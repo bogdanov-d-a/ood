@@ -43,6 +43,19 @@ struct Point
 	int y;
 };
 
+namespace
+{
+	void MoveToHelper(graphics_lib::ICanvas & canvas, Point const& point)
+	{
+		canvas.MoveTo(point.x, point.y);
+	}
+
+	void LineToHelper(graphics_lib::ICanvas & canvas, Point const& point)
+	{
+		canvas.LineTo(point.x, point.y);
+	}
+}
+
 // Интерфейс объектов, которые могут быть нарисованы на холсте из graphics_lib
 class ICanvasDrawable
 {
@@ -55,32 +68,42 @@ class CTriangle : public ICanvasDrawable
 {
 public:
 	CTriangle(const Point & p1, const Point & p2, const Point & p3)
-	{
-		// TODO: написать код конструктора
-	}
+		:m_p1(p1)
+		,m_p2(p2)
+		,m_p3(p3)
+	{}
 
 	void Draw(graphics_lib::ICanvas & canvas)const override
 	{
-		// TODO: написать код рисования треугольника на холсте
+		MoveToHelper(canvas, m_p1);
+		LineToHelper(canvas, m_p2);
+		LineToHelper(canvas, m_p3);
+		LineToHelper(canvas, m_p1);
 	}
 private:
-	// TODO: дописать приватную часть
+	Point m_p1, m_p2, m_p3;
 };
 
 class CRectangle : public ICanvasDrawable
 {
 public:
 	CRectangle(const Point & leftTop, int width, int height)
-	{
-		// TODO: написать код конструктора
-	}
+		:m_leftTop(leftTop)
+		,m_width(width)
+		,m_height(height)
+	{}
 
 	void Draw(graphics_lib::ICanvas & canvas)const override
 	{
-		// TODO: написать код рисования прямоугольника на холсте
+		MoveToHelper(canvas, m_leftTop);
+		canvas.LineTo(m_leftTop.x + m_width, m_leftTop.y);
+		canvas.LineTo(m_leftTop.x + m_width, m_leftTop.y + m_height);
+		canvas.LineTo(m_leftTop.x, m_leftTop.y + m_height);
+		LineToHelper(canvas, m_leftTop);
 	}
 private:
-	// TODO: дописать приватную часть 
+	Point m_leftTop;
+	int m_width, m_height;
 };
 
 // Художник, способный рисовать ICanvasDrawable-объекты на ICanvas
@@ -88,15 +111,14 @@ class CCanvasPainter
 {
 public:
 	CCanvasPainter(graphics_lib::ICanvas & canvas)
-	{
-		// TODO: дописать конструктор класса
-	}
+		:m_canvas(canvas)
+	{}
 	void Draw(const ICanvasDrawable & drawable)
 	{
-		// TODO: дописать код рисования ICanvasDrawable на canvas, переданном в конструктор
+		drawable.Draw(m_canvas);
 	}
 private:
-	// TODO: дописать приватную часть
+	graphics_lib::ICanvas &m_canvas;
 };
 }
 
@@ -146,7 +168,7 @@ public:
 		{
 			throw logic_error("DrawLine is allowed between BeginDraw()/EndDraw() only");
 		}
-		m_out << boost::format(R"(  <line fromX="%1%" fromY="%2" toX="%3%" toY="%4%"/>)") << endl;
+		m_out << boost::format{"  <line fromX=%1% fromY=%2% toX=%3% toY=%4% />"} % start.x % start.y % end.x % end.y << endl;
 	}
 
 	// Этот метод должен быть вызван в конце рисования
@@ -175,7 +197,8 @@ void PaintPicture(shape_drawing_lib::CCanvasPainter & painter)
 	CTriangle triangle({ 10, 15 }, { 100, 200 }, { 150, 250 });
 	CRectangle rectangle({ 30, 40 }, 18, 24);
 
-	// TODO: нарисовать прямоугольник и треугольник при помощи painter
+	painter.Draw(rectangle);
+	painter.Draw(triangle);
 }
 
 void PaintPictureOnCanvas()
@@ -185,14 +208,40 @@ void PaintPictureOnCanvas()
 	PaintPicture(painter);
 }
 
+namespace
+{
+	class CCanvasAdapter : public graphics_lib::ICanvas
+	{
+	public:
+		CCanvasAdapter(modern_graphics_lib::CModernGraphicsRenderer &modernRenderer)
+			:m_modernRenderer(modernRenderer)
+			,m_pos(0, 0)
+		{}
+		void MoveTo(int x, int y) override
+		{
+			m_pos.x = x;
+			m_pos.y = y;
+		}
+		void LineTo(int x, int y) override
+		{
+			m_modernRenderer.BeginDraw();
+			m_modernRenderer.DrawLine(m_pos, modern_graphics_lib::CPoint(x, y));
+			m_modernRenderer.EndDraw();
+			MoveTo(x, y);
+		}
+
+	private:
+		modern_graphics_lib::CModernGraphicsRenderer &m_modernRenderer;
+		modern_graphics_lib::CPoint m_pos;
+	};
+}
+
 void PaintPictureOnModernGraphicsRenderer()
 {
 	modern_graphics_lib::CModernGraphicsRenderer renderer(cout);
-	(void)&renderer; // устраняем предупреждение о неиспользуемой переменной
-
-	// TODO: при помощи существующей функции PaintPicture() нарисовать
-	// картину на renderer
-	// Подсказка: используйте паттерн "Адаптер"
+	CCanvasAdapter canvasAdapter(renderer);
+	shape_drawing_lib::CCanvasPainter painter(canvasAdapter);
+	PaintPicture(painter);
 }
 }
 
