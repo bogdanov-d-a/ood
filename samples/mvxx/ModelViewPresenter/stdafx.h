@@ -39,6 +39,7 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include <boost/signals2.hpp>
 #include <boost/variant.hpp>

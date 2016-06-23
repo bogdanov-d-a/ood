@@ -18,18 +18,24 @@ public:
 #endif
 
 protected:
+	BOOL PreTranslateMessage(MSG *msg) override;
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
 
 // Implementation
 private:
 	void SetSolutionText(const std::wstring & text);
-	void UpdateSolution();
-	afx_msg void OnChangeCoeffA();
-	afx_msg void OnChangeCoeffB();
-	afx_msg void OnChangeCoeffC();
-	afx_msg void OnDestroy();
+	void SetEquationText(const std::wstring & text);
+	void UpdateEquation();
+	void OnChangeCoeffA();
+	void OnChangeCoeffB();
+	void OnChangeCoeffC();
 
+	void OnOK()final;
+
+	afx_msg void OnKillfocusCoeffA();
+	afx_msg void OnKillfocusCoeffB();
+	afx_msg void OnKillfocusCoeffC();
 
 	sig::scoped_connection m_solutionChangeConnection;
 	IMainDlgController & m_controller;

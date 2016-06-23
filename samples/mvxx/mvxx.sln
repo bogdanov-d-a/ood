@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelViewController", "ModelViewController\ModelViewController.vcxproj", "{051AE44A-91A2-4673-8021-5166DB5DF253}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelViewPresenter", "ModelViewPresenter\ModelViewPresenter.vcxproj", "{051AE44A-91A2-4673-8021-5166DB5DF255}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{051AE44A-91A2-4673-8021-5166DB5DF253}.Release|x64.Build.0 = Release|x64
 		{051AE44A-91A2-4673-8021-5166DB5DF253}.Release|x86.ActiveCfg = Release|Win32
 		{051AE44A-91A2-4673-8021-5166DB5DF253}.Release|x86.Build.0 = Release|Win32
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Debug|x64.ActiveCfg = Debug|x64
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Debug|x64.Build.0 = Debug|x64
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Debug|x86.ActiveCfg = Debug|Win32
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Debug|x86.Build.0 = Debug|Win32
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Release|x64.ActiveCfg = Release|x64
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Release|x64.Build.0 = Release|x64
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Release|x86.ActiveCfg = Release|Win32
+		{051AE44A-91A2-4673-8021-5166DB5DF255}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

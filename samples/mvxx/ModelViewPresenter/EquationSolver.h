@@ -14,6 +14,8 @@ public:
 	CEquationSolver();
 	~CEquationSolver();
 
+	double CalculateValue(double arg)const;
+
 	typedef sig::signal<void()> SolutionChangeSignal;
 	sig::connection DoOnSolutionChange(const SolutionChangeSignal::slot_type & handler);
 

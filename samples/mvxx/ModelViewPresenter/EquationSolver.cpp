@@ -11,6 +11,11 @@ CEquationSolver::~CEquationSolver()
 {
 }
 
+double CEquationSolver::CalculateValue(double arg) const
+{
+	return m_a * arg * arg + m_b * arg + m_c;
+}
+
 sig::connection CEquationSolver::DoOnSolutionChange(const SolutionChangeSignal::slot_type & handler)
 {
 	return m_solutionChanged.connect(handler);
