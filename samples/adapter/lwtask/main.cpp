@@ -219,6 +219,13 @@ namespace
 			:m_modernRenderer(modernRenderer)
 			,m_pos(0, 0)
 		{}
+		~CCanvasAdapter()
+		{
+			if (m_drawingInit)
+			{
+				m_modernRenderer.EndDraw();
+			}
+		}
 		void MoveTo(int x, int y) override
 		{
 			m_pos.x = x;
@@ -226,15 +233,24 @@ namespace
 		}
 		void LineTo(int x, int y) override
 		{
-			m_modernRenderer.BeginDraw();
+			InitDrawing();
 			m_modernRenderer.DrawLine(m_pos, modern_graphics_lib::CPoint(x, y));
-			m_modernRenderer.EndDraw();
 			MoveTo(x, y);
 		}
 
 	private:
+		void InitDrawing()
+		{
+			if (!m_drawingInit)
+			{
+				m_drawingInit = true;
+				m_modernRenderer.BeginDraw();
+			}
+		}
+
 		modern_graphics_lib::CModernGraphicsRenderer &m_modernRenderer;
 		modern_graphics_lib::CPoint m_pos;
+		bool m_drawingInit = false;
 	};
 }
 
