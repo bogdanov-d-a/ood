@@ -108,9 +108,63 @@ auto operator << (Component && component, const Decorator & decorate)
 	return decorate(forward<Component>(component));
 }
 
+void DialogWithUser()
+{
+	cout << "Type 1 for coffee or 2 for tea\n";
+	int beverageChoice;
+	cin >> beverageChoice;
+
+	unique_ptr<IBeverage> beverage;
+
+	if (beverageChoice == 1)
+	{
+		beverage = make_unique<CCoffee>();
+	}
+	else if (beverageChoice == 2)
+	{
+		beverage = make_unique<CTea>();
+	}
+	else
+	{
+		return;
+	}
+
+	int condimentChoice;
+	for (;;)
+	{
+		cout << "1 - Lemon, 2 - Cinnamon, 0 - Checkout" << endl;
+		cin >> condimentChoice;
+
+		if (condimentChoice == 1)
+		{
+			//beverage = make_unique<CLemon>(move(beverage));
+			beverage = move(beverage) << MakeCondiment<CLemon>(2);
+		}
+		else if (condimentChoice == 2)
+		{
+			//beverage = make_unique<CCinnamon>(move(beverage));
+			beverage = move(beverage) << MakeCondiment<CCinnamon>();
+		}
+		else if (condimentChoice == 0)
+		{
+			break;
+		}
+		else
+		{
+			return;
+		}
+	}
+
+
+
+	cout << beverage->GetDescription() << ", cost: " << beverage->GetCost() << endl;
+}
+
 
 int main()
 {
+	DialogWithUser();
+	cout << endl;
 	{
 		// Наливаем чашечку латте
 		auto latte = make_unique<CLatte>();

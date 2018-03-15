@@ -8,7 +8,9 @@ class CPizza
 {
 public:
 	typedef std::vector<std::string> Toppings;
-	CPizza(const std::string & name, const std::string & dough, const std::string & sauce)
+	CPizza(const std::string & name, 
+		const std::string & dough, 
+		const std::string & sauce)
 		: m_name(name), m_dough(dough)
 		, m_sauce(sauce)
 	{}

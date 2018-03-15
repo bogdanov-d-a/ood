@@ -35,6 +35,8 @@ public:
 		}
 		return pizza;
 	}
+
+	virtual ~CSimplePizzaFactory() = default;
 };
 
 // Пиццерия
@@ -99,6 +101,7 @@ void OrderPizzaWithSimpleFactory()
 	auto nyPizzaFactory = make_unique<CNYPizzaFactory>();
 	CPizzaStore pizzaStore(move(nyPizzaFactory));
 	auto pizza = pizzaStore.OrderPizza("peperoni");
+	cout << pizza->ToString() << endl;
 }
 
 class CAbstractPizzaStore
@@ -117,6 +120,7 @@ public:
 
 		return pizza;
 	}
+	virtual ~CAbstractPizzaStore() = default;
 protected:
 	// Конкретные подклассы обязаны реализовать данный метод
 	virtual unique_ptr<CPizza> CreatePizza(const string& type) const = 0;

@@ -149,7 +149,6 @@
     <ClInclude Include="ConstDocumentItem.h" />
     <ClInclude Include="Document.h" />
     <ClInclude Include="History.h" />
-    <ClInclude Include="DocumentImpl.h" />
     <ClInclude Include="DocumentItem.h" />
     <ClInclude Include="ICommand_fwd.h" />
     <ClInclude Include="IDocument.h" />
@@ -170,7 +169,6 @@
     <ClCompile Include="ConstDocumentItem.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="History.cpp" />
-    <ClCompile Include="DocumentImpl.cpp" />
     <ClCompile Include="DocumentItem.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageImpl.cpp" />

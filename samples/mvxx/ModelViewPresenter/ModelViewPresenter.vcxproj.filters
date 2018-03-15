@@ -58,7 +58,7 @@
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="ChartView.h">
-      <Filter>Header Files</Filter>
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,7 +78,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChartView.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

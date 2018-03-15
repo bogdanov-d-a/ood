@@ -74,12 +74,12 @@ public:
 	// Относительная влажность (0...100)
 	double GetHumidity()const
 	{
-		return humidity;
+		return m_humidity;
 	}
 	// Атмосферное давление (в мм.рт.ст)
 	double GetPressure()const
 	{
-		return pressure;
+		return m_pressure;
 	}
 
 	void MeasurementsChanged()
@@ -89,9 +89,9 @@ public:
 
 	void SetMeasurements(double temp, double humidity, double pressure)
 	{
-		humidity = humidity;
+		m_humidity = humidity;
 		m_temperature = temp;
-		pressure = pressure;
+		m_pressure = pressure;
 
 		MeasurementsChanged();
 	}
@@ -106,6 +106,6 @@ protected:
 	}
 private:
 	double m_temperature = 0.0;
-	double humidity = 0.0;	
-	double pressure = 760.0;	
+	double m_humidity = 0.0;	
+	double m_pressure = 760.0;	
 };

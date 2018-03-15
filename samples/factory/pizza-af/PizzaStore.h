@@ -83,7 +83,7 @@ protected:
 	// Тип не имеет значения. В меню только лаваш
 	std::unique_ptr<CPizza> CreatePizza(const std::string& /*type*/) override
 	{
-		auto pizza = std::make_unique<CLavash>(ThickCrustDoughFactory);
+		auto pizza = std::make_unique<CLavash>(ThinCrustDoughFactory);
 		pizza->SetName("Lavash");
 		return std::move(pizza);
 	}

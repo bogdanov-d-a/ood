@@ -149,6 +149,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GumBallMachineWithDynamicallyCreatedState.h" />
     <ClInclude Include="GumBallMachineWithState.h" />
     <ClInclude Include="NaiveGumBallMachine.h" />
   </ItemGroup>

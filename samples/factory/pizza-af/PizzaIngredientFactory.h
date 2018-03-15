@@ -11,9 +11,9 @@
 
 typedef std::function<std::unique_ptr<IDough>()> DoughFactory;
 
-std::unique_ptr<IDough> ThickCrustDoughFactory()
+std::unique_ptr<IDough> ThinCrustDoughFactory()
 {
-	return std::make_unique<CThickCrustDough>();
+	return std::make_unique<CThinCrustDough>();
 }
 
 

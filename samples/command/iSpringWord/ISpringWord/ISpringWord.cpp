@@ -95,6 +95,6 @@ int main()
 {
 	CEditor editor;
 	editor.Start();
-    return 0;
+	return 0;
 }
 

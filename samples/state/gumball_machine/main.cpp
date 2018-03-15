@@ -1,5 +1,6 @@
 #include "NaiveGumBallMachine.h"
 #include "GumBallMachineWithState.h"
+#include "GumBallMachineWithDynamicallyCreatedState.h"
 
 using namespace std;
 
@@ -50,12 +51,21 @@ void TestGumballMachineWithState()
 	TestGumballMachine(m);
 }
 
+void TestGumballMachineWithDynamicState()
+{
+	with_dynamic_state::CGumballMachine m(5);
+	TestGumballMachine(m);
+}
+
 int main()
 {
 	TestNaiveGumballMachine();
 
 	cout << "\n-----------------\n";
 	TestGumballMachineWithState();
+
+	cout << "\n-----------------\n";
+	TestGumballMachineWithDynamicState();
 
 	return 0;
 }

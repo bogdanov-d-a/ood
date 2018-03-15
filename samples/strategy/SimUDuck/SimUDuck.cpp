@@ -1,13 +1,13 @@
+#include <cassert>
 #include <iostream>
 #include <memory>
-#include <cassert>
 #include <vector>
 
 using namespace std;
 
 struct IFlyBehavior
 {
-	virtual ~IFlyBehavior() {};
+	virtual ~IFlyBehavior(){};
 	virtual void Fly() = 0;
 };
 class FlyWithWings : public IFlyBehavior
@@ -25,9 +25,9 @@ public:
 	void Fly() override {}
 };
 
-struct IQuackBehavior 
+struct IQuackBehavior
 {
-	virtual ~IQuackBehavior() {};
+	virtual ~IQuackBehavior(){};
 	virtual void Quack() = 0;
 };
 
@@ -51,13 +51,14 @@ public:
 class MuteQuackBehavior : public IQuackBehavior
 {
 public:
-	void Quack() override{}
+	void Quack() override {}
 };
 
 class Duck
 {
 public:
-	Duck(unique_ptr<IFlyBehavior> && flyBehavior, unique_ptr<IQuackBehavior> && quackBehavior)
+	Duck(unique_ptr<IFlyBehavior>&& flyBehavior,
+		unique_ptr<IQuackBehavior>&& quackBehavior)
 		: m_quackBehavior(move(quackBehavior))
 	{
 		assert(m_quackBehavior);
@@ -79,13 +80,14 @@ public:
 	{
 		cout << "I'm Dancing" << endl;
 	}
-	void SetFlyBehavior(unique_ptr<IFlyBehavior> && flyBehavior)
+	void SetFlyBehavior(unique_ptr<IFlyBehavior>&& flyBehavior)
 	{
 		assert(flyBehavior);
 		m_flyBehavior = move(flyBehavior);
 	}
 	virtual void Display() const = 0;
-	virtual ~Duck() {};
+	virtual ~Duck() = default;
+
 private:
 	unique_ptr<IFlyBehavior> m_flyBehavior;
 	unique_ptr<IQuackBehavior> m_quackBehavior;
@@ -134,7 +136,7 @@ class RubberDuck : public Duck
 {
 public:
 	RubberDuck()
-		: Duck(make_unique<FlyNoWay>(), make_unique<QuackBehavior>())
+		: Duck(make_unique<FlyNoWay>(), make_unique<SqueakBehavior>())
 	{
 	}
 	void Display() const override
@@ -163,25 +165,29 @@ void DrawDuck(Duck const& duck)
 	duck.Display();
 }
 
-void PlayWithDuck(Duck & duck)
+void PlayWithDuck(Duck& duck)
 {
-	duck.Quack();
-	duck.Dance();
-	duck.Fly();
 	DrawDuck(duck);
+	duck.Quack();
+	duck.Fly();
+	duck.Dance();
+	cout << endl;
 }
-
 
 void main()
 {
 	MallardDuck mallarDuck;
 	PlayWithDuck(mallarDuck);
+
 	RedheadDuck redheadDuck;
 	PlayWithDuck(redheadDuck);
+
 	RubberDuck rubberDuck;
 	PlayWithDuck(rubberDuck);
+
 	DeckoyDuck deckoyDuck;
 	PlayWithDuck(deckoyDuck);
+
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
 	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>());
