@@ -10,12 +10,28 @@ struct IFlyBehavior
 	virtual ~IFlyBehavior(){};
 	virtual void Fly() = 0;
 };
-class FlyWithWings : public IFlyBehavior
+
+class CounterFlyBehavior : public IFlyBehavior
 {
 public:
-	void Fly() override
+	virtual ~CounterFlyBehavior() = default;
+	void Fly() final
 	{
-		cout << "I'm flying with wings!!" << endl;
+		++count;
+		FlyImpl(count);
+	}
+	virtual void FlyImpl(unsigned count) = 0;
+
+private:
+	unsigned count = 0;
+};
+
+class FlyWithWings : public CounterFlyBehavior
+{
+public:
+	void FlyImpl(unsigned count) override
+	{
+		cout << "I'm flying with wings for " << count << "th time!!" << endl;
 	}
 };
 
@@ -199,9 +215,10 @@ void DrawDuck(Duck const& duck)
 void PlayWithDuck(Duck& duck)
 {
 	DrawDuck(duck);
-	duck.Quack();
 	duck.Fly();
+	duck.Quack();
 	duck.Dance();
+	duck.Fly();
 	cout << endl;
 }
 
