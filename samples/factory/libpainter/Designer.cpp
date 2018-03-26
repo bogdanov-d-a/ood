@@ -10,11 +10,6 @@ CDesigner::CDesigner(IShapeFactory & factory)
 {
 }
 
-
-CDesigner::~CDesigner()
-{
-}
-
 CPictureDraft CDesigner::CreateDraft(std::istream & inputData)
 {
 	CPictureDraft draft;

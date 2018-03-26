@@ -7,10 +7,7 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
-
-#include <sstream>
+#include "../libpainter/deps.h"
 
 #define BOOST_TEST_INCLUDED
 #pragma warning (push, 3)
@@ -20,5 +17,3 @@
 
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/algorithm/cxx11/all_of.hpp>
-
-// TODO: reference additional headers your program requires here
