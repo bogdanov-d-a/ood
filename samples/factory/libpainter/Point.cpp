@@ -1,33 +1,34 @@
 #include "stdafx.h"
 #include "Point.h"
+#include "Utils.h"
 
 CPoint::CPoint()
 	: CPoint(0, 0)
 {
 }
 
-CPoint::CPoint(CUtils::Coordinate x, CUtils::Coordinate y)
+CPoint::CPoint(Coordinate x, Coordinate y)
 	: m_x(x)
 	, m_y(y)
 {
 }
 
-void CPoint::SetX(CUtils::Coordinate x)
+void CPoint::SetX(Coordinate x)
 {
 	m_x = x;
 }
 
-void CPoint::SetY(CUtils::Coordinate y)
+void CPoint::SetY(Coordinate y)
 {
 	m_y = y;
 }
 
-CUtils::Coordinate CPoint::GetX() const
+Coordinate CPoint::GetX() const
 {
 	return m_x;
 }
 
-CUtils::Coordinate CPoint::GetY() const
+Coordinate CPoint::GetY() const
 {
 	return m_y;
 }

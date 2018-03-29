@@ -1,13 +1,12 @@
 #pragma once
 
+#include "Coordinate.h"
 #include "Color.h"
 
 class CUtils
 {
 public:
 	CUtils() = delete;
-
-	using Coordinate = int;
 
 	struct ParseShapeResult
 	{

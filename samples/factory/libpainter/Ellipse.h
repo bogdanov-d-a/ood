@@ -6,15 +6,15 @@
 class CEllipse : public CShape
 {
 public:
-	CEllipse(Color color, CPoint const& center, CUtils::Coordinate horizontalRadius, CUtils::Coordinate verticalRadius);
+	CEllipse(Color color, CPoint const& center, Coordinate horizontalRadius, Coordinate verticalRadius);
 	void Draw(ICanvas &canvas) const final;
 
 private:
 	CPoint GetCenter() const;
-	CUtils::Coordinate GetHorizontalRadius() const;
-	CUtils::Coordinate GetVerticalRadius() const;
+	Coordinate GetHorizontalRadius() const;
+	Coordinate GetVerticalRadius() const;
 
 	CPoint m_center;
-	CUtils::Coordinate m_horizontalRadius;
-	CUtils::Coordinate m_verticalRadius;
+	Coordinate m_horizontalRadius;
+	Coordinate m_verticalRadius;
 };

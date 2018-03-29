@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="deps.h" />
     <ClInclude Include="Designer.h" />
     <ClInclude Include="Ellipse.h" />

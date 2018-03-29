@@ -11,7 +11,7 @@ bool TestSplitWordsWrapper(string const& s, vector<string> const& result)
 	return CUtils::SplitWords(s) == result;
 }
 
-bool TestParseShapeWrapper(string const& s, string const& resultType, Color resultColor, vector<CUtils::Coordinate> const& resultInts)
+bool TestParseShapeWrapper(string const& s, string const& resultType, Color resultColor, vector<int> const& resultInts)
 {
 	const auto result = CUtils::ParseShape(s);
 	return result.type == resultType && result.color == resultColor && result.ints == resultInts;

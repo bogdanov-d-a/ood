@@ -99,6 +99,9 @@
     <ClInclude Include="deps.h">
       <Filter>Support Files</Filter>
     </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "RegularPolygon.h"
 #include "ICanvas.h"
+#include "Utils.h"
 
-CRegularPolygon::CRegularPolygon(Color color, size_t vertexCount, CPoint const & center, CUtils::Coordinate radius)
+CRegularPolygon::CRegularPolygon(Color color, size_t vertexCount, CPoint const & center, Coordinate radius)
 	: CShape(color)
 	, m_vertexCount(vertexCount)
 	, m_center(center)
@@ -49,7 +50,7 @@ CPoint CRegularPolygon::GetCenter() const
 	return m_center;
 }
 
-CUtils::Coordinate CRegularPolygon::GetRadius() const
+Coordinate CRegularPolygon::GetRadius() const
 {
 	return m_radius;
 }

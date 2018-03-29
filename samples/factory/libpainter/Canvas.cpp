@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Canvas.h"
+#include "Utils.h"
 
 CCanvas::CCanvas(std::ostream & out)
 	: m_out(out)
@@ -16,7 +17,7 @@ void CCanvas::DrawLine(CPoint const & from, CPoint const & to)
 	m_out << "DrawLine(" << from.ToString() << "," << to.ToString() << ")" << std::endl;
 }
 
-void CCanvas::DrawEllipse(CUtils::Coordinate left, CUtils::Coordinate top, CUtils::Coordinate width, CUtils::Coordinate height)
+void CCanvas::DrawEllipse(Coordinate left, Coordinate top, Coordinate width, Coordinate height)
 {
 	m_out << "DrawEllipse(" << CUtils::ToString(left) << "," << CUtils::ToString(top)
 		<< "," << CUtils::ToString(width) << "," << CUtils::ToString(height) << ")" << std::endl;

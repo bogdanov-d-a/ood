@@ -5,6 +5,7 @@
 #include "Triangle.h"
 #include "Ellipse.h"
 #include "RegularPolygon.h"
+#include "Utils.h"
 
 namespace
 {

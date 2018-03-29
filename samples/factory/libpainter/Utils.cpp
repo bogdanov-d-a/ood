@@ -15,7 +15,7 @@ const std::map<std::string, Color> stringToColor = {
 
 }
 
-CUtils::Coordinate CUtils::ParseCoordinate(std::string const & s)
+Coordinate CUtils::ParseCoordinate(std::string const & s)
 {
 	return std::stoi(s);
 }
@@ -88,7 +88,7 @@ CUtils::ParseShapeResult CUtils::ParseShape(std::string const & s)
 	return result;
 }
 
-CUtils::Coordinate CUtils::RoundFloatToCoordinate(double d)
+Coordinate CUtils::RoundFloatToCoordinate(double d)
 {
-	return static_cast<CUtils::Coordinate>(round(d));
+	return static_cast<Coordinate>(round(d));
 }
