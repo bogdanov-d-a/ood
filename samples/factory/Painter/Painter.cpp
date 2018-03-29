@@ -6,7 +6,7 @@
 #include "../libpainter/ShapeFactory.h"
 #include "../libpainter/PictureDraft.h"
 #include "../libpainter/Painter.h"
-#include "../libpainter/Canvas.h"
+#include "../libpainter/GraphicCanvas.h"
 
 using namespace std;
 
@@ -16,8 +16,23 @@ int main()
 	unique_ptr<IDesigner> designer = make_unique<CDesigner>(*factory);
 	auto draft = designer->CreateDraft(cin);
 	unique_ptr<IPainter> painter = make_unique<CPainter>();
-	unique_ptr<ICanvas> canvas = make_unique<CCanvas>(cout);
-	painter->DrawPicture(draft, *canvas);
+
+	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
+	unique_ptr<ICanvas> canvas = make_unique<CGraphicCanvas>(window);
+
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		window.clear();
+		painter->DrawPicture(draft, *canvas);
+		window.display();
+	}
 
 	return 0;
 }

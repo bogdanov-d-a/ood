@@ -92,3 +92,29 @@ Coordinate CUtils::RoundFloatToCoordinate(double d)
 {
 	return static_cast<Coordinate>(round(d));
 }
+
+sf::Color CUtils::ColorToSfmlColor(Color color)
+{
+	switch (color)
+	{
+	case Color::GREEN:
+		return sf::Color(0, 255, 0);
+	case Color::RED:
+		return sf::Color(255, 0, 0);
+	case Color::BLUE:
+		return sf::Color(0, 0, 255);
+	case Color::YELLOW:
+		return sf::Color(255, 255, 0);
+	case Color::PINK:
+		return sf::Color(255, 0, 255);
+	case Color::BLACK:
+		return sf::Color(0, 0, 0);
+	default:
+		throw std::runtime_error("Unknown color value");
+	}
+}
+
+sf::Vector2f CUtils::PointToSfmlVector(CPoint const & point)
+{
+	return sf::Vector2f(static_cast<float>(point.GetX()), static_cast<float>(point.GetY()));
+}

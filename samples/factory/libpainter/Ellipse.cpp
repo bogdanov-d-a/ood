@@ -14,7 +14,7 @@ void CEllipse::Draw(ICanvas & canvas) const
 {
 	CShape::Draw(canvas);
 	canvas.DrawEllipse(m_center.GetX() - GetHorizontalRadius(), m_center.GetY() - GetVerticalRadius(),
-		m_center.GetX() + GetHorizontalRadius(), m_center.GetY() + GetVerticalRadius());
+		GetHorizontalRadius() * 2, GetVerticalRadius() * 2);
 }
 
 CPoint CEllipse::GetCenter() const

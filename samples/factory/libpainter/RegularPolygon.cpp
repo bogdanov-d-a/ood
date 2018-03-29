@@ -21,8 +21,8 @@ void CRegularPolygon::Draw(ICanvas & canvas) const
 	for (size_t curVertex = 0; curVertex < GetVertexCount(); ++curVertex)
 	{
 		const auto phi = curVertex * 2 * M_PI / GetVertexCount();
-		const auto x = GetRadius() * cos(phi);
-		const auto y = GetRadius() * sin(phi);
+		const auto x = m_center.GetX() + GetRadius() * cos(phi);
+		const auto y = m_center.GetY() + GetRadius() * sin(phi);
 		const CPoint curPoint(CUtils::RoundFloatToCoordinate(x), CUtils::RoundFloatToCoordinate(y));
 
 		if (firstPoint == boost::none)

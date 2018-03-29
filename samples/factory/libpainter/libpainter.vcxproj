@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -144,6 +144,7 @@
     <ClInclude Include="deps.h" />
     <ClInclude Include="Designer.h" />
     <ClInclude Include="Ellipse.h" />
+    <ClInclude Include="GraphicCanvas.h" />
     <ClInclude Include="ICanvas.h" />
     <ClInclude Include="IDesigner.h" />
     <ClInclude Include="IPainter.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Designer.cpp" />
     <ClCompile Include="Ellipse.cpp" />
+    <ClCompile Include="GraphicCanvas.cpp" />
     <ClCompile Include="Painter.cpp" />
     <ClCompile Include="PictureDraft.cpp" />
     <ClCompile Include="Point.cpp" />
