@@ -80,7 +80,13 @@ private:
 	void Update(SWeatherInfo const& data) override
 	{
 		m_temperatureStats.AddValue(data.temperature);
+		m_humidityStats.AddValue(data.humidity);
+		m_pressureStats.AddValue(data.pressure);
+
 		DisplayStats("Temp", m_temperatureStats);
+		DisplayStats("Hum", m_humidityStats);
+		DisplayStats("Pressure", m_pressureStats);
+		std::cout << "----------------" << std::endl;
 	}
 
 	void DisplayStats(std::string const& name, CStatsCalculator const& stats)
@@ -88,10 +94,11 @@ private:
 		std::cout << "Max " << name << " " << stats.GetMaxValue() << std::endl;
 		std::cout << "Min " << name << " " << stats.GetMinValue() << std::endl;
 		std::cout << "Average " << name << " " << stats.GetAverageValue() << std::endl;
-		std::cout << "----------------" << std::endl;
 	}
 
 	CStatsCalculator m_temperatureStats;
+	CStatsCalculator m_humidityStats;
+	CStatsCalculator m_pressureStats;
 };
 
 class CWeatherData : public CObservable<SWeatherInfo>
