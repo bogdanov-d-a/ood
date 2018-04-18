@@ -7,19 +7,13 @@ int main()
 	CDisplay display;
 	wd.RegisterObserver(display);
 
-	CTemperatureStatsDisplay temperatureStatsDisplay;
-	wd.RegisterObserver(temperatureStatsDisplay);
-
-	CHumidityStatsDisplay humidityStatsDisplay;
-	wd.RegisterObserver(humidityStatsDisplay);
+	CStatsDisplay statsDisplay;
+	wd.RegisterObserver(statsDisplay);
 
 	wd.SetMeasurements(3, 0.7, 760);
 	wd.SetMeasurements(4, 0.8, 761);
 
-	wd.RemoveObserver(temperatureStatsDisplay);
-
-	CPressureStatsDisplay pressureStatsDisplay;
-	wd.RegisterObserver(pressureStatsDisplay);
+	wd.RemoveObserver(statsDisplay);
 
 	wd.SetMeasurements(10, 0.8, 761);
 	wd.SetMeasurements(-10, 0.8, 761);
