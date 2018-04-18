@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <climits>
+#include <string>
 #include "Observer.h"
 
 using namespace std;
@@ -30,6 +31,45 @@ private:
 	}
 };
 
+class CStatsCalculator
+{
+public:
+	void AddValue(double value)
+	{
+		if (m_minValue > value)
+		{
+			m_minValue = value;
+		}
+		if (m_maxValue < value)
+		{
+			m_maxValue = value;
+		}
+		m_accValue += value;
+		++m_countAcc;
+	}
+
+	double GetMinValue() const
+	{
+		return m_minValue;
+	}
+
+	double GetMaxValue() const
+	{
+		return m_maxValue;
+	}
+
+	double GetAverageValue() const
+	{
+		return m_accValue / m_countAcc;
+	}
+
+private:
+	double m_minValue = std::numeric_limits<double>::infinity();
+	double m_maxValue = -std::numeric_limits<double>::infinity();
+	double m_accValue = 0;
+	unsigned m_countAcc = 0;
+};
+
 class CStatsDisplay : public IObserver<SWeatherInfo>
 {
 private:
@@ -39,28 +79,19 @@ private:
 	*/
 	void Update(SWeatherInfo const& data) override
 	{
-		if (m_minTemperature > data.temperature)
-		{
-			m_minTemperature = data.temperature;
-		}
-		if (m_maxTemperature < data.temperature)
-		{
-			m_maxTemperature = data.temperature;
-		}
-		m_accTemperature += data.temperature;
-		++m_countAcc;
+		m_temperatureStats.AddValue(data.temperature);
+		DisplayStats("Temp", m_temperatureStats);
+	}
 
-		std::cout << "Max Temp " << m_maxTemperature << std::endl;
-		std::cout << "Min Temp " << m_minTemperature << std::endl;
-		std::cout << "Average Temp " << (m_accTemperature / m_countAcc) << std::endl;
+	void DisplayStats(std::string const& name, CStatsCalculator const& stats)
+	{
+		std::cout << "Max " << name << " " << stats.GetMaxValue() << std::endl;
+		std::cout << "Min " << name << " " << stats.GetMinValue() << std::endl;
+		std::cout << "Average " << name << " " << stats.GetAverageValue() << std::endl;
 		std::cout << "----------------" << std::endl;
 	}
 
-	double m_minTemperature = std::numeric_limits<double>::infinity();
-	double m_maxTemperature = -std::numeric_limits<double>::infinity();
-	double m_accTemperature = 0;
-	unsigned m_countAcc = 0;
-
+	CStatsCalculator m_temperatureStats;
 };
 
 class CWeatherData : public CObservable<SWeatherInfo>
