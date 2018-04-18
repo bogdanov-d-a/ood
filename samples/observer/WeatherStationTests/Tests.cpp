@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(TestObserverSelfUnsubscribe)
 	observable.RegisterObserver(observer1);
 
 	CMockObserver observer2;
-	//observer2.SetUnsubscribeSelf(&observable);
+	observer2.SetUnsubscribeSelf(&observable);
 	observable.RegisterObserver(observer2);
 
 	CMockObserver observer3;
@@ -88,5 +88,15 @@ BOOST_AUTO_TEST_CASE(TestObserverSelfUnsubscribe)
 
 	BOOST_CHECK(observer1.IsNotified());
 	BOOST_CHECK(observer2.IsNotified());
+	BOOST_CHECK(observer3.IsNotified());
+
+	observer1.ResetNotified();
+	observer2.ResetNotified();
+	observer3.ResetNotified();
+
+	observable.NotifyObservers();
+
+	BOOST_CHECK(observer1.IsNotified());
+	BOOST_CHECK(!observer2.IsNotified());
 	BOOST_CHECK(observer3.IsNotified());
 }
