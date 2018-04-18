@@ -7,20 +7,19 @@
 using namespace std;
 
 
-function<void()> MakeCounterFlyBehavior(function<void(unsigned)> const& flyImpl, unsigned &countRef)
+function<void()> MakeCounterFlyBehavior(function<void(unsigned)> const& flyImpl)
 {
-	countRef = 0;
-	return [flyImpl, &countRef]() {
-		++countRef;
-		flyImpl(countRef);
+	return [flyImpl, count = 0]() mutable {
+		++count;
+		flyImpl(count);
 	};
 }
 
-function<void()> MakeFlyWithWings(unsigned &countRef)
+function<void()> MakeFlyWithWings()
 {
 	return MakeCounterFlyBehavior([](unsigned count) {
 		cout << "I'm flying with wings for " << count << "th time!!" << endl;
-	}, countRef);
+	});
 }
 
 const auto flyNoWay = []() {};
@@ -87,8 +86,8 @@ private:
 class MallardDuck : public Duck
 {
 public:
-	MallardDuck(unsigned &flyCountRef)
-		: Duck(MakeFlyWithWings(flyCountRef), quackBehavior, waltzDanceBehavior)
+	MallardDuck()
+		: Duck(MakeFlyWithWings(), quackBehavior, waltzDanceBehavior)
 	{
 	}
 
@@ -101,8 +100,8 @@ public:
 class RedheadDuck : public Duck
 {
 public:
-	RedheadDuck(unsigned &flyCountRef)
-		: Duck(MakeFlyWithWings(flyCountRef), quackBehavior, minuetDanceBehavior)
+	RedheadDuck()
+		: Duck(MakeFlyWithWings(), quackBehavior, minuetDanceBehavior)
 	{
 	}
 	void Display() const override
@@ -165,12 +164,10 @@ void PlayWithDuck(Duck& duck)
 
 void main()
 {
-	unsigned mallarDuckFlyCount;
-	MallardDuck mallarDuck(mallarDuckFlyCount);
+	MallardDuck mallarDuck;
 	PlayWithDuck(mallarDuck);
 
-	unsigned redheadDuckFlyCount;
-	RedheadDuck redheadDuck(redheadDuckFlyCount);
+	RedheadDuck redheadDuck;
 	PlayWithDuck(redheadDuck);
 
 	RubberDuck rubberDuck;
@@ -179,9 +176,8 @@ void main()
 	DeckoyDuck deckoyDuck;
 	PlayWithDuck(deckoyDuck);
 
-	unsigned modelDuckFlyCount;
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
-	modelDuck.SetFlyBehavior(MakeFlyWithWings(modelDuckFlyCount));
+	modelDuck.SetFlyBehavior(MakeFlyWithWings());
 	PlayWithDuck(modelDuck);
 }
