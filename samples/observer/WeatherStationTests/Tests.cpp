@@ -56,10 +56,10 @@ BOOST_AUTO_TEST_CASE(TestBasic)
 	CMockObservable observable;
 
 	CMockObserver observer1;
-	observable.RegisterObserver(observer1);
+	observable.RegisterObserver(observer1, 0);
 
 	CMockObserver observer2;
-	observable.RegisterObserver(observer2);
+	observable.RegisterObserver(observer2, 0);
 
 	CMockObserver observer3;
 
@@ -75,14 +75,14 @@ BOOST_AUTO_TEST_CASE(TestObserverSelfUnsubscribe)
 	CMockObservable observable;
 
 	CMockObserver observer1;
-	observable.RegisterObserver(observer1);
+	observable.RegisterObserver(observer1, 0);
 
 	CMockObserver observer2;
 	observer2.SetUnsubscribeSelf(&observable);
-	observable.RegisterObserver(observer2);
+	observable.RegisterObserver(observer2, 0);
 
 	CMockObserver observer3;
-	observable.RegisterObserver(observer3);
+	observable.RegisterObserver(observer3, 0);
 
 	observable.NotifyObservers();
 

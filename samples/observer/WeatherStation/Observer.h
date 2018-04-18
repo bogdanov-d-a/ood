@@ -28,7 +28,7 @@ class IObservable
 {
 public:
 	virtual ~IObservable() = default;
-	virtual void RegisterObserver(IObserver<T> & observer) = 0;
+	virtual void RegisterObserver(IObserver<T> & observer, int priority) = 0;
 	virtual void NotifyObservers() = 0;
 	virtual void RemoveObserver(IObserver<T> & observer) = 0;
 };
@@ -40,9 +40,16 @@ class CObservable : public IObservable<T>
 public:
 	typedef IObserver<T> ObserverType;
 
-	void RegisterObserver(ObserverType & observer) override
+	void RegisterObserver(ObserverType & observer, int priority) override
 	{
-		m_observers.insert(&observer);
+		if (FindObserverByPointer(&observer) == m_observers.end())
+		{
+			m_observers.insert(ObserverData(priority, &observer));
+		}
+		else
+		{
+			assert(false);
+		}
 	}
 
 	void NotifyObservers() override
@@ -69,7 +76,7 @@ public:
 			};
 			assert(!m_skipObserverIncrement);
 
-			(*m_observerIt)->Update(data);
+			m_observerIt->second->Update(data);
 
 			if (!m_skipObserverIncrement)
 			{
@@ -80,7 +87,7 @@ public:
 
 	void RemoveObserver(ObserverType & observer) override
 	{
-		const auto eraseIt = m_observers.find(&observer);
+		const auto eraseIt = FindObserverByPointer(&observer);
 		if (eraseIt == m_observers.end())
 		{
 			// Observer not found
@@ -104,7 +111,21 @@ protected:
 	virtual T GetChangedData()const = 0;
 
 private:
-	std::set<ObserverType *> m_observers;
-	typename std::set<ObserverType *>::iterator m_observerIt = m_observers.end();
+	using ObserverData = std::pair<int, ObserverType *>;
+
+	auto FindObserverByPointer(ObserverType *observerPtr)
+	{
+		for (auto it = m_observers.begin(); it != m_observers.end(); ++it)
+		{
+			if (it->second == observerPtr)
+			{
+				return it;
+			}
+		}
+		return m_observers.end();
+	}
+
+	std::set<ObserverData> m_observers;
+	typename std::set<ObserverData>::iterator m_observerIt = m_observers.end();
 	bool m_skipObserverIncrement = false;
 };
