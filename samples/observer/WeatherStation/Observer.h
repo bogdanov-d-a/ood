@@ -3,7 +3,6 @@
 #include <set>
 #include <functional>
 #include <cassert>
-#include <boost\scope_exit.hpp>
 
 /*
 Шаблонный интерфейс IObserver. Его должен реализовывать класс, 
@@ -54,34 +53,11 @@ public:
 
 	void NotifyObservers() override
 	{
-		if (m_observerIt != m_observers.end())
-		{
-			// NotifyObservers is already in progress
-			assert(false);
-			return;
-		}
-
 		T data = GetChangedData();
-
-		BOOST_SCOPE_EXIT_ALL(this)
+		const auto observersCopy = m_observers;
+		for (auto & observer : observersCopy)
 		{
-			m_observerIt = m_observers.end();
-		};
-
-		for (m_observerIt = m_observers.begin(); m_observerIt != m_observers.end();)
-		{
-			BOOST_SCOPE_EXIT_ALL(this)
-			{
-				m_skipObserverIncrement = false;
-			};
-			assert(!m_skipObserverIncrement);
-
-			m_observerIt->second->Update(data);
-
-			if (!m_skipObserverIncrement)
-			{
-				++m_observerIt;
-			}
+			observer.second->Update(data);
 		}
 	}
 
@@ -90,19 +66,10 @@ public:
 		const auto eraseIt = FindObserverByPointer(&observer);
 		if (eraseIt == m_observers.end())
 		{
-			// Observer not found
 			assert(false);
 			return;
 		}
-
-		const bool updatingElementErase = (m_observerIt == eraseIt);
-		const auto afterEraseIt = m_observers.erase(eraseIt);
-
-		if (updatingElementErase)
-		{
-			m_observerIt = afterEraseIt;
-			m_skipObserverIncrement = true;
-		}
+		m_observers.erase(eraseIt);
 	}
 
 protected:
@@ -126,6 +93,4 @@ private:
 	}
 
 	std::set<ObserverData> m_observers;
-	typename std::set<ObserverData>::iterator m_observerIt = m_observers.end();
-	bool m_skipObserverIncrement = false;
 };
