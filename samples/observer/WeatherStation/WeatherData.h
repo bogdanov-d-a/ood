@@ -8,6 +8,7 @@
 #include <map>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <boost/optional.hpp>
 #include "Observer.h"
 
 using namespace std;
@@ -29,12 +30,57 @@ struct SWeatherInfo
 	double temperature = 0;
 	double humidity = 0;
 	double pressure = 0;
+};
+
+struct SWeatherInfoWind : public SWeatherInfo
+{
 	SWindData wind;
 };
 
 using SenderNameProvider = std::function<std::string(const void*)>;
 
-class CDisplay: public IObserver<SWeatherInfo>
+class CWeatherObserverHelper : public IObserver<SWeatherInfo>
+{
+public:
+	virtual void UpdateWeather(SWeatherInfo const& data, const void* sender) = 0;
+
+private:
+	void Update(SWeatherInfo const& data, const void* sender) final
+	{
+		UpdateWeather(data, sender);
+	}
+};
+
+class CWeatherWindObserverHelper : public IObserver<SWeatherInfoWind>
+{
+public:
+	virtual void UpdateWeatherWind(SWeatherInfoWind const& data, const void* sender) = 0;
+
+private:
+	void Update(SWeatherInfoWind const& data, const void* sender) final
+	{
+		UpdateWeatherWind(data, sender);
+	}
+};
+
+class CDualWeatherObserver : public CWeatherObserverHelper, public CWeatherWindObserverHelper
+{
+public:
+	virtual void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) = 0;
+
+private:
+	void UpdateWeather(SWeatherInfo const& data, const void* sender) final
+	{
+		Update(data, boost::none, sender);
+	}
+
+	void UpdateWeatherWind(SWeatherInfoWind const& data, const void* sender) final
+	{
+		Update(data, data.wind, sender);
+	}
+};
+
+class CDisplay: public CDualWeatherObserver
 {
 public:
 	explicit CDisplay(SenderNameProvider const& senderNameProvider)
@@ -43,17 +89,16 @@ public:
 	}
 
 private:
-	/* Метод Update сделан приватным, чтобы ограничить возможность его вызова напрямую
-		Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
-		остается публичным
-	*/
-	void Update(SWeatherInfo const& data, const void* sender) override
+	void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) final
 	{
 		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
-		std::cout << "Current Temp " << data.temperature << std::endl;
-		std::cout << "Current Hum " << data.humidity << std::endl;
-		std::cout << "Current Pressure " << data.pressure << std::endl;
-		std::cout << "Current Wind " << data.wind << std::endl;
+		std::cout << "Current Temp " << basic.temperature << std::endl;
+		std::cout << "Current Hum " << basic.humidity << std::endl;
+		std::cout << "Current Pressure " << basic.pressure << std::endl;
+		if (wind)
+		{
+			std::cout << "Current Wind " << *wind << std::endl;
+		}
 		std::cout << "----------------" << std::endl;
 	}
 
@@ -156,7 +201,7 @@ private:
 	unsigned m_countAcc = 0;
 };
 
-class CStatsDisplay : public IObserver<SWeatherInfo>
+class CStatsDisplay : public CDualWeatherObserver
 {
 public:
 	explicit CStatsDisplay(SenderNameProvider const& senderNameProvider)
@@ -173,24 +218,26 @@ private:
 		CWindStatsCalculator windStats;
 	};
 
-	/* Метод Update сделан приватным, чтобы ограничить возможность его вызова напрямую
-	Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
-	остается публичным
-	*/
-	void Update(SWeatherInfo const& data, const void* sender) override
+	void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) final
 	{
 		auto& sensorStats = m_stats[sender];
 
-		sensorStats.temperatureStats.AddValue(data.temperature);
-		sensorStats.humidityStats.AddValue(data.humidity);
-		sensorStats.pressureStats.AddValue(data.pressure);
-		sensorStats.windStats.AddValue(data.wind);
+		sensorStats.temperatureStats.AddValue(basic.temperature);
+		sensorStats.humidityStats.AddValue(basic.humidity);
+		sensorStats.pressureStats.AddValue(basic.pressure);
+		if (wind)
+		{
+			sensorStats.windStats.AddValue(*wind);
+		}
 
 		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
 		DisplayScalarStats("Temp", sensorStats.temperatureStats);
 		DisplayScalarStats("Hum", sensorStats.humidityStats);
 		DisplayScalarStats("Pressure", sensorStats.pressureStats);
-		DisplayWindStats(sensorStats.windStats);
+		if (wind)
+		{
+			DisplayWindStats(sensorStats.windStats);
+		}
 		std::cout << "----------------" << std::endl;
 	}
 
@@ -212,7 +259,8 @@ private:
 	std::map<const void*, SensorStats> m_stats;
 };
 
-class CWeatherData : public CObservable<SWeatherInfo>
+template<typename InfoType>
+class CAbstractWeatherData : public CObservable<InfoType>
 {
 public:
 	// Температура в градусах Цельсия
@@ -230,17 +278,44 @@ public:
 	{
 		return m_pressure;
 	}
-	// Скорость и направление ветра
-	SWindData GetWind()const
-	{
-		return m_wind;
-	}
 
 	void MeasurementsChanged()
 	{
 		NotifyObservers();
 	}
 
+protected:
+	double m_temperature = 0.0;
+	double m_humidity = 0.0;	
+	double m_pressure = 760.0;	
+};
+
+class CWeatherData : public CAbstractWeatherData<SWeatherInfo>
+{
+public:
+	void SetMeasurements(double temp, double humidity, double pressure)
+	{
+		m_humidity = humidity;
+		m_temperature = temp;
+		m_pressure = pressure;
+
+		MeasurementsChanged();
+	}
+
+private:
+	SWeatherInfo GetChangedData() const final
+	{
+		SWeatherInfo info;
+		info.temperature = GetTemperature();
+		info.humidity = GetHumidity();
+		info.pressure = GetPressure();
+		return info;
+	}
+};
+
+class CWeatherWindData : public CAbstractWeatherData<SWeatherInfoWind>
+{
+public:
 	void SetMeasurements(double temp, double humidity, double pressure, double windSpeed, double windDirection)
 	{
 		m_humidity = humidity;
@@ -251,19 +326,23 @@ public:
 
 		MeasurementsChanged();
 	}
-protected:
-	SWeatherInfo GetChangedData()const override
+
+	// Скорость и направление ветра
+	SWindData GetWind()const
 	{
-		SWeatherInfo info;
+		return m_wind;
+	}
+
+private:
+	SWeatherInfoWind GetChangedData() const final
+	{
+		SWeatherInfoWind info;
 		info.temperature = GetTemperature();
 		info.humidity = GetHumidity();
 		info.pressure = GetPressure();
 		info.wind = GetWind();
 		return info;
 	}
-private:
-	double m_temperature = 0.0;
-	double m_humidity = 0.0;	
-	double m_pressure = 760.0;	
+
 	SWindData m_wind;
 };
