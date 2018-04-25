@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <climits>
 #include <string>
+#include <functional>
+#include <map>
 #include "Observer.h"
 
 using namespace std;
@@ -15,20 +17,31 @@ struct SWeatherInfo
 	double pressure = 0;
 };
 
+using SenderNameProvider = std::function<std::string(const void*)>;
+
 class CDisplay: public IObserver<SWeatherInfo>
 {
+public:
+	explicit CDisplay(SenderNameProvider const& senderNameProvider)
+		: m_senderNameProvider(senderNameProvider)
+	{
+	}
+
 private:
 	/* Метод Update сделан приватным, чтобы ограничить возможность его вызова напрямую
 		Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
 		остается публичным
 	*/
-	void Update(SWeatherInfo const& data) override
+	void Update(SWeatherInfo const& data, const void* sender) override
 	{
+		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
 		std::cout << "Current Temp " << data.temperature << std::endl;
 		std::cout << "Current Hum " << data.humidity << std::endl;
 		std::cout << "Current Pressure " << data.pressure << std::endl;
 		std::cout << "----------------" << std::endl;
 	}
+
+	SenderNameProvider m_senderNameProvider;
 };
 
 class CStatsCalculator
@@ -72,20 +85,36 @@ private:
 
 class CStatsDisplay : public IObserver<SWeatherInfo>
 {
+public:
+	explicit CStatsDisplay(SenderNameProvider const& senderNameProvider)
+		: m_senderNameProvider(senderNameProvider)
+	{
+	}
+
 private:
+	struct SensorStats
+	{
+		CStatsCalculator temperatureStats;
+		CStatsCalculator humidityStats;
+		CStatsCalculator pressureStats;
+	};
+
 	/* Метод Update сделан приватным, чтобы ограничить возможность его вызова напрямую
 	Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
 	остается публичным
 	*/
-	void Update(SWeatherInfo const& data) override
+	void Update(SWeatherInfo const& data, const void* sender) override
 	{
-		m_temperatureStats.AddValue(data.temperature);
-		m_humidityStats.AddValue(data.humidity);
-		m_pressureStats.AddValue(data.pressure);
+		auto& sensorStats = m_stats[sender];
 
-		DisplayStats("Temp", m_temperatureStats);
-		DisplayStats("Hum", m_humidityStats);
-		DisplayStats("Pressure", m_pressureStats);
+		sensorStats.temperatureStats.AddValue(data.temperature);
+		sensorStats.humidityStats.AddValue(data.humidity);
+		sensorStats.pressureStats.AddValue(data.pressure);
+
+		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
+		DisplayStats("Temp", sensorStats.temperatureStats);
+		DisplayStats("Hum", sensorStats.humidityStats);
+		DisplayStats("Pressure", sensorStats.pressureStats);
 		std::cout << "----------------" << std::endl;
 	}
 
@@ -96,9 +125,8 @@ private:
 		std::cout << "Average " << name << " " << stats.GetAverageValue() << std::endl;
 	}
 
-	CStatsCalculator m_temperatureStats;
-	CStatsCalculator m_humidityStats;
-	CStatsCalculator m_pressureStats;
+	SenderNameProvider m_senderNameProvider;
+	std::map<const void*, SensorStats> m_stats;
 };
 
 class CWeatherData : public CObservable<SWeatherInfo>

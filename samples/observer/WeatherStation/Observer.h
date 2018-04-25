@@ -14,7 +14,7 @@ template <typename T>
 class IObserver
 {
 public:
-	virtual void Update(T const& data) = 0;
+	virtual void Update(T const& data, const void* sender) = 0;
 	virtual ~IObserver() = default;
 };
 
@@ -57,7 +57,7 @@ public:
 		const auto observersCopy = m_observers;
 		for (auto & observer : observersCopy)
 		{
-			observer.second->Update(data);
+			observer.second->Update(data, this);
 		}
 	}
 
