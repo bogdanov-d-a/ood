@@ -29,18 +29,18 @@ int main()
 	wdIndoor.RegisterObserver(statsDisplay, 0);
 	wdOutdoor.RegisterObserver(statsDisplay, 0);
 
-	wdOutdoor.SetMeasurements(3, 0.7, 760);
-	wdIndoor.SetMeasurements(15, 0.5, 762);
-	wdOutdoor.SetMeasurements(4, 0.8, 761);
-	wdIndoor.SetMeasurements(16, 0.6, 763);
+	wdOutdoor.SetMeasurements(3, 0.7, 760, 2, 0);
+	wdIndoor.SetMeasurements(15, 0.5, 762, 0, 0);
+	wdOutdoor.SetMeasurements(4, 0.8, 761, 3, 10);
+	wdIndoor.SetMeasurements(16, 0.6, 763, 0, 0);
 
 	wdIndoor.RemoveObserver(statsDisplay);
 	wdOutdoor.RemoveObserver(display);
 
-	wdOutdoor.SetMeasurements(10, 0.8, 761);
-	wdIndoor.SetMeasurements(20, 0.6, 763);
-	wdOutdoor.SetMeasurements(-10, 0.8, 761);
-	wdIndoor.SetMeasurements(22, 0.6, 763);
+	wdOutdoor.SetMeasurements(10, 0.8, 761, 5, 100);
+	wdIndoor.SetMeasurements(20, 0.6, 763, 0, 0);
+	wdOutdoor.SetMeasurements(-10, 0.8, 761, 7, 145);
+	wdIndoor.SetMeasurements(22, 0.6, 763, 0, 0);
 
 	return 0;
 }
