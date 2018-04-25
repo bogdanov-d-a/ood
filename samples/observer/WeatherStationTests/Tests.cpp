@@ -7,14 +7,19 @@ namespace
 class CMockObserver : public IObserver<bool>
 {
 public:
-	bool IsNotified() const
+	const void* GetNotifier() const
 	{
-		return m_notified;
+		return m_notifier;
 	}
 
-	void ResetNotified()
+	bool IsNotified() const
 	{
-		m_notified = false;
+		return GetNotifier() != nullptr;
+	}
+
+	void ResetNotifier()
+	{
+		m_notifier = nullptr;
 	}
 
 	void SetDoOnNotify(std::function<void(const void*)> const& onNotify = std::function<void(const void*)>())
@@ -33,7 +38,7 @@ private:
 		assert(!data);
 		(void)data;
 
-		m_notified = true;
+		m_notifier = sender;
 		if (m_onNotify)
 		{
 			m_onNotify(sender);
@@ -45,7 +50,7 @@ private:
 		}
 	}
 
-	bool m_notified = false;
+	const void* m_notifier = nullptr;
 	std::function<void(const void*)> m_onNotify;
 	IObservable<bool> *m_unsubscribeSelf = nullptr;
 };
@@ -100,9 +105,9 @@ BOOST_AUTO_TEST_CASE(TestObserverSelfUnsubscribe)
 	BOOST_CHECK(observer2.IsNotified());
 	BOOST_CHECK(observer3.IsNotified());
 
-	observer1.ResetNotified();
-	observer2.ResetNotified();
-	observer3.ResetNotified();
+	observer1.ResetNotifier();
+	observer2.ResetNotifier();
+	observer3.ResetNotifier();
 
 	observable.NotifyObservers();
 
@@ -141,4 +146,36 @@ BOOST_AUTO_TEST_CASE(TestObserverPriority)
 	runTest({ 0, 42, -1337 }, { 3, 1, 2 });
 	runTest({ 0, 1, 2 }, { 1, 2, 3 });
 	runTest({ 2, 1, 0 }, { 3, 2, 1 });
+}
+
+BOOST_AUTO_TEST_CASE(TestSender)
+{
+	CMockObservable observable1;
+	CMockObservable observable2;
+
+	CMockObserver observer1;
+	observable1.RegisterObserver(observer1, 0);
+
+	CMockObserver observer2;
+	observable2.RegisterObserver(observer2, 0);
+
+	CMockObserver observer3;
+	observable1.RegisterObserver(observer3, 0);
+	observable2.RegisterObserver(observer3, 0);
+
+	observable1.NotifyObservers();
+
+	BOOST_CHECK(observer1.GetNotifier() == &observable1);
+	BOOST_CHECK(!observer2.IsNotified());
+	BOOST_CHECK(observer3.GetNotifier() == &observable1);
+
+	observer1.ResetNotifier();
+	observer2.ResetNotifier();
+	observer3.ResetNotifier();
+
+	observable2.NotifyObservers();
+
+	BOOST_CHECK(!observer1.IsNotified());
+	BOOST_CHECK(observer2.GetNotifier() == &observable2);
+	BOOST_CHECK(observer3.GetNotifier() == &observable2);
 }
