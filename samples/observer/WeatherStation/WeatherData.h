@@ -39,42 +39,18 @@ struct SWeatherInfoWind : public SWeatherInfo
 
 using SenderNameProvider = std::function<std::string(const void*)>;
 
-class CWeatherObserverHelper : public IObserver<SWeatherInfo>
-{
-public:
-	virtual void UpdateWeather(SWeatherInfo const& data, const void* sender) = 0;
-
-private:
-	void Update(SWeatherInfo const& data, const void* sender) final
-	{
-		UpdateWeather(data, sender);
-	}
-};
-
-class CWeatherWindObserverHelper : public IObserver<SWeatherInfoWind>
-{
-public:
-	virtual void UpdateWeatherWind(SWeatherInfoWind const& data, const void* sender) = 0;
-
-private:
-	void Update(SWeatherInfoWind const& data, const void* sender) final
-	{
-		UpdateWeatherWind(data, sender);
-	}
-};
-
-class CDualWeatherObserver : public CWeatherObserverHelper, public CWeatherWindObserverHelper
+class CDualWeatherObserver : public IObserver<SWeatherInfo>, public IObserver<SWeatherInfoWind>
 {
 public:
 	virtual void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) = 0;
 
 private:
-	void UpdateWeather(SWeatherInfo const& data, const void* sender) final
+	void Update(SWeatherInfo const& data, const void* sender) final
 	{
 		Update(data, boost::none, sender);
 	}
 
-	void UpdateWeatherWind(SWeatherInfoWind const& data, const void* sender) final
+	void Update(SWeatherInfoWind const& data, const void* sender) final
 	{
 		Update(data, data.wind, sender);
 	}
