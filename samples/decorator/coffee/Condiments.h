@@ -222,3 +222,31 @@ private:
 
 	unsigned m_pieces;
 };
+
+enum class LiquorType
+{
+	Nut,
+	Chocolate,
+};
+
+class CLiquor : public CCondimentDecorator
+{
+public:
+	CLiquor(IBeveragePtr && beverage, LiquorType type = LiquorType::Nut)
+		: CCondimentDecorator(move(beverage))
+		, m_type(type)
+	{}
+
+private:
+	double GetCondimentCost() const final
+	{
+		return 50;
+	}
+
+	std::string GetCondimentDescription() const final
+	{
+		return std::string("Liquor (") + (m_type == LiquorType::Chocolate ? "chocolate" : "nut") + ")";
+	}
+
+	LiquorType m_type;
+};
