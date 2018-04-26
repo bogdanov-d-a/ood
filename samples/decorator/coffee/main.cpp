@@ -122,7 +122,7 @@ void DialogWithUser()
 	}
 	else if (beverageChoice == 2)
 	{
-		beverage = make_unique<CTea>();
+		beverage = make_unique<CTea>(TeaType::Green);
 	}
 	else
 	{
@@ -203,7 +203,7 @@ int main()
 		// iceCubes - функция, добавляющая "3 кусочка льда" к любому напитку
 		auto iceCubes3 = MakeCondiment<CIceCubes>(3, IceCubeType::Water);
 		
-		auto tea = make_unique<CTea>();
+		auto tea = make_unique<CTea>(TeaType::Red);
 
 		// декорируем чай двумя дольками лимона и тремя кусочками льда
 		auto lemonIceTea = iceCubes3(lemon2(move(tea)));	
@@ -215,9 +215,11 @@ int main()
 					2), 
 				2, IceCubeType::Water);
 		*/
-		
+
+		cout << lemonIceTea->GetDescription() << " costs " << lemonIceTea->GetCost() << endl;
+
 		auto oneMoreLemonIceTea =
-			make_unique<CTea>()	// Берем чай
+			make_unique<CTea>(TeaType::Blue) // Берем чай
 			<< MakeCondiment<CLemon>(2)	// добавляем пару долек лимона
 			<< MakeCondiment<CIceCubes>(3, IceCubeType::Water); // и 3 кубика льда
 		/*
@@ -227,6 +229,8 @@ int main()
 				MakeCondiment<CLemon>(2)(make_unique<CTea>())
 				);
 		*/
+
+		cout << oneMoreLemonIceTea->GetDescription() << " costs " << oneMoreLemonIceTea->GetCost() << endl;
 	}
 
 	// Аналог предыдущего решения с добавкой синтаксического сахара
