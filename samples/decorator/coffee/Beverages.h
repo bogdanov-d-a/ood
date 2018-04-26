@@ -115,16 +115,38 @@ public:
 	}
 };
 
+enum class MilkshakeType
+{
+	Small,
+	Medium,
+	Large,
+};
+
+namespace
+{
+
+const std::map<MilkshakeType, std::pair<std::string, double>> MILKSHAKE_TYPE_TO_DATA = {
+	{ MilkshakeType::Small, { "Small", 50 } },
+	{ MilkshakeType::Medium, { "Medium", 60 } },
+	{ MilkshakeType::Large, { "Large", 80 } },
+};
+
+}
+
 // Молочный коктейль
 class CMilkshake : public CBeverage
 {
 public:
-	CMilkshake() 
-		:CBeverage("Milkshake") 
+	CMilkshake(MilkshakeType type = MilkshakeType::Large)
+		: CBeverage(std::string("Milkshake (") + MILKSHAKE_TYPE_TO_DATA.at(type).first + ")")
+		, m_type(type)
 	{}
 
 	double GetCost() const override 
 	{ 
-		return 80; 
+		return MILKSHAKE_TYPE_TO_DATA.at(m_type).second;
 	}
+
+private:
+	MilkshakeType m_type;
 };

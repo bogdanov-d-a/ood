@@ -249,9 +249,9 @@ int main()
 
 	{
 		auto beverage = 
-			make_unique<CMilkshake>()					// Наливаем молочный коктейль
-			<< MakeCondiment<CSyrup>(SyrupType::Maple)	// заливаем кленовым сиропом
-			<< MakeCondiment<CCoconutFlakes>(8);		// посыпаем кокосовой стружкой
+			make_unique<CMilkshake>(MilkshakeType::Medium)	// Наливаем молочный коктейль
+			<< MakeCondiment<CSyrup>(SyrupType::Maple)		// заливаем кленовым сиропом
+			<< MakeCondiment<CCoconutFlakes>(8);			// посыпаем кокосовой стружкой
 
 		// Выписываем счет покупателю
 		cout << beverage->GetDescription() << " costs " << beverage->GetCost() << endl;
