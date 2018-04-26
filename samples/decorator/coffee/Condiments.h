@@ -177,3 +177,22 @@ protected:
 private:
 	unsigned m_mass;
 };
+
+class CCream : public CCondimentDecorator
+{
+public:
+	CCream(IBeveragePtr && beverage)
+		: CCondimentDecorator(move(beverage))
+	{}
+
+private:
+	double GetCondimentCost() const final
+	{
+		return 25;
+	}
+
+	std::string GetCondimentDescription() const final
+	{
+		return "Cream";
+	}
+};
