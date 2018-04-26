@@ -166,8 +166,8 @@ int main()
 	DialogWithUser();
 	cout << endl;
 	{
-		// Наливаем чашечку латте
-		auto latte = make_unique<CLatte>();
+		// Наливаем чашечку двойного латте
+		auto latte = make_unique<CLatte>(LatteType::Double);
 		// добавляем корицы
 		auto cinnamon = make_unique<CCinnamon>(move(latte));
 		// добавляем пару долек лимона

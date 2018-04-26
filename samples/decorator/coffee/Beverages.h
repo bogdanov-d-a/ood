@@ -46,18 +46,28 @@ public:
 	}
 };
 
+enum class LatteType
+{
+	Regular,
+	Double,
+};
+
 // Латте
 class CLatte : public CCoffee
 {
 public:
-	CLatte() 
-		:CCoffee("Latte") 
+	CLatte(LatteType type = LatteType::Regular)
+		: CCoffee(std::string("Latte") + (type == LatteType::Double ? " (double)" : ""))
+		, m_type(type)
 	{}
 
 	double GetCost() const override 
 	{
-		return 90; 
+		return m_type == LatteType::Double ? 130 : 90;
 	}
+
+private:
+	LatteType m_type;
 };
 
 // Чай
