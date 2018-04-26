@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "IBeverage.h"
+#include <algorithm>
 
 // Базовый декоратор "Добавка к напитку". Также является напитком
 class CCondimentDecorator : public IBeverage
@@ -195,4 +196,29 @@ private:
 	{
 		return "Cream";
 	}
+};
+
+class CChocolate : public CCondimentDecorator
+{
+public:
+	CChocolate(IBeveragePtr && beverage, unsigned pieces = 1)
+		: CCondimentDecorator(move(beverage))
+		, m_pieces(pieces)
+	{
+		m_pieces = std::max<unsigned>(m_pieces, 1);
+		m_pieces = std::min<unsigned>(m_pieces, 5);
+	}
+
+private:
+	double GetCondimentCost() const final
+	{
+		return 10 * m_pieces;
+	}
+
+	std::string GetCondimentDescription() const final
+	{
+		return std::string("Chocolate ") + std::to_string(m_pieces) + "pcs";
+	}
+
+	unsigned m_pieces;
 };
