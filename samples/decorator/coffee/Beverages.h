@@ -32,18 +32,28 @@ public:
 	}
 };
 
+enum class CapuccinoType
+{
+	Regular,
+	Double,
+};
+
 // Капуччино
 class CCapuccino : public CCoffee
 {
 public:
-	CCapuccino() 
-		:CCoffee("Capuccino") 
+	CCapuccino(CapuccinoType type = CapuccinoType::Regular)
+		: CCoffee(std::string("Capuccino") + (type == CapuccinoType::Double ? " (double)" : ""))
+		, m_type(type)
 	{}
 
 	double GetCost() const override 
 	{
-		return 80; 
+		return m_type == CapuccinoType::Double ? 120 : 80;
 	}
+
+private:
+	CapuccinoType m_type;
 };
 
 enum class LatteType

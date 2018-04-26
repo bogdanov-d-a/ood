@@ -166,10 +166,10 @@ int main()
 	DialogWithUser();
 	cout << endl;
 	{
-		// Наливаем чашечку двойного латте
-		auto latte = make_unique<CLatte>(LatteType::Double);
+		// Наливаем чашечку двойного капуччино
+		auto сapuccino = make_unique<CCapuccino>(CapuccinoType::Double);
 		// добавляем корицы
-		auto cinnamon = make_unique<CCinnamon>(move(latte));
+		auto cinnamon = make_unique<CCinnamon>(move(сapuccino));
 		// добавляем пару долек лимона
 		auto lemon = make_unique<CLemon>(move(cinnamon), 2);
 		// добавляем пару кубиков льда
@@ -183,14 +183,14 @@ int main()
 
 	{
 		auto beverage =
-			make_unique<CChocolateCrumbs>(			// Внешний слой: шоколадная крошка
-				make_unique<CIceCubes>(				// | под нею - кубики льда
-					make_unique<CLemon>(			// | | еще ниже лимон
-						make_unique<CCinnamon>(		// | | | слоем ниже - корица
-							make_unique<CLatte>()),	// | | |   в самом сердце - Латте
-						2),							// | | 2 дольки лимона
-					2, IceCubeType::Dry),			// | 2 кубика сухого льда
-				2);									// 2 грамма шоколадной крошки
+			make_unique<CChocolateCrumbs>(				// Внешний слой: шоколадная крошка
+				make_unique<CIceCubes>(					// | под нею - кубики льда
+					make_unique<CLemon>(				// | | еще ниже лимон
+						make_unique<CCinnamon>(			// | | | слоем ниже - корица
+							make_unique<CCapuccino>()),	// | | |   в самом сердце - Капуччино
+						2),								// | | 2 дольки лимона
+					2, IceCubeType::Dry),				// | 2 кубика сухого льда
+				2);										// 2 грамма шоколадной крошки
 
 		// Выписываем счет покупателю
 		cout << beverage->GetDescription() << " costs " << beverage->GetCost() << endl;
@@ -233,7 +233,7 @@ int main()
 	// обеспечиваемого операторами << и функцией MakeCondiment
 	{
 		auto beverage = 
-			make_unique<CLatte>()							// Наливаем чашечку латте,
+			make_unique<CCapuccino>()						// Наливаем чашечку капуччино,
 			<< MakeCondiment<CCinnamon>()					// оборачиваем корицей,
 			<< MakeCondiment<CLemon>(2)						// добавляем пару долек лимона
 			<< MakeCondiment<CIceCubes>(2, IceCubeType::Dry)// брасаем пару кубиков сухого льда
