@@ -21,20 +21,20 @@ int main()
 	};
 
 	CDisplay display(senderNameProvider);
-	wdIndoor.RegisterObserver(display, 0);
-	wdOutdoor.RegisterObserver(display, 0);
+	wdIndoor.RegisterObserver(display.GetBasicObserver(), 0);
+	wdOutdoor.RegisterObserver(display.GetWindObserver(), 0);
 
 	CStatsDisplay statsDisplay(senderNameProvider);
-	wdIndoor.RegisterObserver(statsDisplay, 0);
-	wdOutdoor.RegisterObserver(statsDisplay, 0);
+	wdIndoor.RegisterObserver(statsDisplay.GetBasicObserver(), 0);
+	wdOutdoor.RegisterObserver(statsDisplay.GetWindObserver(), 0);
 
 	wdOutdoor.SetMeasurements(3, 0.7, 760, 2, 0);
 	wdIndoor.SetMeasurements(15, 0.5, 762);
 	wdOutdoor.SetMeasurements(4, 0.8, 761, 3, 10);
 	wdIndoor.SetMeasurements(16, 0.6, 763);
 
-	wdIndoor.RemoveObserver(statsDisplay);
-	wdOutdoor.RemoveObserver(display);
+	wdIndoor.RemoveObserver(statsDisplay.GetBasicObserver());
+	wdOutdoor.RemoveObserver(display.GetWindObserver());
 
 	wdOutdoor.SetMeasurements(10, 0.8, 761, 5, 100);
 	wdIndoor.SetMeasurements(20, 0.6, 763);

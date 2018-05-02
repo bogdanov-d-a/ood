@@ -38,48 +38,106 @@ struct SWeatherInfoWind
 	SWindData wind;
 };
 
-using SenderNameProvider = std::function<std::string(const void*)>;
-
-class CDualWeatherObserver : public IObserver<SWeatherInfo>, public IObserver<SWeatherInfoWind>
+template<typename T>
+class CCallbackObserver : public IObserver<T>
 {
 public:
-	virtual void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) = 0;
+	using FnType = std::function<void(T const& data, IObservable<T> &sender)>;
+
+	void SetCallback(FnType const& function = FnType())
+	{
+		m_function = function;
+	}
 
 private:
-	void Update(SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) final
+	void Update(T const& data, IObservable<T> &sender) final
 	{
-		Update(data, boost::none, &sender);
+		if (m_function)
+		{
+			m_function(data, sender);
+		}
 	}
 
-	void Update(SWeatherInfoWind const& data, IObservable<SWeatherInfoWind> &sender) final
-	{
-		Update(data.info, data.wind, &sender);
-	}
+	FnType m_function;
 };
 
-class CDisplay: public CDualWeatherObserver
+class CDualWeatherObserver
+{
+public:
+	using FnType = std::function<void(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender)>;
+
+	CDualWeatherObserver()
+	{
+		m_basicObserver.SetCallback([this](SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) {
+			if (m_function)
+			{
+				m_function(data, boost::none, &sender);
+			}
+		});
+
+		m_windObserver.SetCallback([this](SWeatherInfoWind const& data, IObservable<SWeatherInfoWind> &sender) {
+			if (m_function)
+			{
+				m_function(data.info, data.wind, &sender);
+			}
+		});
+	}
+
+	void SetCallback(FnType const& function = FnType())
+	{
+		m_function = function;
+	}
+
+	IObserver<SWeatherInfo>& GetBasicObserver()
+	{
+		return m_basicObserver;
+	}
+
+	IObserver<SWeatherInfoWind>& GetWindObserver()
+	{
+		return m_windObserver;
+	}
+
+private:
+	CCallbackObserver<SWeatherInfo> m_basicObserver;
+	CCallbackObserver<SWeatherInfoWind> m_windObserver;
+	FnType m_function;
+};
+
+using SenderNameProvider = std::function<std::string(const void*)>;
+
+class CDisplay
 {
 public:
 	explicit CDisplay(SenderNameProvider const& senderNameProvider)
 		: m_senderNameProvider(senderNameProvider)
 	{
+		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) {
+			std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
+			std::cout << "Current Temp " << basic.temperature << std::endl;
+			std::cout << "Current Hum " << basic.humidity << std::endl;
+			std::cout << "Current Pressure " << basic.pressure << std::endl;
+			if (wind)
+			{
+				std::cout << "Current Wind " << *wind << std::endl;
+			}
+			std::cout << "----------------" << std::endl;
+		});
+	}
+
+	IObserver<SWeatherInfo>& GetBasicObserver()
+	{
+		return m_observer.GetBasicObserver();
+	}
+
+	IObserver<SWeatherInfoWind>& GetWindObserver()
+	{
+		return m_observer.GetWindObserver();
 	}
 
 private:
-	void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) final
-	{
-		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
-		std::cout << "Current Temp " << basic.temperature << std::endl;
-		std::cout << "Current Hum " << basic.humidity << std::endl;
-		std::cout << "Current Pressure " << basic.pressure << std::endl;
-		if (wind)
-		{
-			std::cout << "Current Wind " << *wind << std::endl;
-		}
-		std::cout << "----------------" << std::endl;
-	}
-
 	SenderNameProvider m_senderNameProvider;
+	CDualWeatherObserver m_observer;
 };
 
 class CMinMaxStatsCalculator
@@ -193,12 +251,43 @@ private:
 	unsigned m_countAcc = 0;
 };
 
-class CStatsDisplay : public CDualWeatherObserver
+class CStatsDisplay
 {
 public:
 	explicit CStatsDisplay(SenderNameProvider const& senderNameProvider)
 		: m_senderNameProvider(senderNameProvider)
 	{
+		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) {
+			auto& sensorStats = m_stats[sender];
+
+			sensorStats.temperatureStats.AddValue(basic.temperature);
+			sensorStats.humidityStats.AddValue(basic.humidity);
+			sensorStats.pressureStats.AddValue(basic.pressure);
+			if (wind)
+			{
+				sensorStats.windStats.AddValue(*wind);
+			}
+
+			std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
+			DisplayScalarStats("Temp", sensorStats.temperatureStats);
+			DisplayScalarStats("Hum", sensorStats.humidityStats);
+			DisplayScalarStats("Pressure", sensorStats.pressureStats);
+			if (wind)
+			{
+				DisplayWindStats(sensorStats.windStats);
+			}
+			std::cout << "----------------" << std::endl;
+		});
+	}
+
+	IObserver<SWeatherInfo>& GetBasicObserver()
+	{
+		return m_observer.GetBasicObserver();
+	}
+
+	IObserver<SWeatherInfoWind>& GetWindObserver()
+	{
+		return m_observer.GetWindObserver();
 	}
 
 private:
@@ -209,29 +298,6 @@ private:
 		CScalarStatsCalculator pressureStats;
 		CWindStatsCalculator windStats;
 	};
-
-	void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) final
-	{
-		auto& sensorStats = m_stats[sender];
-
-		sensorStats.temperatureStats.AddValue(basic.temperature);
-		sensorStats.humidityStats.AddValue(basic.humidity);
-		sensorStats.pressureStats.AddValue(basic.pressure);
-		if (wind)
-		{
-			sensorStats.windStats.AddValue(*wind);
-		}
-
-		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
-		DisplayScalarStats("Temp", sensorStats.temperatureStats);
-		DisplayScalarStats("Hum", sensorStats.humidityStats);
-		DisplayScalarStats("Pressure", sensorStats.pressureStats);
-		if (wind)
-		{
-			DisplayWindStats(sensorStats.windStats);
-		}
-		std::cout << "----------------" << std::endl;
-	}
 
 	static void DisplayScalarStats(std::string const& name, CScalarStatsCalculator const& stats)
 	{
@@ -248,6 +314,7 @@ private:
 	}
 
 	SenderNameProvider m_senderNameProvider;
+	CDualWeatherObserver m_observer;
 	std::map<const void*, SensorStats> m_stats;
 };
 
