@@ -318,8 +318,7 @@ private:
 	std::map<const void*, SensorStats> m_stats;
 };
 
-template<typename InfoType>
-class CAbstractWeatherData : public CObservable<InfoType>
+class CWeatherData : public CObservable<SWeatherInfo>
 {
 public:
 	// Температура в градусах Цельсия
@@ -343,15 +342,6 @@ public:
 		NotifyObservers();
 	}
 
-protected:
-	double m_temperature = 0.0;
-	double m_humidity = 0.0;	
-	double m_pressure = 760.0;	
-};
-
-class CWeatherData : public CAbstractWeatherData<SWeatherInfo>
-{
-public:
 	void SetMeasurements(double temp, double humidity, double pressure)
 	{
 		m_humidity = humidity;
@@ -370,11 +360,41 @@ private:
 		info.pressure = GetPressure();
 		return info;
 	}
+
+	double m_temperature = 0.0;
+	double m_humidity = 0.0;
+	double m_pressure = 760.0;
 };
 
-class CWeatherWindData : public CAbstractWeatherData<SWeatherInfoWind>
+class CWeatherWindData : public CObservable<SWeatherInfoWind>
 {
 public:
+	// Температура в градусах Цельсия
+	double GetTemperature()const
+	{
+		return m_temperature;
+	}
+	// Относительная влажность (0...100)
+	double GetHumidity()const
+	{
+		return m_humidity;
+	}
+	// Атмосферное давление (в мм.рт.ст)
+	double GetPressure()const
+	{
+		return m_pressure;
+	}
+	// Скорость и направление ветра
+	SWindData GetWind()const
+	{
+		return m_wind;
+	}
+
+	void MeasurementsChanged()
+	{
+		NotifyObservers();
+	}
+
 	void SetMeasurements(double temp, double humidity, double pressure, double windSpeed, double windDirection)
 	{
 		m_humidity = humidity;
@@ -384,12 +404,6 @@ public:
 		m_wind.direction = windDirection;
 
 		MeasurementsChanged();
-	}
-
-	// Скорость и направление ветра
-	SWindData GetWind()const
-	{
-		return m_wind;
 	}
 
 private:
@@ -403,5 +417,8 @@ private:
 		return info;
 	}
 
+	double m_temperature = 0.0;
+	double m_humidity = 0.0;
+	double m_pressure = 760.0;
 	SWindData m_wind;
 };
