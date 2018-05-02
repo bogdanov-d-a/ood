@@ -32,8 +32,9 @@ struct SWeatherInfo
 	double pressure = 0;
 };
 
-struct SWeatherInfoWind : public SWeatherInfo
+struct SWeatherInfoWind
 {
+	SWeatherInfo info;
 	SWindData wind;
 };
 
@@ -52,7 +53,7 @@ private:
 
 	void Update(SWeatherInfoWind const& data, IObservable<SWeatherInfoWind> &sender) final
 	{
-		Update(data, data.wind, &sender);
+		Update(data.info, data.wind, &sender);
 	}
 };
 
@@ -328,9 +329,9 @@ private:
 	SWeatherInfoWind GetChangedData() const final
 	{
 		SWeatherInfoWind info;
-		info.temperature = GetTemperature();
-		info.humidity = GetHumidity();
-		info.pressure = GetPressure();
+		info.info.temperature = GetTemperature();
+		info.info.humidity = GetHumidity();
+		info.info.pressure = GetPressure();
 		info.wind = GetWind();
 		return info;
 	}
