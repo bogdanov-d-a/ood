@@ -5,8 +5,8 @@ int main()
 	CWeatherData wdIndoor;
 	CWeatherData wdOutdoor;
 
-	const auto senderNameProvider = [&](const void* sender) {
-		decltype(auto) wdSender = reinterpret_cast<const CWeatherData*>(sender);
+	const auto senderNameProvider = [&](IObservable<SWeatherInfo> &sender) {
+		decltype(auto) wdSender = reinterpret_cast<const CWeatherData*>(&sender);
 		if (wdSender == &wdIndoor)
 		{
 			return "indoor";

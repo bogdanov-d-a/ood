@@ -17,7 +17,7 @@ struct SWeatherInfo
 	double pressure = 0;
 };
 
-using SenderNameProvider = std::function<std::string(const void*)>;
+using SenderNameProvider = std::function<std::string(IObservable<SWeatherInfo>&)>;
 
 class CDisplay: public IObserver<SWeatherInfo>
 {
@@ -32,7 +32,7 @@ private:
 		Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
 		остается публичным
 	*/
-	void Update(SWeatherInfo const& data, const void* sender) override
+	void Update(SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) override
 	{
 		std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
 		std::cout << "Current Temp " << data.temperature << std::endl;
@@ -103,9 +103,9 @@ private:
 	Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
 	остается публичным
 	*/
-	void Update(SWeatherInfo const& data, const void* sender) override
+	void Update(SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) override
 	{
-		auto& sensorStats = m_stats[sender];
+		auto& sensorStats = m_stats[&sender];
 
 		sensorStats.temperatureStats.AddValue(data.temperature);
 		sensorStats.humidityStats.AddValue(data.humidity);
@@ -126,7 +126,7 @@ private:
 	}
 
 	SenderNameProvider m_senderNameProvider;
-	std::map<const void*, SensorStats> m_stats;
+	std::map<const IObservable<SWeatherInfo>*, SensorStats> m_stats;
 };
 
 class CWeatherData : public CObservable<SWeatherInfo>
