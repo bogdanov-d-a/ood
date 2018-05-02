@@ -84,8 +84,6 @@ private:
 class CMinMaxStatsCalculator
 {
 public:
-	virtual ~CMinMaxStatsCalculator() = default;
-
 	virtual void AddValue(double value)
 	{
 		if (m_minValue > value)
@@ -113,14 +111,24 @@ private:
 	double m_maxValue = -std::numeric_limits<double>::infinity();
 };
 
-class CScalarStatsCalculator : public CMinMaxStatsCalculator
+class CScalarStatsCalculator
 {
 public:
-	void AddValue(double value) final
+	void AddValue(double value)
 	{
-		CMinMaxStatsCalculator::AddValue(value);
+		m_minMaxStat.AddValue(value);
 		m_accValue += value;
 		++m_countAcc;
+	}
+
+	double GetMinValue() const
+	{
+		return m_minMaxStat.GetMinValue();
+	}
+
+	double GetMaxValue() const
+	{
+		return m_minMaxStat.GetMaxValue();
 	}
 
 	double GetAverageValue() const
@@ -129,6 +137,7 @@ public:
 	}
 
 private:
+	CMinMaxStatsCalculator m_minMaxStat;
 	double m_accValue = 0;
 	unsigned m_countAcc = 0;
 };
@@ -146,8 +155,8 @@ public:
 		m_minMaxSpeedStat.AddValue(data.speed);
 
 		const double radAngle = data.direction * M_PI / 180;
-		m_accValue.first += data.speed * cos(radAngle);
-		m_accValue.second += data.speed * sin(radAngle);
+		m_accValue.x += data.speed * cos(radAngle);
+		m_accValue.y += data.speed * sin(radAngle);
 
 		++m_countAcc;
 	}
@@ -165,15 +174,21 @@ public:
 	SWindData GetAverageValue() const
 	{
 		SWindData result;
-		double radAngle = atan2(m_accValue.second, m_accValue.first);
+		double radAngle = atan2(m_accValue.y, m_accValue.x);
 		result.direction = radAngle * 180 / M_PI;
-		result.speed = sqrt(sqr(m_accValue.first) + sqr(m_accValue.second)) / m_countAcc;
+		result.speed = sqrt(sqr(m_accValue.x) + sqr(m_accValue.y)) / m_countAcc;
 		return result;
 	}
 
 private:
+	struct CartesianVector
+	{
+		double x = 0;
+		double y = 0;
+	};
+
 	CMinMaxStatsCalculator m_minMaxSpeedStat;
-	std::pair<double, double> m_accValue = { 0, 0 };
+	CartesianVector m_accValue;
 	unsigned m_countAcc = 0;
 };
 
