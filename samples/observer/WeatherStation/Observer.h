@@ -4,6 +4,9 @@
 #include <functional>
 #include <cassert>
 
+template <typename T>
+class IObservable;
+
 /*
 Шаблонный интерфейс IObserver. Его должен реализовывать класс, 
 желающий получать уведомления от соответствующего IObservable
@@ -14,7 +17,7 @@ template <typename T>
 class IObserver
 {
 public:
-	virtual void Update(T const& data, const void* sender) = 0;
+	virtual void Update(T const& data, IObservable<T> &sender) = 0;
 	virtual ~IObserver() = default;
 };
 
@@ -57,7 +60,7 @@ public:
 		const auto observersCopy = m_observers;
 		for (auto & observer : observersCopy)
 		{
-			observer.second->Update(data, this);
+			observer.second->Update(data, *this);
 		}
 	}
 

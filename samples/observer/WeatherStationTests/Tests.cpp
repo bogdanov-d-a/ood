@@ -7,7 +7,7 @@ namespace
 class CMockObserver : public IObserver<bool>
 {
 public:
-	const void* GetNotifier() const
+	const IObservable<bool>* GetNotifier() const
 	{
 		return m_notifier;
 	}
@@ -22,7 +22,7 @@ public:
 		m_notifier = nullptr;
 	}
 
-	void SetDoOnNotify(std::function<void(const void*)> const& onNotify = std::function<void(const void*)>())
+	void SetDoOnNotify(std::function<void(const IObservable<bool>*)> const& onNotify = std::function<void(const IObservable<bool>*)>())
 	{
 		m_onNotify = onNotify;
 	}
@@ -33,15 +33,15 @@ public:
 	}
 
 private:
-	void Update(bool const& data, const void* sender) final
+	void Update(bool const& data, IObservable<bool> &sender) final
 	{
 		assert(!data);
 		(void)data;
 
-		m_notifier = sender;
+		m_notifier = &sender;
 		if (m_onNotify)
 		{
-			m_onNotify(sender);
+			m_onNotify(&sender);
 		}
 
 		if (m_unsubscribeSelf)
@@ -50,8 +50,8 @@ private:
 		}
 	}
 
-	const void* m_notifier = nullptr;
-	std::function<void(const void*)> m_onNotify;
+	const IObservable<bool>* m_notifier = nullptr;
+	std::function<void(const IObservable<bool>*)> m_onNotify;
 	IObservable<bool> *m_unsubscribeSelf = nullptr;
 };
 
@@ -131,9 +131,9 @@ BOOST_AUTO_TEST_CASE(TestObserverPriority)
 
 		std::vector<int> updOrder;
 
-		observer1.SetDoOnNotify([&updOrder](const void*) { updOrder.push_back(1); });
-		observer2.SetDoOnNotify([&updOrder](const void*) { updOrder.push_back(2); });
-		observer3.SetDoOnNotify([&updOrder](const void*) { updOrder.push_back(3); });
+		observer1.SetDoOnNotify([&updOrder](const IObservable<bool>*) { updOrder.push_back(1); });
+		observer2.SetDoOnNotify([&updOrder](const IObservable<bool>*) { updOrder.push_back(2); });
+		observer3.SetDoOnNotify([&updOrder](const IObservable<bool>*) { updOrder.push_back(3); });
 
 		observable.NotifyObservers();
 		BOOST_CHECK(updOrder == result);

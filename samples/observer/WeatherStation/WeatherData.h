@@ -45,14 +45,14 @@ public:
 	virtual void Update(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) = 0;
 
 private:
-	void Update(SWeatherInfo const& data, const void* sender) final
+	void Update(SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) final
 	{
-		Update(data, boost::none, sender);
+		Update(data, boost::none, &sender);
 	}
 
-	void Update(SWeatherInfoWind const& data, const void* sender) final
+	void Update(SWeatherInfoWind const& data, IObservable<SWeatherInfoWind> &sender) final
 	{
-		Update(data, data.wind, sender);
+		Update(data, data.wind, &sender);
 	}
 };
 
