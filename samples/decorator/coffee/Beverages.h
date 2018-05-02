@@ -33,7 +33,7 @@ public:
 	}
 };
 
-enum class CapuccinoType
+enum class CapuccinoSize
 {
 	Regular,
 	Double,
@@ -43,21 +43,21 @@ enum class CapuccinoType
 class CCapuccino : public CCoffee
 {
 public:
-	CCapuccino(CapuccinoType type = CapuccinoType::Regular)
-		: CCoffee(std::string("Capuccino") + (type == CapuccinoType::Double ? " (double)" : ""))
-		, m_type(type)
+	CCapuccino(CapuccinoSize size = CapuccinoSize::Regular)
+		: CCoffee(std::string("Capuccino") + (size == CapuccinoSize::Double ? " (double)" : ""))
+		, m_size(size)
 	{}
 
 	double GetCost() const override 
 	{
-		return m_type == CapuccinoType::Double ? 120 : 80;
+		return m_size == CapuccinoSize::Double ? 120 : 80;
 	}
 
 private:
-	CapuccinoType m_type;
+	CapuccinoSize m_size;
 };
 
-enum class LatteType
+enum class LatteSize
 {
 	Regular,
 	Double,
@@ -67,18 +67,18 @@ enum class LatteType
 class CLatte : public CCoffee
 {
 public:
-	CLatte(LatteType type = LatteType::Regular)
-		: CCoffee(std::string("Latte") + (type == LatteType::Double ? " (double)" : ""))
-		, m_type(type)
+	CLatte(LatteSize size = LatteSize::Regular)
+		: CCoffee(std::string("Latte") + (size == LatteSize::Double ? " (double)" : ""))
+		, m_size(size)
 	{}
 
 	double GetCost() const override 
 	{
-		return m_type == LatteType::Double ? 130 : 90;
+		return m_size == LatteSize::Double ? 130 : 90;
 	}
 
 private:
-	LatteType m_type;
+	LatteSize m_size;
 };
 
 enum class TeaType
@@ -89,17 +89,7 @@ enum class TeaType
 	Blue,
 };
 
-namespace
-{
-
-const std::map<TeaType, std::string> TEA_TYPE_TO_NAME = {
-	{ TeaType::Red, "Red" },
-	{ TeaType::Yellow, "Yellow" },
-	{ TeaType::Green, "Green" },
-	{ TeaType::Blue, "Blue" },
-};
-
-}
+extern const std::map<TeaType, std::string> TEA_TYPE_TO_NAME;
 
 // Чай
 class CTea : public CBeverage
@@ -115,38 +105,29 @@ public:
 	}
 };
 
-enum class MilkshakeType
+enum class MilkshakeSize
 {
 	Small,
 	Medium,
 	Large,
 };
 
-namespace
-{
-
-const std::map<MilkshakeType, std::pair<std::string, double>> MILKSHAKE_TYPE_TO_DATA = {
-	{ MilkshakeType::Small, { "Small", 50 } },
-	{ MilkshakeType::Medium, { "Medium", 60 } },
-	{ MilkshakeType::Large, { "Large", 80 } },
-};
-
-}
+extern const std::map<MilkshakeSize, std::pair<std::string, double>> MILKSHAKE_SIZE_TO_DATA;
 
 // Молочный коктейль
 class CMilkshake : public CBeverage
 {
 public:
-	CMilkshake(MilkshakeType type = MilkshakeType::Large)
-		: CBeverage(std::string("Milkshake (") + MILKSHAKE_TYPE_TO_DATA.at(type).first + ")")
-		, m_type(type)
+	CMilkshake(MilkshakeSize size = MilkshakeSize::Large)
+		: CBeverage(std::string("Milkshake (") + MILKSHAKE_SIZE_TO_DATA.at(size).first + ")")
+		, m_size(size)
 	{}
 
 	double GetCost() const override 
 	{ 
-		return MILKSHAKE_TYPE_TO_DATA.at(m_type).second;
+		return MILKSHAKE_SIZE_TO_DATA.at(m_size).second;
 	}
 
 private:
-	MilkshakeType m_type;
+	MilkshakeSize m_size;
 };

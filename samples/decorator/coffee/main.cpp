@@ -179,7 +179,7 @@ int main()
 	cout << endl;
 	{
 		// Наливаем чашечку двойного капуччино
-		auto сapuccino = make_unique<CCapuccino>(CapuccinoType::Double);
+		auto сapuccino = make_unique<CCapuccino>(CapuccinoSize::Double);
 		// добавляем корицы
 		auto cinnamon = make_unique<CCinnamon>(move(сapuccino));
 		// добавляем пару долек лимона
@@ -261,7 +261,7 @@ int main()
 
 	{
 		auto beverage = 
-			make_unique<CMilkshake>(MilkshakeType::Medium)	// Наливаем молочный коктейль
+			make_unique<CMilkshake>(MilkshakeSize::Medium)	// Наливаем молочный коктейль
 			<< MakeCondiment<CSyrup>(SyrupType::Maple)		// заливаем кленовым сиропом
 			<< MakeCondiment<CCoconutFlakes>(8);			// посыпаем кокосовой стружкой
 
