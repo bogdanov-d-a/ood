@@ -1,23 +1,31 @@
 #include "WeatherData.h"
 
+namespace
+{
+
+class SenderNameProviderVisitor : public boost::static_visitor<std::string>
+{
+public:
+	std::string operator()(IObservable<SWeatherInfo>&) const
+    {
+		return "indoor";
+	}
+    
+	std::string operator()(IObservable<SWeatherInfoWind>&) const
+    {
+		return "outdoor";
+	}
+};
+
+}
+
 int main()
 {
 	CWeatherData wdIndoor;
 	CWeatherWindData wdOutdoor;
 
-	const auto senderNameProvider = [&](const void* sender) {
-		if (sender == reinterpret_cast<const void*>(&wdIndoor))
-		{
-			return "indoor";
-		}
-		else if (sender == reinterpret_cast<const void*>(&wdOutdoor))
-		{
-			return "outdoor";
-		}
-		else
-		{
-			return "unknown";
-		}
+	const auto senderNameProvider = [](boost::variant<IObservable<SWeatherInfo>&, IObservable<SWeatherInfoWind>&> sender) {
+		return sender.apply_visitor(SenderNameProviderVisitor());
 	};
 
 	CDisplay display(senderNameProvider);

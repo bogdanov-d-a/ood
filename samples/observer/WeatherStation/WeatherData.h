@@ -9,6 +9,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <boost/optional.hpp>
+#include <boost/variant.hpp>
 #include "Observer.h"
 
 using namespace std;
@@ -64,21 +65,22 @@ private:
 class CDualWeatherObserver
 {
 public:
-	using FnType = std::function<void(SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender)>;
+	using FnType = std::function<void(SWeatherInfo const& basic, boost::optional<SWindData> const& wind,
+		boost::variant<IObservable<SWeatherInfo>&, IObservable<SWeatherInfoWind>&> sender)>;
 
 	CDualWeatherObserver()
 	{
 		m_basicObserver.SetCallback([this](SWeatherInfo const& data, IObservable<SWeatherInfo> &sender) {
 			if (m_function)
 			{
-				m_function(data, boost::none, &sender);
+				m_function(data, boost::none, sender);
 			}
 		});
 
 		m_windObserver.SetCallback([this](SWeatherInfoWind const& data, IObservable<SWeatherInfoWind> &sender) {
 			if (m_function)
 			{
-				m_function(data.info, data.wind, &sender);
+				m_function(data.info, data.wind, sender);
 			}
 		});
 	}
@@ -104,7 +106,7 @@ private:
 	FnType m_function;
 };
 
-using SenderNameProvider = std::function<std::string(const void*)>;
+using SenderNameProvider = std::function<std::string(boost::variant<IObservable<SWeatherInfo>&, IObservable<SWeatherInfoWind>&>)>;
 
 class CDisplay
 {
@@ -112,7 +114,8 @@ public:
 	explicit CDisplay(SenderNameProvider const& senderNameProvider)
 		: m_senderNameProvider(senderNameProvider)
 	{
-		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) {
+		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind,
+				boost::variant<IObservable<SWeatherInfo>&, IObservable<SWeatherInfoWind>&> sender) {
 			std::cout << "Update from " << m_senderNameProvider(sender) << " sensor:" << std::endl;
 			std::cout << "Current Temp " << basic.temperature << std::endl;
 			std::cout << "Current Hum " << basic.humidity << std::endl;
@@ -257,8 +260,9 @@ public:
 	explicit CStatsDisplay(SenderNameProvider const& senderNameProvider)
 		: m_senderNameProvider(senderNameProvider)
 	{
-		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind, const void* sender) {
-			auto& sensorStats = m_stats[sender];
+		m_observer.SetCallback([this](SWeatherInfo const& basic, boost::optional<SWindData> const& wind,
+				boost::variant<IObservable<SWeatherInfo>&, IObservable<SWeatherInfoWind>&> sender) {
+			auto& sensorStats = m_stats[&sender];
 
 			sensorStats.temperatureStats.AddValue(basic.temperature);
 			sensorStats.humidityStats.AddValue(basic.humidity);
