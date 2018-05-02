@@ -50,8 +50,6 @@ private:
 class CMinMaxStatsCalculator
 {
 public:
-	virtual ~CMinMaxStatsCalculator() = default;
-
 	virtual void AddValue(double value)
 	{
 		if (m_minValue > value)
@@ -79,14 +77,24 @@ private:
 	double m_maxValue = -std::numeric_limits<double>::infinity();
 };
 
-class CScalarStatsCalculator : public CMinMaxStatsCalculator
+class CScalarStatsCalculator
 {
 public:
-	void AddValue(double value) final
+	void AddValue(double value)
 	{
-		CMinMaxStatsCalculator::AddValue(value);
+		m_minMaxStat.AddValue(value);
 		m_accValue += value;
 		++m_countAcc;
+	}
+
+	double GetMinValue() const
+	{
+		return m_minMaxStat.GetMinValue();
+	}
+
+	double GetMaxValue() const
+	{
+		return m_minMaxStat.GetMaxValue();
 	}
 
 	double GetAverageValue() const
@@ -95,6 +103,7 @@ public:
 	}
 
 private:
+	CMinMaxStatsCalculator m_minMaxStat;
 	double m_accValue = 0;
 	unsigned m_countAcc = 0;
 };
