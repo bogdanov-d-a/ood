@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FileInputStream.cpp" />
+    <ClCompile Include="FileOutputStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoryInputStream.cpp" />
     <ClCompile Include="MemoryOutputStream.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="deps.h" />
     <ClInclude Include="FileInputStream.h" />
+    <ClInclude Include="FileOutputStream.h" />
     <ClInclude Include="IInputDataStream.h" />
     <ClInclude Include="IOutputDataStream.h" />
     <ClInclude Include="MemoryInputStream.h" />
