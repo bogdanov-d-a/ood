@@ -33,7 +33,8 @@ std::streamsize MemoryInputStream::ReadBlock(void * dstBuffer, std::streamsize s
 	std::streamsize readCount = 0;
 	for (; readCount < size && !IsEOF(); ++readCount)
 	{
-		dstBufferCast[readCount] = ReadByte();
+		*dstBufferCast = ReadByte();
+		++dstBufferCast;
 	}
 	return readCount;
 }
