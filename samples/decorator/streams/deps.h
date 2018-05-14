@@ -5,5 +5,7 @@
 #include <cstdint>
 #include <vector>
 #include <fstream>
+#include <random>
+#include <numeric>
 
 #include <boost/scope_exit.hpp>
