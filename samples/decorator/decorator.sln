@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coffee", "coffee\coffee.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "streams-test", "streams-test\streams-test.vcxproj", "{578F9585-3051-40C7-AF17-20E8235C8B76}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libstreams", "libstreams\libstreams.vcxproj", "{EB89DAF3-33ED-4803-98D6-55D036C899A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{578F9585-3051-40C7-AF17-20E8235C8B76}.Release|x64.Build.0 = Release|x64
 		{578F9585-3051-40C7-AF17-20E8235C8B76}.Release|x86.ActiveCfg = Release|Win32
 		{578F9585-3051-40C7-AF17-20E8235C8B76}.Release|x86.Build.0 = Release|Win32
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Debug|x64.ActiveCfg = Debug|x64
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Debug|x64.Build.0 = Debug|x64
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Debug|x86.ActiveCfg = Debug|Win32
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Debug|x86.Build.0 = Debug|Win32
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Release|x64.ActiveCfg = Release|x64
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Release|x64.Build.0 = Release|x64
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Release|x86.ActiveCfg = Release|Win32
+		{EB89DAF3-33ED-4803-98D6-55D036C899A8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
