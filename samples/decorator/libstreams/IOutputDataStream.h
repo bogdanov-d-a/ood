@@ -14,3 +14,5 @@ public:
 
 	virtual ~IOutputDataStream() = default;
 };
+
+using IOutputDataStreamPtr = std::unique_ptr<IOutputDataStream>;

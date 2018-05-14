@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "../libstreams/Utils.h"
+#include "../libstreams/MemoryOutputStream.h"
+#include "../libstreams/OutputStreamEncryptor.h"
 
 BOOST_AUTO_TEST_CASE(GenerateReplaceTableSameTest)
 {
@@ -35,4 +37,22 @@ BOOST_AUTO_TEST_CASE(InvertReplaceTableDoubleTest)
 	BOOST_CHECK(doubleTest({ 0, 1, 2, 3, 4 }));
 	BOOST_CHECK(doubleTest({ 0 }));
 	BOOST_CHECK(doubleTest({ 2, 4, 3, 1, 0 }));
+}
+
+BOOST_AUTO_TEST_CASE(OutputStreamEncryptorTest)
+{
+	auto memOutPtr = std::make_unique<MemoryOutputStream>();
+	auto& memOutRef = *memOutPtr;
+
+	IOutputDataStreamPtr outPtr = std::move(memOutPtr);
+	outPtr = std::make_unique<OutputStreamEncryptor>(std::move(outPtr), 42);
+
+	BOOST_CHECK(memOutRef.GetData().empty());
+
+	{
+		std::vector<uint8_t> data({ 0, 4, 2, 0, 1, 4 });
+		outPtr->WriteBlock(data.data(), data.size());
+	}
+
+	BOOST_CHECK(memOutRef.GetData() == std::vector<uint8_t>({ 9, 72, 211, 9, 187, 72 }));
 }

@@ -26,6 +26,7 @@
     <ClInclude Include="IOutputDataStream.h" />
     <ClInclude Include="MemoryInputStream.h" />
     <ClInclude Include="MemoryOutputStream.h" />
+    <ClInclude Include="OutputStreamEncryptor.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@
     <ClCompile Include="FileOutputStream.cpp" />
     <ClCompile Include="MemoryInputStream.cpp" />
     <ClCompile Include="MemoryOutputStream.cpp" />
+    <ClCompile Include="OutputStreamEncryptor.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
