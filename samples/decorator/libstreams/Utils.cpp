@@ -19,6 +19,10 @@ std::vector<uint8_t> Utils::InvertReplaceTable(std::vector<uint8_t> const & tabl
 	for (uint8_t i = 0; i < table.size(); ++i)
 	{
 		result[table[i]] = i;
+		if (i == UINT8_MAX)
+		{
+			break;
+		}
 	}
 
 	return result;
