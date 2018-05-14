@@ -1,4 +1,4 @@
-﻿#include "deps.h"
+﻿#include "../libstreams/deps.h"
 
 int main()
 {

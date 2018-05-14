@@ -1,6 +1,16 @@
 #include "stdafx.h"
+#include "../libstreams/Utils.h"
 
-BOOST_AUTO_TEST_CASE(test)
+BOOST_AUTO_TEST_CASE(GenerateReplaceTableSameTest)
 {
-	BOOST_CHECK(2 + 2 == 4);
+	auto table1 = Utils::GenerateReplaceTable(42);
+	auto table2 = Utils::GenerateReplaceTable(42);
+	BOOST_CHECK(table1 == table2);
+}
+
+BOOST_AUTO_TEST_CASE(GenerateReplaceTableDifferentTest)
+{
+	auto table1 = Utils::GenerateReplaceTable(42);
+	auto table2 = Utils::GenerateReplaceTable(666);
+	BOOST_CHECK(table1 != table2);
 }
