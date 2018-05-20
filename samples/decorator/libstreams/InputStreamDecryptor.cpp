@@ -1,10 +1,9 @@
 #include "deps.h"
 #include "InputStreamDecryptor.h"
-#include "Utils.h"
 
 InputStreamDecryptor::InputStreamDecryptor(IInputDataStreamPtr && stream, uint32_t key)
 	: m_stream(std::move(stream))
-	, m_table(Utils::InvertReplaceTable(Utils::GenerateReplaceTable(key)))
+	, m_table(key)
 {
 }
 
@@ -15,7 +14,7 @@ bool InputStreamDecryptor::IsEOF()
 
 uint8_t InputStreamDecryptor::ReadByte()
 {
-	return m_table[m_stream->ReadByte()];
+	return m_table.MapBack(m_stream->ReadByte());
 }
 
 std::streamsize InputStreamDecryptor::ReadBlock(void * dstBuffer, std::streamsize size)

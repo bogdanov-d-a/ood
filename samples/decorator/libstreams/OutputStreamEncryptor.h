@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IOutputDataStream.h"
+#include "ReplaceTable.h"
 
 class OutputStreamEncryptor : public IOutputDataStream
 {
@@ -12,5 +13,5 @@ public:
 
 private:
 	IOutputDataStreamPtr m_stream;
-	const std::vector<uint8_t> m_table;
+	const ReplaceTable m_table;
 };

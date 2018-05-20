@@ -28,7 +28,7 @@
     <ClInclude Include="MemoryInputStream.h" />
     <ClInclude Include="MemoryOutputStream.h" />
     <ClInclude Include="OutputStreamEncryptor.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="ReplaceTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileInputStream.cpp" />
@@ -37,7 +37,7 @@
     <ClCompile Include="MemoryInputStream.cpp" />
     <ClCompile Include="MemoryOutputStream.cpp" />
     <ClCompile Include="OutputStreamEncryptor.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ReplaceTable.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

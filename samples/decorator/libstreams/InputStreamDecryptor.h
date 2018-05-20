@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IInputDataStream.h"
+#include "ReplaceTable.h"
 
 class InputStreamDecryptor : public IInputDataStream
 {
@@ -13,5 +14,5 @@ public:
 
 private:
 	IInputDataStreamPtr m_stream;
-	const std::vector<uint8_t> m_table;
+	const ReplaceTable m_table;
 };
