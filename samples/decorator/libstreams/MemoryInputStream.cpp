@@ -18,12 +18,7 @@ uint8_t MemoryInputStream::ReadByte()
 	{
 		throw std::ios_base::failure("ReadByte attempt on EOF");
 	}
-
-	BOOST_SCOPE_EXIT_ALL(this)
-	{
-		++m_pos;
-	};
-	return *m_pos;
+	return *(m_pos++);
 }
 
 std::streamsize MemoryInputStream::ReadBlock(void * dstBuffer, std::streamsize size)
