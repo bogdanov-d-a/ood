@@ -23,6 +23,11 @@ uint8_t FileInputStream::ReadByte()
 
 std::streamsize FileInputStream::ReadBlock(void * dstBuffer, std::streamsize size)
 {
+	if (IsEOF())
+	{
+		return 0;
+	}
+
 	decltype(auto) dstBufferCast = reinterpret_cast<char*>(dstBuffer);
 
 	BOOST_SCOPE_EXIT_ALL(this, oldFlags = m_stream.exceptions())
