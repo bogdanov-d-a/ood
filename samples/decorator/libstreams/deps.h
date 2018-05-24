@@ -10,3 +10,4 @@
 
 #include <boost/scope_exit.hpp>
 #include <boost/optional.hpp>
+#include <boost/variant.hpp>

@@ -70,6 +70,43 @@ void ParseArgs(int argc, char *argv[],
 	}
 }
 
+struct EncryptAction
+{
+	explicit EncryptAction(int key)
+		: key(key)
+	{}
+
+	int key = 0;
+};
+
+class CompressAction
+{
+};
+
+using OutputAction = boost::variant<EncryptAction, CompressAction>;
+
+class ApplyOutputActionVisitor : boost::static_visitor<IOutputDataStreamPtr>
+{
+public:
+	explicit ApplyOutputActionVisitor(IOutputDataStreamPtr &&stream)
+		: m_stream(std::move(stream))
+	{
+	}
+
+	IOutputDataStreamPtr operator()(EncryptAction const& action)
+	{
+		return std::make_unique<OutputStreamEncryptor>(std::move(m_stream), action.key);
+	}
+
+	IOutputDataStreamPtr operator()(CompressAction const&)
+	{
+		return std::make_unique<OutputStreamCompressor>(std::move(m_stream));
+	}
+
+private:
+	IOutputDataStreamPtr m_stream;
+};
+
 }
 
 int main(int argc, char *argv[])
@@ -86,20 +123,30 @@ int main(int argc, char *argv[])
 	IInputDataStreamPtr input = std::make_unique<FileInputStream>(inputName);
 	IOutputDataStreamPtr output = std::make_unique<FileOutputStream>(outputName);
 
-	ParseArgs(argc, argv,
-		[&output](int key) {
-			output = std::make_unique<OutputStreamEncryptor>(std::move(output), key);
-		},
-		[&input](int key) {
-			input = std::make_unique<InputStreamDecryptor>(std::move(input), key);
-		},
-		[&output]() {
-			output = std::make_unique<OutputStreamCompressor>(std::move(output));
-		},
-		[&input]() {
-			input = std::make_unique<InputStreamDecompressor>(std::move(input));
+	{
+		std::vector<OutputAction> outputActions;
+
+		ParseArgs(argc, argv,
+			[&outputActions](int key) {
+				outputActions.emplace_back(EncryptAction(key));
+			},
+			[&input](int key) {
+				input = std::make_unique<InputStreamDecryptor>(std::move(input), key);
+			},
+			[&outputActions]() {
+				outputActions.emplace_back(CompressAction());
+			},
+			[&input]() {
+				input = std::make_unique<InputStreamDecompressor>(std::move(input));
+			}
+		);
+
+		for (auto it = outputActions.rbegin(); it != outputActions.rend(); ++it)
+		{
+			ApplyOutputActionVisitor visitor(std::move(output));
+			output = boost::apply_visitor(visitor, *it);
 		}
-	);
+	}
 
 	constexpr std::streamsize bufferSize = 1024;
 	std::vector<uint8_t> buffer(bufferSize);
