@@ -23,23 +23,19 @@ uint8_t FileInputStream::ReadByte()
 
 std::streamsize FileInputStream::ReadBlock(void * dstBuffer, std::streamsize size)
 {
-	if (IsEOF())
-	{
-		return 0;
-	}
-
 	decltype(auto) dstBufferCast = reinterpret_cast<char*>(dstBuffer);
 
 	BOOST_SCOPE_EXIT_ALL(this, oldFlags = m_stream.exceptions())
 	{
 		m_stream.exceptions(oldFlags);
 	};
-	m_stream.exceptions(m_stream.exceptions() & ~std::ifstream::failbit);
+	m_stream.exceptions(0);
 
 	m_stream.read(dstBufferCast, size);
-	if (m_stream.fail() && !m_stream.eof())
+	if (m_stream.eof())
 	{
-		throw std::ios_base::failure("ReadBlock failbit set");
+		m_stream.clear();
 	}
+
 	return m_stream.gcount();
 }

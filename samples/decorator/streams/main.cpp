@@ -101,9 +101,16 @@ int main(int argc, char *argv[])
 		}
 	);
 
-	while (!input->IsEOF())
+	constexpr std::streamsize bufferSize = 1024;
+	std::vector<uint8_t> buffer(bufferSize);
+	for (;;)
 	{
-		output->WriteByte(input->ReadByte());
+		const auto readCount = input->ReadBlock(buffer.data(), bufferSize);
+		output->WriteBlock(buffer.data(), readCount);
+		if (readCount < bufferSize)
+		{
+			break;
+		}
 	}
 
 	return 0;
