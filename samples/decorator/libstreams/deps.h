@@ -9,3 +9,4 @@
 #include <numeric>
 
 #include <boost/scope_exit.hpp>
+#include <boost/optional.hpp>

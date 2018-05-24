@@ -23,6 +23,7 @@
     <ClInclude Include="FileInputStream.h" />
     <ClInclude Include="FileOutputStream.h" />
     <ClInclude Include="IInputDataStream.h" />
+    <ClInclude Include="InputStreamDecompressor.h" />
     <ClInclude Include="InputStreamDecryptor.h" />
     <ClInclude Include="IOutputDataStream.h" />
     <ClInclude Include="MemoryInputStream.h" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <ClCompile Include="FileInputStream.cpp" />
     <ClCompile Include="FileOutputStream.cpp" />
+    <ClCompile Include="InputStreamDecompressor.cpp" />
     <ClCompile Include="InputStreamDecryptor.cpp" />
     <ClCompile Include="MemoryInputStream.cpp" />
     <ClCompile Include="MemoryOutputStream.cpp" />

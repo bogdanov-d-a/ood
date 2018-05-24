@@ -3,6 +3,7 @@
 #include "../libstreams/MemoryInputStream.h"
 #include "../libstreams/MemoryOutputStream.h"
 #include "../libstreams/InputStreamDecryptor.h"
+#include "../libstreams/InputStreamDecompressor.h"
 #include "../libstreams/OutputStreamEncryptor.h"
 #include "../libstreams/OutputStreamCompressor.h"
 
@@ -46,7 +47,7 @@ BOOST_AUTO_TEST_CASE(InputStreamDecryptorTest)
 	inPtr = std::make_unique<InputStreamDecryptor>(std::move(inPtr), 42);
 
 	std::vector<uint8_t> outData(6);
-	BOOST_CHECK(inPtr->ReadBlock(outData.data(), outData.size()));
+	BOOST_CHECK(inPtr->ReadBlock(outData.data(), outData.size()) == 6);
 	BOOST_CHECK(inPtr->IsEOF());
 	BOOST_CHECK(outData == std::vector<uint8_t>({ 0, 4, 2, 0, 1, 4 }));
 }
@@ -67,4 +68,15 @@ BOOST_AUTO_TEST_CASE(OutputStreamCompressorTest)
 	}
 
 	BOOST_CHECK(memOutRef.GetData() == std::vector<uint8_t>({ 0, 0, 0, 1, 2, 2, 0, 0, 0, 3, 0, 5, 0, 3, 2, 5 }));
+}
+
+BOOST_AUTO_TEST_CASE(InputStreamDecompressorTest)
+{
+	IInputDataStreamPtr inPtr = std::make_unique<MemoryInputStream>(std::vector<uint8_t>({ 0, 0, 0, 1, 2, 2, 0, 0, 0, 3, 0, 5, 0, 3, 2, 5 }));
+	inPtr = std::make_unique<InputStreamDecompressor>(std::move(inPtr));
+
+	std::vector<uint8_t> outData(12);
+	BOOST_CHECK(inPtr->ReadBlock(outData.data(), outData.size()) == 12);
+	BOOST_CHECK(inPtr->IsEOF());
+	BOOST_CHECK(outData == std::vector<uint8_t>({ 0, 1, 2, 2, 2, 0, 3, 5, 3, 5, 5, 5 }));
 }

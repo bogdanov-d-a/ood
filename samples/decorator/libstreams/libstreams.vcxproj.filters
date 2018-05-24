@@ -48,6 +48,9 @@
     <ClInclude Include="OutputStreamCompressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InputStreamDecompressor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileInputStream.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OutputStreamCompressor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputStreamDecompressor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
