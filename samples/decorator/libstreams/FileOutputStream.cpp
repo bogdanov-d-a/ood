@@ -2,7 +2,7 @@
 #include "FileOutputStream.h"
 
 FileOutputStream::FileOutputStream(std::string const & filename)
-	: m_stream(filename)
+	: m_stream(filename, std::ios::binary)
 {
 	m_stream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 }
