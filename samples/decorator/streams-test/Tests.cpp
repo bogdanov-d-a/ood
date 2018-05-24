@@ -52,6 +52,18 @@ BOOST_AUTO_TEST_CASE(InputStreamDecryptorTest)
 	BOOST_CHECK(outData == std::vector<uint8_t>({ 0, 4, 2, 0, 1, 4 }));
 }
 
+BOOST_AUTO_TEST_CASE(OutputStreamCompressorEmptyTest)
+{
+	auto memOutPtr = std::make_unique<MemoryOutputStream>();
+	auto& memOutRef = *memOutPtr;
+
+	auto outPtr = std::make_unique<OutputStreamCompressor>(std::move(memOutPtr));
+
+	BOOST_CHECK(memOutRef.GetData().empty());
+	outPtr->SyncBuffer();
+	BOOST_CHECK(memOutRef.GetData().empty());
+}
+
 BOOST_AUTO_TEST_CASE(OutputStreamCompressorTest)
 {
 	auto memOutPtr = std::make_unique<MemoryOutputStream>();
@@ -68,6 +80,16 @@ BOOST_AUTO_TEST_CASE(OutputStreamCompressorTest)
 	}
 
 	BOOST_CHECK(memOutRef.GetData() == std::vector<uint8_t>({ 0, 0, 0, 1, 2, 2, 0, 0, 0, 3, 0, 5, 0, 3, 2, 5 }));
+}
+
+BOOST_AUTO_TEST_CASE(InputStreamDecompressorEmptyTest)
+{
+	IInputDataStreamPtr inPtr = std::make_unique<MemoryInputStream>(std::vector<uint8_t>());
+	inPtr = std::make_unique<InputStreamDecompressor>(std::move(inPtr));
+
+	std::vector<uint8_t> outData(10);
+	BOOST_CHECK(inPtr->ReadBlock(outData.data(), outData.size()) == 0);
+	BOOST_CHECK(inPtr->IsEOF());
 }
 
 BOOST_AUTO_TEST_CASE(InputStreamDecompressorTest)
