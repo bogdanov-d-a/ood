@@ -5,7 +5,7 @@
 
 using namespace std;
 
-std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, boost::optional<size_t> position)
+std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
 	// TODO: m_history.AddAndExecuteCommand
 
@@ -15,7 +15,7 @@ std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text,
 	return result;
 }
 
-std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int width, int height, boost::optional<size_t> position)
+std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
 	throw std::runtime_error("not implemented");
 }

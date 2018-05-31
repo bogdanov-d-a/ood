@@ -14,14 +14,14 @@ public:
 	// Вставляет параграф текста в указанную позицию (сдвигая последующие элементы)
 	// Если параметр position не указан, вставка происходит в конец документа
 	virtual std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
-		boost::optional<size_t> position = boost::none) = 0;
+		const boost::optional<size_t>& position = boost::none) = 0;
 
 	// Вставляет изображение в указанную позицию (сдвигая последующие элементы)
 	// Параметр path задает путь к вставляемому изображению
 	// При вставке изображение должно копироваться в подкаталог images 
 	// под автоматически сгенерированным именем
 	virtual std::shared_ptr<IImage> InsertImage(const std::string& path, int width, int height,
-		boost::optional<size_t> position = boost::none) = 0;
+		const boost::optional<size_t>& position = boost::none) = 0;
 
 	// Возвращает количество элементов в документе
 	virtual size_t GetItemsCount()const = 0;
