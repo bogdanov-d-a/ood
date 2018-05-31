@@ -37,7 +37,7 @@ CDocumentItem CDocument::GetItem(size_t index)
 
 void CDocument::DeleteItem(size_t index)
 {
-	throw std::runtime_error("not implemented");
+	m_items.erase(m_items.begin() + index);
 }
 
 void CDocument::SetTitle(const std::string & title)

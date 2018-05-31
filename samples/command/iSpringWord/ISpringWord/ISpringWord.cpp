@@ -24,6 +24,7 @@ public:
 		AddMenuItem("Undo", "Undo command", &CEditor::Undo);
 		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
 		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <position>|end <new text>", &CEditor::InsertParagraph);
+		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
 	}
 
 	void Start()
@@ -64,6 +65,13 @@ private:
 		getline(in, text);
 
 		m_document->InsertParagraph(text, pos);
+	}
+
+	void DeleteItem(istream & in)
+	{
+		size_t pos;
+		in >> pos;
+		m_document->DeleteItem(pos);
 	}
 
 	void List(istream &)
