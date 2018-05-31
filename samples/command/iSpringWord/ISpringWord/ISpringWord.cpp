@@ -25,6 +25,7 @@ public:
 		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
 		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <position>|end <new text>", &CEditor::InsertParagraph);
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
+		AddMenuItem("ReplaceText", "Replaces text. Args <position> <text>", &CEditor::ReplaceText);
 	}
 
 	void Start()
@@ -65,6 +66,18 @@ private:
 		getline(in, text);
 
 		m_document->InsertParagraph(text, pos);
+	}
+
+	void ReplaceText(istream & in)
+	{
+		size_t pos;
+		in >> pos;
+
+		in >> ws;
+		string text;
+		getline(in, text);
+
+		m_document->GetItem(pos).GetParagraph()->SetText(text);
 	}
 
 	void DeleteItem(istream & in)
