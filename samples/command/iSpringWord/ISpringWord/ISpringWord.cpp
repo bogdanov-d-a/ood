@@ -23,6 +23,7 @@ public:
 		m_menu.AddItem("list", "Show document", bind(&CEditor::List, this, _1));
 		AddMenuItem("undo", "Undo command", &CEditor::Undo);
 		AddMenuItem("redo", "Redo undone command", &CEditor::Redo);
+		AddMenuItem("insertparagraph", "Insert paragraph", &CEditor::InsertParagraph);
 	}
 
 	void Start()
@@ -47,10 +48,22 @@ private:
 		m_document->SetTitle(title);
 	}
 
+	void InsertParagraph(istream & in)
+	{
+		in >> ws;
+		string text;
+		getline(in, text);
+		m_document->InsertParagraph(text);
+	}
+
 	void List(istream &)
 	{
 		cout << "-------------" << endl;
-		cout << m_document->GetTitle() << endl;
+		cout << "Title: " << m_document->GetTitle() << endl;
+		for (size_t i = 0; i < m_document->GetItemsCount(); ++i)
+		{
+			cout << std::to_string(i) << ". " << m_document->GetItem(i).GetParagraph()->GetText() << std::endl;
+		}
 		cout << "-------------" << endl;
 	}
 

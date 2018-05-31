@@ -5,6 +5,18 @@
 class CDocument:public IDocument
 {
 public:
+	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
+		boost::optional<size_t> position = boost::none) final;
+
+	std::shared_ptr<IImage> InsertImage(const std::string& path, int width, int height,
+		boost::optional<size_t> position = boost::none) final;
+
+	size_t GetItemsCount()const final;
+
+	CConstDocumentItem GetItem(size_t index)const final;
+	CDocumentItem GetItem(size_t index) final;
+
+	void DeleteItem(size_t index) final;
 
 	void SetTitle(const std::string & title) override;
 	std::string GetTitle() const override;
@@ -16,7 +28,7 @@ public:
 
 private:
 	std::string m_title;
+	std::vector<CDocumentItem> m_items;
+
 	CHistory m_history;
-
-
 };

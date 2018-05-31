@@ -1,8 +1,44 @@
 #include "stdafx.h"
 #include "Document.h"
 #include "ChangeStringCommand.h"
+#include "Paragraph.h"
 
 using namespace std;
+
+std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, boost::optional<size_t> position)
+{
+	// TODO: m_history.AddAndExecuteCommand
+
+	auto result = std::make_shared<CParagraph>();
+	result->SetText(text);
+	m_items.insert(position ? m_items.begin() + *position : m_items.end(), CDocumentItem(std::shared_ptr<IImage>(), result));
+	return result;
+}
+
+std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int width, int height, boost::optional<size_t> position)
+{
+	throw std::runtime_error("not implemented");
+}
+
+size_t CDocument::GetItemsCount() const
+{
+	return m_items.size();
+}
+
+CConstDocumentItem CDocument::GetItem(size_t index) const
+{
+	return m_items.at(index);
+}
+
+CDocumentItem CDocument::GetItem(size_t index)
+{
+	return m_items.at(index);
+}
+
+void CDocument::DeleteItem(size_t index)
+{
+	throw std::runtime_error("not implemented");
+}
 
 void CDocument::SetTitle(const std::string & title)
 {
