@@ -47,8 +47,8 @@ std::streamsize InputStreamDecompressor::ReadBlock(void * dstBuffer, std::stream
 
 void InputStreamDecompressor::TryReadBuffer()
 {
-	std::vector<uint8_t> data(2);
-	if (m_stream->ReadBlock(data.data(), 2) == 2)
+	uint8_t data[2] = {};
+	if (m_stream->ReadBlock(data, 2) == 2)
 	{
 		m_buffer = RlePair(data[0], data[1]);
 	}
