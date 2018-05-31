@@ -17,13 +17,13 @@ public:
 	CEditor()  //-V730
 		:m_document(make_unique<CDocument>())
 	{
-		m_menu.AddItem("help", "Help", [this](istream&) { m_menu.ShowInstructions(); });
-		m_menu.AddItem("exit", "Exit", [this](istream&) { m_menu.Exit(); });
-		AddMenuItem("setTitle", "Changes title. Args: <new title>", &CEditor::SetTitle);
-		m_menu.AddItem("list", "Show document", bind(&CEditor::List, this, _1));
-		AddMenuItem("undo", "Undo command", &CEditor::Undo);
-		AddMenuItem("redo", "Redo undone command", &CEditor::Redo);
-		AddMenuItem("insertparagraph", "Insert paragraph", &CEditor::InsertParagraph);
+		m_menu.AddItem("Help", "Help", [this](istream&) { m_menu.ShowInstructions(); });
+		m_menu.AddItem("Exit", "Exit", [this](istream&) { m_menu.Exit(); });
+		AddMenuItem("SetTitle", "Changes title. Args: <new title>", &CEditor::SetTitle);
+		m_menu.AddItem("List", "Show document", bind(&CEditor::List, this, _1));
+		AddMenuItem("Undo", "Undo command", &CEditor::Undo);
+		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
+		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <new text>", &CEditor::InsertParagraph);
 	}
 
 	void Start()
