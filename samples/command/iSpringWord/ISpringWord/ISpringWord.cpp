@@ -39,18 +39,11 @@ private:
 		m_menu.AddItem(shortcut, description, bind(handler, this, _1));
 	}
 
-	// TODO: скипнуть первый пробел элегантнее
 	void SetTitle(istream & in)
 	{
-		string head;
-		string tail;
-
-		if (in >> head)
-		{
-			getline(in, tail);
-		}
-		string title = head + tail;
-
+		in >> ws;
+		string title;
+		getline(in, title);
 		m_document->SetTitle(title);
 	}
 
