@@ -23,7 +23,7 @@ public:
 		m_menu.AddItem("List", "Show document", bind(&CEditor::List, this, _1));
 		AddMenuItem("Undo", "Undo command", &CEditor::Undo);
 		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
-		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <new text>", &CEditor::InsertParagraph);
+		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <position>|end <new text>", &CEditor::InsertParagraph);
 	}
 
 	void Start()
@@ -50,10 +50,20 @@ private:
 
 	void InsertParagraph(istream & in)
 	{
+		string posStr;
+		in >> posStr;
+
+		boost::optional<size_t> pos;
+		if (posStr != "end")
+		{
+			pos = std::stoi(posStr);
+		}
+
 		in >> ws;
 		string text;
 		getline(in, text);
-		m_document->InsertParagraph(text);
+
+		m_document->InsertParagraph(text, pos);
 	}
 
 	void List(istream &)
