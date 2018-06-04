@@ -72,6 +72,9 @@
     <ClInclude Include="AbstractCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InsertParagraphCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChangeStringCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InsertParagraphCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

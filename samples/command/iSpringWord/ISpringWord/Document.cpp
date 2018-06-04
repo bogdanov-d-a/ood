@@ -1,17 +1,24 @@
 #include "stdafx.h"
 #include "Document.h"
 #include "ChangeStringCommand.h"
+#include "InsertParagraphCommand.h"
 #include "Paragraph.h"
 
 using namespace std;
 
 std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
-	// TODO: m_history.AddAndExecuteCommand
-
-	auto result = std::make_shared<CParagraph>();
-	result->SetText(text);
-	m_items.insert(position ? m_items.begin() + *position : m_items.end(), CDocumentItem(std::shared_ptr<IImage>(), result));
+	// TODO: fix method result
+	std::shared_ptr<IParagraph> result;
+	m_history.AddAndExecuteCommand(make_unique<InsertParagraphCommand>(text, position,
+		[&result, this](std::string const& text, const boost::optional<size_t>& position) {
+			auto result = std::make_shared<CParagraph>();
+			result->SetText(text);
+			m_items.insert(position ? m_items.begin() + *position : m_items.end(), CDocumentItem(std::shared_ptr<IImage>(), result));
+		},
+		[this](const boost::optional<size_t>& position) {
+			m_items.erase(position ? m_items.begin() + *position : --m_items.end());
+		}));
 	return result;
 }
 
