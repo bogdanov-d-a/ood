@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractCommand.h" />
     <ClInclude Include="ConstDocumentItem.h" />
+    <ClInclude Include="DeleteItemCommand.h" />
     <ClInclude Include="Document.h" />
     <ClInclude Include="DocumentData.h" />
     <ClInclude Include="History.h" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="AbstractCommand.cpp" />
     <ClCompile Include="ConstDocumentItem.cpp" />
+    <ClCompile Include="DeleteItemCommand.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentData.cpp" />
     <ClCompile Include="History.cpp" />

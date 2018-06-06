@@ -78,6 +78,9 @@
     <ClInclude Include="SetTitleCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DeleteItemCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SetTitleCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteItemCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

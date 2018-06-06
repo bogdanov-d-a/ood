@@ -2,6 +2,7 @@
 #include "Document.h"
 #include "SetTitleCommand.h"
 #include "InsertParagraphCommand.h"
+#include "DeleteItemCommand.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ CDocumentItem CDocument::GetItem(size_t index)
 
 void CDocument::DeleteItem(size_t index)
 {
-	m_data.DeleteItem(index);
+	m_history.AddAndExecuteCommand(make_unique<DeleteItemCommand>(m_data, index));
 }
 
 void CDocument::SetTitle(const std::string & title)
