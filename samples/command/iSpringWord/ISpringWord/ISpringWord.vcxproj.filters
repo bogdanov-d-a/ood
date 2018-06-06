@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{cbd91464-f958-452e-a7c8-469a03e2aefc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -45,9 +48,6 @@
     <ClInclude Include="Paragraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IDocument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,26 +57,29 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ICommand_fwd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="History.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InsertParagraphCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DocumentData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SetTitleCommand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AbstractCommand.h">
+      <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="DeleteItemCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="InsertParagraphCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="SetTitleCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand_fwd.h">
+      <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,20 +113,20 @@
     <ClCompile Include="History.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InsertParagraphCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DocumentData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SetTitleCommand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AbstractCommand.cpp">
+      <Filter>Commands</Filter>
     </ClCompile>
     <ClCompile Include="DeleteItemCommand.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="InsertParagraphCommand.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="SetTitleCommand.cpp">
+      <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
