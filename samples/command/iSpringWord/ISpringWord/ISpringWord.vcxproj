@@ -161,6 +161,7 @@
     <ClInclude Include="IParagraph.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Paragraph.h" />
+    <ClInclude Include="ReplaceTextCommand.h" />
     <ClInclude Include="SetTitleCommand.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="ISpringWord.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Paragraph.cpp" />
+    <ClCompile Include="ReplaceTextCommand.cpp" />
     <ClCompile Include="SetTitleCommand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

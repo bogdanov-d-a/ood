@@ -78,6 +78,9 @@
     <ClInclude Include="ICommand_fwd.h">
       <Filter>Commands</Filter>
     </ClInclude>
+    <ClInclude Include="ReplaceTextCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -120,6 +123,9 @@
       <Filter>Commands</Filter>
     </ClCompile>
     <ClCompile Include="SetTitleCommand.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceTextCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>
