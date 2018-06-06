@@ -39,9 +39,6 @@
     <ClInclude Include="IImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImageImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DocumentItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Image.cpp">
