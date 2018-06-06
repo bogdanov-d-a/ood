@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Paragraph.h"
-//#include "ParagraphImpl.h"
 
 std::string CParagraph::GetText() const
 {
