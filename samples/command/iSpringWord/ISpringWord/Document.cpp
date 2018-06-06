@@ -1,25 +1,14 @@
 #include "stdafx.h"
 #include "Document.h"
-#include "ChangeStringCommand.h"
+#include "SetTitleCommand.h"
 #include "InsertParagraphCommand.h"
-#include "Paragraph.h"
 
 using namespace std;
 
 std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
-	// TODO: fix method result
-	std::shared_ptr<IParagraph> result;
-	m_history.AddAndExecuteCommand(make_unique<InsertParagraphCommand>(text, position,
-		[&result, this](std::string const& text, const boost::optional<size_t>& position) {
-			auto result = std::make_shared<CParagraph>();
-			result->SetText(text);
-			m_items.insert(position ? m_items.begin() + *position : m_items.end(), CDocumentItem(std::shared_ptr<IImage>(), result));
-		},
-		[this](const boost::optional<size_t>& position) {
-			m_items.erase(position ? m_items.begin() + *position : --m_items.end());
-		}));
-	return result;
+	m_history.AddAndExecuteCommand(make_unique<InsertParagraphCommand>(m_data, text, position));
+	return GetItem(position ? *position : GetItemsCount() - 1).GetParagraph();
 }
 
 std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
@@ -29,32 +18,32 @@ std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int wid
 
 size_t CDocument::GetItemsCount() const
 {
-	return m_items.size();
+	return m_data.GetItemsCount();
 }
 
 CConstDocumentItem CDocument::GetItem(size_t index) const
 {
-	return m_items.at(index);
+	return m_data.GetItem(index);
 }
 
 CDocumentItem CDocument::GetItem(size_t index)
 {
-	return m_items.at(index);
+	return m_data.GetItem(index);
 }
 
 void CDocument::DeleteItem(size_t index)
 {
-	m_items.erase(m_items.begin() + index);
+	m_data.DeleteItem(index);
 }
 
 void CDocument::SetTitle(const std::string & title)
 {
-	m_history.AddAndExecuteCommand(make_unique<CChangeStringCommand>(m_title, title));
+	m_history.AddAndExecuteCommand(make_unique<SetTitleCommand>(m_data, title));
 }
 
 std::string CDocument::GetTitle() const
 {
-	return m_title;
+	return m_data.GetTitle();
 }
 
 bool CDocument::CanUndo() const

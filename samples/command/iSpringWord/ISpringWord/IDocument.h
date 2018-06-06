@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <memory>
 #include <string>
-#include <boost\optional.hpp>
-#include <boost\none.hpp>
 #include "IParagraph.h"
 #include "IImage.h"
 #include "ConstDocumentItem.h"

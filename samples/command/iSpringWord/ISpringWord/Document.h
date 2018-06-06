@@ -1,6 +1,7 @@
 #pragma once
 #include "IDocument.h"
 #include "History.h"
+#include "DocumentData.h"
 
 class CDocument:public IDocument
 {
@@ -27,8 +28,6 @@ public:
 	void Redo() override;
 
 private:
-	std::string m_title;
-	std::vector<CDocumentItem> m_items;
-
+	DocumentData m_data;
 	CHistory m_history;
 };

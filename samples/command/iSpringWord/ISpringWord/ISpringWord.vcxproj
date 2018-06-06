@@ -148,6 +148,7 @@
     <ClInclude Include="AbstractCommand.h" />
     <ClInclude Include="ConstDocumentItem.h" />
     <ClInclude Include="Document.h" />
+    <ClInclude Include="DocumentData.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="DocumentItem.h" />
     <ClInclude Include="ICommand_fwd.h" />
@@ -161,7 +162,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Paragraph.h" />
     <ClInclude Include="ParagraphImpl.h" />
-    <ClInclude Include="ChangeStringCommand.h" />
+    <ClInclude Include="SetTitleCommand.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClCompile Include="AbstractCommand.cpp" />
     <ClCompile Include="ConstDocumentItem.cpp" />
     <ClCompile Include="Document.cpp" />
+    <ClCompile Include="DocumentData.cpp" />
     <ClCompile Include="History.cpp" />
     <ClCompile Include="DocumentItem.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -178,7 +180,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Paragraph.cpp" />
     <ClCompile Include="ParagraphImpl.cpp" />
-    <ClCompile Include="ChangeStringCommand.cpp" />
+    <ClCompile Include="SetTitleCommand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
