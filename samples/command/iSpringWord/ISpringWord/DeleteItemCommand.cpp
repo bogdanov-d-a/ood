@@ -9,7 +9,7 @@ DeleteItemCommand::DeleteItemCommand(DocumentData & data, boost::optional<size_t
 
 void DeleteItemCommand::DoExecute()
 {
-	m_deletedItem = m_data.GetItem(m_position);
+	m_deletedItem = m_data.GetItemData(m_position);
 	m_data.DeleteItem(m_position);
 }
 

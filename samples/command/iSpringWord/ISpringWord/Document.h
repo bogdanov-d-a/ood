@@ -6,6 +6,8 @@
 class CDocument:public IDocument
 {
 public:
+	explicit CDocument();
+
 	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
 		const boost::optional<size_t>& position = boost::none) final;
 

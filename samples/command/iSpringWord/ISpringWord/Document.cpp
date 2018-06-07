@@ -3,8 +3,16 @@
 #include "SetTitleCommand.h"
 #include "InsertParagraphCommand.h"
 #include "DeleteItemCommand.h"
+#include "ReplaceTextCommand.h"
 
 using namespace std;
+
+CDocument::CDocument()
+	: m_data([this](const std::string & text, size_t position) {
+		m_history.AddAndExecuteCommand(make_unique<ReplaceTextCommand>(m_data, text, position));
+	})
+{
+}
 
 std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {

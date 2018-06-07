@@ -18,11 +18,15 @@ size_t PositionToIndex(size_t itemCount, const boost::optional<size_t>& position
 
 }
 
+DocumentData::DocumentData(OnSetParagraphText const & onSetParagraphText)
+	: m_onSetParagraphText(onSetParagraphText)
+{
+}
+
 std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
-	auto result = std::make_shared<CParagraph>();
-	result->SetText(text);
-	m_items.insert(InsertPositionToIterator(m_items, position), CDocumentItem(std::shared_ptr<IImage>(), result));
+	auto result = std::make_shared<CParagraph>(*this, text);
+	m_items.insert(InsertPositionToIterator(m_items, position), result);
 	return result;
 }
 
@@ -31,7 +35,7 @@ std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int 
 	throw std::runtime_error("not implemented");
 }
 
-void DocumentData::InsertItem(CDocumentItem && item, const boost::optional<size_t>& position)
+void DocumentData::InsertItem(ItemData && item, const boost::optional<size_t>& position)
 {
 	m_items.insert(InsertPositionToIterator(m_items, position), std::move(item));
 }
@@ -43,10 +47,33 @@ size_t DocumentData::GetItemsCount() const
 
 CConstDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position) const
 {
-	return m_items.at(PositionToIndex(GetItemsCount(), position));
+	auto &item = m_items.at(PositionToIndex(GetItemsCount(), position));
+	auto textPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
+	std::shared_ptr<CParagraph> text;
+
+	if (textPtr)
+	{
+		text = *textPtr;
+	}
+
+	return CConstDocumentItem(std::shared_ptr<IImage>(), std::move(text));
 }
 
 CDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position)
+{
+	auto &item = m_items.at(PositionToIndex(GetItemsCount(), position));
+	auto textPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
+	std::shared_ptr<CParagraph> text;
+
+	if (textPtr)
+	{
+		text = *textPtr;
+	}
+
+	return CDocumentItem(std::shared_ptr<IImage>(), std::move(text));
+}
+
+DocumentData::ItemData DocumentData::GetItemData(const boost::optional<size_t>& position)
 {
 	return m_items.at(PositionToIndex(GetItemsCount(), position));
 }
@@ -64,4 +91,20 @@ void DocumentData::SetTitle(const std::string & title)
 std::string DocumentData::GetTitle() const
 {
 	return m_title;
+}
+
+void DocumentData::CallOnSetParagraphText(CParagraph const * source, std::string const & text) const
+{
+	size_t index = 0;
+	for (auto const& item : m_items)
+	{
+		auto paragraphPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
+		if (paragraphPtr && *paragraphPtr && paragraphPtr->get() == source)
+		{
+			m_onSetParagraphText(text, index);
+			return;
+		}
+		++index;
+	}
+	throw std::runtime_error("Paragraph not found");
 }

@@ -14,5 +14,5 @@ private:
 
 	DocumentData &m_data;
 	const boost::optional<size_t> m_position;
-	boost::optional<CDocumentItem> m_deletedItem;
+	boost::optional<DocumentData::ItemData> m_deletedItem;
 };
