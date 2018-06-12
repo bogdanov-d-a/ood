@@ -50,7 +50,15 @@ void CHistory::AddAndExecuteCommand(ICommandPtr && command)
 	}
 	else // будет происходить расширение истории команд
 	{
+		const int maxHistoryLength = 10;
+		if (m_commands.size() > maxHistoryLength - 1)
+		{
+			m_nextCommandIndex = maxHistoryLength - 1;
+			m_commands.resize(m_nextCommandIndex);
+		}
+
 		assert(m_nextCommandIndex == m_commands.size());
+
 		// резервируем место по добавляемую команду 
 		m_commands.emplace_back(nullptr); // может выбросить исключение, но мы еще ничего не трогали
 
