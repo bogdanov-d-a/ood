@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Paragraph.h"
+#include "ReplaceTextCommand.h"
 
-CParagraph::CParagraph(DocumentData &documentData, const std::string& text)
-	: m_documentData(documentData)
+CParagraph::CParagraph(OnCreateCommand const& onCreateCommand, const std::string& text)
+	: m_onCreateCommand(onCreateCommand)
 	, m_text(text)
 {
 }
@@ -14,7 +15,7 @@ std::string CParagraph::GetText() const
 
 void CParagraph::SetText(const std::string & text)
 {
-	m_documentData.CallOnSetParagraphText(this, text);
+	m_onCreateCommand(std::make_unique<ReplaceTextCommand>(*this, text));
 }
 
 void CParagraph::SetTextData(const std::string & text)

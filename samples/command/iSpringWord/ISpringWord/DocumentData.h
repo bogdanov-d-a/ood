@@ -2,6 +2,7 @@
 
 #include "DocumentItem.h"
 #include "IImage.h"
+#include "ICommand.h"
 
 class CParagraph;
 
@@ -9,9 +10,9 @@ class DocumentData
 {
 public:
 	using ItemData = boost::variant<std::shared_ptr<CParagraph>, std::shared_ptr<IImage>>;
-	using OnSetParagraphText = std::function<void(const std::string&, size_t)>;
+	using OnCreateCommand = std::function<void(ICommandPtr)>;
 
-	explicit DocumentData(OnSetParagraphText const& onSetParagraphText);
+	explicit DocumentData(OnCreateCommand const& onCreateCommand);
 
 	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
 		const boost::optional<size_t>& position = boost::none);
@@ -32,10 +33,8 @@ public:
 	void SetTitle(const std::string & title);
 	std::string GetTitle() const;
 
-	void CallOnSetParagraphText(CParagraph const* source, std::string const& text) const;
-
 private:
 	std::string m_title;
 	std::vector<ItemData> m_items;
-	OnSetParagraphText m_onSetParagraphText;
+	OnCreateCommand m_onCreateCommand;
 };

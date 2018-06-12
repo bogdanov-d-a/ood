@@ -1,19 +1,18 @@
 #pragma once
 
 #include "AbstractCommand.h"
-#include "DocumentData.h"
+#include "Paragraph.h"
 
 class ReplaceTextCommand : public CAbstractCommand
 {
 public:
-	explicit ReplaceTextCommand(DocumentData &documentData, std::string const& newText, const boost::optional<size_t>& position);
+	explicit ReplaceTextCommand(CParagraph &paragraph, std::string const& newText);
 
 private:
 	void DoExecute() final;
 	void DoUnexecute() final;
 
-	DocumentData &m_documentData;
+	CParagraph &m_paragraph;
 	const std::string m_newText;
-	const boost::optional<size_t> m_position;
 	std::string m_oldText;
 };

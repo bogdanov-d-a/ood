@@ -18,14 +18,14 @@ size_t PositionToIndex(size_t itemCount, const boost::optional<size_t>& position
 
 }
 
-DocumentData::DocumentData(OnSetParagraphText const & onSetParagraphText)
-	: m_onSetParagraphText(onSetParagraphText)
+DocumentData::DocumentData(OnCreateCommand const & onCreateCommand)
+	: m_onCreateCommand(onCreateCommand)
 {
 }
 
 std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
-	auto result = std::make_shared<CParagraph>(*this, text);
+	auto result = std::make_shared<CParagraph>(m_onCreateCommand, text);
 	m_items.insert(InsertPositionToIterator(m_items, position), result);
 	return result;
 }
@@ -91,20 +91,4 @@ void DocumentData::SetTitle(const std::string & title)
 std::string DocumentData::GetTitle() const
 {
 	return m_title;
-}
-
-void DocumentData::CallOnSetParagraphText(CParagraph const * source, std::string const & text) const
-{
-	size_t index = 0;
-	for (auto const& item : m_items)
-	{
-		auto paragraphPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
-		if (paragraphPtr && *paragraphPtr && paragraphPtr->get() == source)
-		{
-			m_onSetParagraphText(text, index);
-			return;
-		}
-		++index;
-	}
-	throw std::runtime_error("Paragraph not found");
 }

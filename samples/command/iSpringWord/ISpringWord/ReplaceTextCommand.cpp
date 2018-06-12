@@ -2,29 +2,20 @@
 #include "ReplaceTextCommand.h"
 #include "Paragraph.h"
 
-ReplaceTextCommand::ReplaceTextCommand(DocumentData & documentData, std::string const & newText, const boost::optional<size_t>& position)
-	: m_documentData(documentData)
+ReplaceTextCommand::ReplaceTextCommand(CParagraph &paragraph, std::string const & newText)
+	: m_paragraph(paragraph)
 	, m_newText(newText)
-	, m_position(position)
 {
 }
 
 void ReplaceTextCommand::DoExecute()
 {
-	auto item = m_documentData.GetItemData(m_position);
-	auto paragraphPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
-	assert(paragraphPtr && *paragraphPtr);
-
-	m_oldText = (*paragraphPtr)->GetText();
-	(*paragraphPtr)->SetTextData(m_newText);
+	m_oldText = m_paragraph.GetText();
+	m_paragraph.SetTextData(m_newText);
 }
 
 void ReplaceTextCommand::DoUnexecute()
 {
-	auto item = m_documentData.GetItemData(m_position);
-	auto paragraphPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
-	assert(paragraphPtr && *paragraphPtr);
-
-	assert((*paragraphPtr)->GetText() == m_newText);
-	(*paragraphPtr)->SetTextData(m_oldText);
+	assert(m_paragraph.GetText() == m_newText);
+	m_paragraph.SetTextData(m_oldText);
 }
