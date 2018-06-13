@@ -51,10 +51,14 @@ void CHistory::AddAndExecuteCommand(ICommandPtr && command)
 	else // будет происходить расширение истории команд
 	{
 		const int maxHistoryLength = 10;
-		if (m_commands.size() > maxHistoryLength - 1)
+		assert(m_commands.size() <= maxHistoryLength);
+
+		assert(m_nextCommandIndex == m_commands.size());
+
+		if (m_commands.size() == maxHistoryLength)
 		{
-			m_nextCommandIndex = maxHistoryLength - 1;
-			m_commands.resize(m_nextCommandIndex);
+			--m_nextCommandIndex;
+			m_commands.pop_front();
 		}
 
 		assert(m_nextCommandIndex == m_commands.size());
