@@ -16,7 +16,7 @@ void InsertImageCommand::DoExecute()
 	}
 	else if (auto image = boost::get<std::shared_ptr<CImage>>(&m_executeData))
 	{
-		m_data.InsertItem(std::move(*image));
+		m_data.InsertItem(std::move(*image), m_position);
 	}
 	else
 	{
