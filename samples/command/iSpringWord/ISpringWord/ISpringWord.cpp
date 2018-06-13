@@ -29,6 +29,7 @@ public:
 		AddMenuItem("InsertImage", "Inserts image. Args: <position>|end <width> <height> <path>", &CEditor::InsertImage);
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
 		AddMenuItem("ReplaceText", "Replaces text. Args <position> <text>", &CEditor::ReplaceText);
+		AddMenuItem("ResizeImage", "Resizes image. Args <position> <width> <height>", &CEditor::ResizeImage);
 	}
 
 	void Start()
@@ -105,6 +106,20 @@ private:
 		getline(in, text);
 
 		m_document->GetItem(pos).GetParagraph()->SetText(text);
+	}
+
+	void ResizeImage(istream & in)
+	{
+		size_t pos;
+		in >> pos;
+
+		int width = 0;
+		in >> width;
+
+		int height = 0;
+		in >> height;
+
+		m_document->GetItem(pos).GetImage()->Resize(width, height);
 	}
 
 	void DeleteItem(istream & in)

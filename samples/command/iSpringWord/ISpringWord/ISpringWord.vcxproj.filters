@@ -87,6 +87,9 @@
     <ClInclude Include="InsertImageCommand.h">
       <Filter>Commands</Filter>
     </ClInclude>
+    <ClInclude Include="ResizeImageCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InsertImageCommand.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizeImageCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>

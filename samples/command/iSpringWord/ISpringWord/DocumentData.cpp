@@ -33,7 +33,7 @@ std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & te
 
 std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
-	auto result = std::make_shared<CImage>(path, m_imageIndex++, width, height);
+	auto result = std::make_shared<CImage>(m_onCreateCommand, path, m_imageIndex++, width, height);
 	m_items.insert(InsertPositionToIterator(m_items, position), result);
 	return result;
 }

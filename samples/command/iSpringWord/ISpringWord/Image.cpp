@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Image.h"
+#include "ResizeImageCommand.h"
 
 namespace
 {
@@ -26,8 +27,9 @@ std::string GetClonePath(std::string const& path, unsigned index)
 
 }
 
-CImage::CImage(std::string const & path, unsigned index, int width, int height)
-	: m_width(width)
+CImage::CImage(OnCreateCommand const& onCreateCommand, std::string const & path, unsigned index, int width, int height)
+	: m_onCreateCommand(onCreateCommand)
+	, m_width(width)
 	, m_height(height)
 {
 	const auto clonePath = GetClonePath(path, index);
@@ -54,6 +56,11 @@ int CImage::GetHeight() const
 }
 
 void CImage::Resize(int width, int height)
+{
+	m_onCreateCommand(std::make_unique<ResizeImageCommand>(*this, width, height));
+}
+
+void CImage::ResizeData(int width, int height)
 {
 	m_width = width;
 	m_height = height;
