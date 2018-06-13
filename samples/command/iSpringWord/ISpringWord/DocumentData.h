@@ -5,11 +5,12 @@
 #include "ICommand.h"
 
 class CParagraph;
+class CImage;
 
 class DocumentData
 {
 public:
-	using ItemData = boost::variant<std::shared_ptr<CParagraph>, std::shared_ptr<IImage>>;
+	using ItemData = boost::variant<std::shared_ptr<CParagraph>, std::shared_ptr<CImage>>;
 	using OnCreateCommand = std::function<void(ICommandPtr)>;
 
 	explicit DocumentData(OnCreateCommand const& onCreateCommand);
@@ -28,7 +29,7 @@ public:
 	CDocumentItem GetItem(const boost::optional<size_t>& position);
 	ItemData GetItemData(const boost::optional<size_t>& position);
 
-	void DeleteItem(const boost::optional<size_t>& position);
+	ItemData DeleteItem(const boost::optional<size_t>& position);
 
 	void SetTitle(const std::string & title);
 	std::string GetTitle() const;
@@ -37,4 +38,5 @@ private:
 	std::string m_title;
 	std::vector<ItemData> m_items;
 	OnCreateCommand m_onCreateCommand;
+	unsigned m_imageIndex = 0;
 };

@@ -9,11 +9,13 @@ DeleteItemCommand::DeleteItemCommand(DocumentData & data, boost::optional<size_t
 
 void DeleteItemCommand::DoExecute()
 {
-	m_deletedItem = m_data.GetItemData(m_position);
-	m_data.DeleteItem(m_position);
+	assert(!m_deletedItem.is_initialized());
+	m_deletedItem = m_data.DeleteItem(m_position);
 }
 
 void DeleteItemCommand::DoUnexecute()
 {
+	assert(m_deletedItem.is_initialized());
 	m_data.InsertItem(std::move(*m_deletedItem), m_position);
+	m_deletedItem = boost::none;
 }

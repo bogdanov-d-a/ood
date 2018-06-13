@@ -81,6 +81,12 @@
     <ClInclude Include="ReplaceTextCommand.h">
       <Filter>Commands</Filter>
     </ClInclude>
+    <ClInclude Include="ImageKeeper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InsertImageCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -126,6 +132,12 @@
       <Filter>Commands</Filter>
     </ClCompile>
     <ClCompile Include="ReplaceTextCommand.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageKeeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InsertImageCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,6 +23,7 @@
 #include <boost/optional.hpp>
 #include <boost/none.hpp>
 #include <boost/variant.hpp>
+#include <Windows.h>
 
 
 // TODO: reference additional headers your program requires here

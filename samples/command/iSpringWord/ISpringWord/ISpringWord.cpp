@@ -17,6 +17,8 @@ public:
 	CEditor()  //-V730
 		:m_document(make_unique<CDocument>())
 	{
+		CreateDirectoryA("images", NULL);
+
 		m_menu.AddItem("Help", "Help", [this](istream&) { m_menu.ShowInstructions(); });
 		m_menu.AddItem("Exit", "Exit", [this](istream&) { m_menu.Exit(); });
 		AddMenuItem("SetTitle", "Changes title. Args: <new title>", &CEditor::SetTitle);
@@ -24,6 +26,7 @@ public:
 		AddMenuItem("Undo", "Undo command", &CEditor::Undo);
 		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
 		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <position>|end <new text>", &CEditor::InsertParagraph);
+		AddMenuItem("InsertImage", "Inserts image. Args: <position>|end <width> <height> <path>", &CEditor::InsertImage);
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
 		AddMenuItem("ReplaceText", "Replaces text. Args <position> <text>", &CEditor::ReplaceText);
 	}
@@ -68,6 +71,30 @@ private:
 		m_document->InsertParagraph(text, pos);
 	}
 
+	void InsertImage(istream & in)
+	{
+		string posStr;
+		in >> posStr;
+
+		boost::optional<size_t> pos;
+		if (posStr != "end")
+		{
+			pos = std::stoi(posStr);
+		}
+
+		int width = 0;
+		in >> width;
+
+		int height = 0;
+		in >> height;
+
+		in >> ws;
+		string path;
+		getline(in, path);
+
+		m_document->InsertImage(path, width, height, pos);
+	}
+
 	void ReplaceText(istream & in)
 	{
 		size_t pos;
@@ -93,7 +120,23 @@ private:
 		cout << "Title: " << m_document->GetTitle() << endl;
 		for (size_t i = 0; i < m_document->GetItemsCount(); ++i)
 		{
-			cout << std::to_string(i) << ". " << m_document->GetItem(i).GetParagraph()->GetText() << std::endl;
+			cout << std::to_string(i) << ". ";
+
+			auto &item = m_document->GetItem(i);
+			if (auto &paragraph = item.GetParagraph())
+			{
+				cout << "Paragraph: " << m_document->GetItem(i).GetParagraph()->GetText();
+			}
+			else if (auto &image = item.GetImage())
+			{
+				cout << "Image: " << image->GetWidth() << " " << image->GetHeight() << " " << image->GetPath();
+			}
+			else
+			{
+				assert(false);
+			}
+
+			cout << std::endl;
 		}
 		cout << "-------------" << endl;
 	}

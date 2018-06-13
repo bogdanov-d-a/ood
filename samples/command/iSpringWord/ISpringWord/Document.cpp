@@ -2,6 +2,7 @@
 #include "Document.h"
 #include "SetTitleCommand.h"
 #include "InsertParagraphCommand.h"
+#include "InsertImageCommand.h"
 #include "DeleteItemCommand.h"
 
 using namespace std;
@@ -21,7 +22,8 @@ std::shared_ptr<IParagraph> CDocument::InsertParagraph(const std::string & text,
 
 std::shared_ptr<IImage> CDocument::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
-	throw std::runtime_error("not implemented");
+	m_history.AddAndExecuteCommand(make_unique<InsertImageCommand>(m_data, path, width, height, position));
+	return GetItem(position ? *position : GetItemsCount() - 1).GetImage();
 }
 
 size_t CDocument::GetItemsCount() const

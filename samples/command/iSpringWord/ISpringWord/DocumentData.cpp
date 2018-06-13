@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DocumentData.h"
 #include "Paragraph.h"
+#include "Image.h"
 
 namespace
 {
@@ -32,7 +33,9 @@ std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & te
 
 std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
-	throw std::runtime_error("not implemented");
+	auto result = std::make_shared<CImage>(path, m_imageIndex++, width, height);
+	m_items.insert(InsertPositionToIterator(m_items, position), result);
+	return result;
 }
 
 void DocumentData::InsertItem(ItemData && item, const boost::optional<size_t>& position)
@@ -48,6 +51,7 @@ size_t DocumentData::GetItemsCount() const
 CConstDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position) const
 {
 	auto &item = m_items.at(PositionToIndex(GetItemsCount(), position));
+
 	auto textPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
 	std::shared_ptr<CParagraph> text;
 
@@ -56,12 +60,21 @@ CConstDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position
 		text = *textPtr;
 	}
 
-	return CConstDocumentItem(std::shared_ptr<IImage>(), std::move(text));
+	auto imagePtr = boost::get<std::shared_ptr<CImage>>(&item);
+	std::shared_ptr<CImage> image;
+
+	if (imagePtr)
+	{
+		image = *imagePtr;
+	}
+
+	return CConstDocumentItem(std::move(image), std::move(text));
 }
 
 CDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position)
 {
 	auto &item = m_items.at(PositionToIndex(GetItemsCount(), position));
+
 	auto textPtr = boost::get<std::shared_ptr<CParagraph>>(&item);
 	std::shared_ptr<CParagraph> text;
 
@@ -70,7 +83,15 @@ CDocumentItem DocumentData::GetItem(const boost::optional<size_t>& position)
 		text = *textPtr;
 	}
 
-	return CDocumentItem(std::shared_ptr<IImage>(), std::move(text));
+	auto imagePtr = boost::get<std::shared_ptr<CImage>>(&item);
+	std::shared_ptr<CImage> image;
+
+	if (imagePtr)
+	{
+		image = *imagePtr;
+	}
+
+	return CDocumentItem(std::move(image), std::move(text));
 }
 
 DocumentData::ItemData DocumentData::GetItemData(const boost::optional<size_t>& position)
@@ -78,9 +99,11 @@ DocumentData::ItemData DocumentData::GetItemData(const boost::optional<size_t>& 
 	return m_items.at(PositionToIndex(GetItemsCount(), position));
 }
 
-void DocumentData::DeleteItem(const boost::optional<size_t>& position)
+DocumentData::ItemData DocumentData::DeleteItem(const boost::optional<size_t>& position)
 {
+	auto result = std::move(m_items.at(PositionToIndex(GetItemsCount(), position)));
 	m_items.erase(position ? m_items.begin() + *position : --m_items.end());
+	return result;
 }
 
 void DocumentData::SetTitle(const std::string & title)
