@@ -12,7 +12,7 @@ class DocumentData
 {
 public:
 	using ItemData = boost::variant<std::shared_ptr<CParagraph>, std::shared_ptr<CImage>>;
-	using OnCreateCommand = std::function<void(ICommandPtr)>;
+	using OnCreateCommand = std::function<void(ICommandPtr&&)>;
 
 	explicit DocumentData(OnCreateCommand const& onCreateCommand);
 

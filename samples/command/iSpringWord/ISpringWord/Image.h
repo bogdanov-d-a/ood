@@ -7,7 +7,7 @@
 class CImage : public IImage
 {
 public:
-	using OnCreateCommand = std::function<void(ICommandPtr)>;
+	using OnCreateCommand = std::function<void(ICommandPtr&&)>;
 
 	explicit CImage(OnCreateCommand const& onCreateCommand, std::string const& path, unsigned index, int width, int height);
 

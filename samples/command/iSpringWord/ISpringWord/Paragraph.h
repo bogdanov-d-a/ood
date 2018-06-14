@@ -6,7 +6,7 @@
 class CParagraph:public IParagraph
 {
 public:
-	using OnCreateCommand = std::function<void(ICommandPtr)>;
+	using OnCreateCommand = std::function<void(ICommandPtr&&)>;
 
 	explicit CParagraph(OnCreateCommand const& onCreateCommand, const std::string& text);
 	std::string GetText()const final;

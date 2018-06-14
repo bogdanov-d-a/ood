@@ -47,7 +47,7 @@ std::string EscapeStr(std::string const& str)
 
 CDocument::CDocument(OnKeepImage const& onKeepImage)
 	: m_onKeepImage(onKeepImage)
-	, m_data([this](ICommandPtr cmd) {
+	, m_data([this](ICommandPtr && cmd) {
 		m_history.AddAndExecuteCommand(std::move(cmd));
 	})
 {
