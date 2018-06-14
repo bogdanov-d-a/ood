@@ -25,6 +25,7 @@ public:
 		m_menu.AddItem("List", "Show document", bind(&CEditor::List, this, _1));
 		AddMenuItem("Undo", "Undo command", &CEditor::Undo);
 		AddMenuItem("Redo", "Redo undone command", &CEditor::Redo);
+		AddMenuItem("Save", "Save document <path>", &CEditor::Save);
 		AddMenuItem("InsertParagraph", "Inserts paragraph. Args: <position>|end <new text>", &CEditor::InsertParagraph);
 		AddMenuItem("InsertImage", "Inserts image. Args: <position>|end <width> <height> <path>", &CEditor::InsertImage);
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
@@ -178,6 +179,15 @@ private:
 		{
 			cout << "Can't redo" << endl;
 		}
+	}
+
+	void Save(istream & in)
+	{
+		in >> ws;
+		string path;
+		getline(in, path);
+
+		m_document->Save(path);
 	}
 
 	CMenu m_menu;

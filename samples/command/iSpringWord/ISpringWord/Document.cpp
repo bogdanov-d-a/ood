@@ -7,6 +7,16 @@
 
 using namespace std;
 
+namespace
+{
+
+std::string EscapeStr(std::string const& str)
+{
+	return str;
+}
+
+}
+
 CDocument::CDocument()
 	: m_data([this](ICommandPtr cmd) {
 		m_history.AddAndExecuteCommand(std::move(cmd));
@@ -74,4 +84,38 @@ bool CDocument::CanRedo() const
 void CDocument::Redo()
 {
 	m_history.Redo();
+}
+
+void CDocument::Save(const std::string & path) const
+{
+	std::ofstream out(path);
+
+	out << "<!DOCTYPE html>" << std::endl;
+	out << "<html>" << std::endl;
+
+	out << "<head>" << std::endl;
+	out << "<title>" << m_data.GetTitle() << "</title>" << std::endl;
+	out << "</head>" << std::endl;
+
+	out << "<body>" << std::endl;
+
+	for (size_t i = 0; i < m_data.GetItemsCount(); ++i)
+	{
+		auto item = m_data.GetItem(i);
+		if (auto paragraph = item.GetParagraph())
+		{
+			out << "<p>" << EscapeStr(paragraph->GetText()) << "</p>" << std::endl;
+		}
+		else if (auto image = item.GetImage())
+		{
+			out << "<img src=\"" << image->GetPath() << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	out << "</body>" << std::endl;
+	out << "</html>" << std::endl;
 }

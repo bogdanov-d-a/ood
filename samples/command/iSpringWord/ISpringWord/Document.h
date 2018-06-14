@@ -29,6 +29,8 @@ public:
 	bool CanRedo() const override;
 	void Redo() override;
 
+	void Save(const std::string& path)const final;
+
 private:
 	DocumentData m_data;
 	CHistory m_history;
