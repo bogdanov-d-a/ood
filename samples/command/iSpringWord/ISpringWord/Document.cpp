@@ -12,7 +12,35 @@ namespace
 
 std::string EscapeStr(std::string const& str)
 {
-	return str;
+	std::string result;
+
+	constexpr std::array<std::pair<char, char*>, 5> escapeMap = { {
+		{ '&', "&amp;" },
+		{ '<', "&lt;" },
+		{ '>', "&gt;" },
+		{ '"', "&quot;" },
+		{ '\'', "&apos;" },
+	} };
+
+	for (auto c : str)
+	{
+		const auto found = std::find_if(escapeMap.begin(), escapeMap.end(),
+			[c](std::pair<char, char*> const& elem) {
+				return elem.first == c;
+			}
+		);
+
+		if (found != escapeMap.end())
+		{
+			result += found->second;
+		}
+		else
+		{
+			result.push_back(c);
+		}
+	}
+
+	return result;
 }
 
 }
