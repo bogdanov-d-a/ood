@@ -45,8 +45,9 @@ std::string EscapeStr(std::string const& str)
 
 }
 
-CDocument::CDocument()
-	: m_data([this](ICommandPtr cmd) {
+CDocument::CDocument(OnKeepImage const& onKeepImage)
+	: m_onKeepImage(onKeepImage)
+	, m_data([this](ICommandPtr cmd) {
 		m_history.AddAndExecuteCommand(std::move(cmd));
 	})
 {
@@ -137,6 +138,7 @@ void CDocument::Save(const std::string & path) const
 		else if (auto image = item.GetImage())
 		{
 			out << "<img src=\"" << image->GetPath() << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
+			m_onKeepImage(m_data.GetImageKeeper(i));
 		}
 		else
 		{

@@ -15,7 +15,9 @@ class CEditor
 {
 public:
 	CEditor()  //-V730
-		:m_document(make_unique<CDocument>())
+		:m_document(make_unique<CDocument>([this](ImageKeeperPtr const& keeper) {
+			m_savedImages.insert(std::pair<std::string, ImageKeeperPtr>(keeper->GetPath(), keeper));
+		}))
 	{
 		CreateDirectoryA("images", NULL);
 
@@ -31,6 +33,14 @@ public:
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
 		AddMenuItem("ReplaceText", "Replaces text. Args <position> <text>", &CEditor::ReplaceText);
 		AddMenuItem("ResizeImage", "Resizes image. Args <position> <width> <height>", &CEditor::ResizeImage);
+	}
+
+	~CEditor()
+	{
+		for (auto &image : m_savedImages)
+		{
+			image.second->KeepAlive();
+		}
 	}
 
 	void Start()
@@ -192,6 +202,7 @@ private:
 
 	CMenu m_menu;
 	unique_ptr<IDocument> m_document;
+	std::map<std::string, ImageKeeperPtr> m_savedImages;
 };
 
 }

@@ -16,6 +16,7 @@ public:
 	int GetHeight() const final;
 	void Resize(int width, int height) final;
 	void ResizeData(int width, int height);
+	ImageKeeperPtr GetKeeper() const;
 
 private:
 	OnCreateCommand m_onCreateCommand;

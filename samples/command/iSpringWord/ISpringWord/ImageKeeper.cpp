@@ -21,3 +21,8 @@ std::string ImageKeeper::GetPath() const
 {
 	return m_path;
 }
+
+void ImageKeeper::KeepAlive()
+{
+	m_keepAlive = true;
+}

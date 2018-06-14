@@ -7,6 +7,7 @@ public:
 	~ImageKeeper();
 
 	std::string GetPath() const;
+	void KeepAlive();
 
 private:
 	std::string m_path;

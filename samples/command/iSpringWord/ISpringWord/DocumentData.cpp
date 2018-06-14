@@ -115,3 +115,16 @@ std::string DocumentData::GetTitle() const
 {
 	return m_title;
 }
+
+ImageKeeperPtr DocumentData::GetImageKeeper(size_t index) const
+{
+	auto &item = m_items.at(index);
+	if (auto imagePtr = boost::get<std::shared_ptr<CImage>>(&item))
+	{
+		return (*imagePtr)->GetKeeper();
+	}
+	else
+	{
+		throw std::runtime_error("GetImageKeeper: not an image");
+	}
+}

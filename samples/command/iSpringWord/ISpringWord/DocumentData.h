@@ -3,6 +3,7 @@
 #include "DocumentItem.h"
 #include "IImage.h"
 #include "ICommand.h"
+#include "ImageKeeper.h"
 
 class CParagraph;
 class CImage;
@@ -33,6 +34,8 @@ public:
 
 	void SetTitle(const std::string & title);
 	std::string GetTitle() const;
+
+	ImageKeeperPtr GetImageKeeper(size_t index) const;
 
 private:
 	std::string m_title;

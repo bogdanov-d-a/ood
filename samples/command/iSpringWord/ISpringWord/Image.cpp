@@ -65,3 +65,8 @@ void CImage::ResizeData(int width, int height)
 	m_width = width;
 	m_height = height;
 }
+
+ImageKeeperPtr CImage::GetKeeper() const
+{
+	return m_keeper;
+}
