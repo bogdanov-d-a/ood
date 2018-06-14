@@ -219,7 +219,7 @@ private:
 			}
 			else if (auto &image = item.GetImage())
 			{
-				cout << "Image: " << image->GetWidth() << " " << image->GetHeight() << " " << image->GetPath();
+				cout << "Image: " << image->GetWidth() << " " << image->GetHeight() << " " << GetFilename(image->GetPath()).substr(1);
 			}
 			else
 			{
