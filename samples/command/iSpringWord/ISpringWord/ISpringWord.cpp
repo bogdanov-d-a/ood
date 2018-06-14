@@ -88,6 +88,7 @@ public:
 
 	~CEditor()
 	{
+		m_document.reset();  // delete images before working dir
 		if (!RemoveDirectoryA(m_imgPath.c_str()))
 		{
 			std::cerr << "RemoveDirectoryA failed" << std::endl;
