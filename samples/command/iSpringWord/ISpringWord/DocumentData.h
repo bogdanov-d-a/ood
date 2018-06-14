@@ -13,8 +13,9 @@ class DocumentData
 public:
 	using ItemData = boost::variant<std::shared_ptr<CParagraph>, std::shared_ptr<CImage>>;
 	using OnCreateCommand = std::function<void(ICommandPtr&&)>;
+	using OnCopyImage = std::function<std::string(std::string const&)>;
 
-	explicit DocumentData(OnCreateCommand const& onCreateCommand);
+	explicit DocumentData(OnCreateCommand const& onCreateCommand, OnCopyImage const& onCopyImage);
 
 	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
 		const boost::optional<size_t>& position = boost::none);
@@ -40,6 +41,6 @@ public:
 private:
 	std::string m_title;
 	std::vector<ItemData> m_items;
-	OnCreateCommand m_onCreateCommand;
-	unsigned m_imageIndex = 0;
+	const OnCreateCommand m_onCreateCommand;
+	const OnCopyImage m_onCopyCommand;
 };

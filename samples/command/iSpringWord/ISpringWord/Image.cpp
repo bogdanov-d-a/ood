@@ -2,41 +2,13 @@
 #include "Image.h"
 #include "ResizeImageCommand.h"
 
-namespace
-{
-
-std::string GetPathFromIndex(unsigned index, std::string const& ext)
-{
-	return "images\\img" + std::to_string(index) + ext;
-}
-
-std::string GetExtension(std::string const& path)
-{
-	size_t dotIndex = path.find_last_of('.');
-	if (dotIndex == std::string::npos)
-	{
-		return "";
-	}
-	return path.substr(dotIndex);
-}
-
-std::string GetClonePath(std::string const& path, unsigned index)
-{
-	return GetPathFromIndex(index, GetExtension(path));
-}
-
-}
-
-CImage::CImage(OnCreateCommand const& onCreateCommand, std::string const & path, unsigned index, int width, int height)
+CImage::CImage(OnCreateCommand const& onCreateCommand, OnCopyImage const& onCopyImage,
+		std::string const & path, int width, int height)
 	: m_onCreateCommand(onCreateCommand)
 	, m_width(width)
 	, m_height(height)
 {
-	const auto clonePath = GetClonePath(path, index);
-	if (!CopyFileA(path.c_str(), clonePath.c_str(), TRUE))
-	{
-		throw std::runtime_error("CopyFileA failed");
-	}
+	const auto clonePath = onCopyImage(path);
 	m_keeper = std::make_shared<ImageKeeper>(clonePath);
 }
 

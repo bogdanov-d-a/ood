@@ -11,13 +11,66 @@ using namespace std::placeholders;
 namespace
 {
 
+std::string GetPathFromIndex(unsigned index, std::string const& root, std::string const& ext)
+{
+	return root + "\\img" + std::to_string(index) + ext;
+}
+
+std::string GetExtension(std::string const& path)
+{
+	size_t dotIndex = path.find_last_of('.');
+	if (dotIndex == std::string::npos)
+	{
+		return "";
+	}
+	return path.substr(dotIndex);
+}
+
+std::string GetClonePath(std::string const& path, unsigned index, std::string const& root)
+{
+	return GetPathFromIndex(index, root, GetExtension(path));
+}
+
+std::string GetTempPathWrapper()
+{
+	constexpr int bufferCapacity = 1024;
+	char buffer[bufferCapacity];
+
+	const auto pathLength = GetTempPathA(bufferCapacity, buffer);
+	if (pathLength == 0)
+	{
+		throw std::invalid_argument("GetTempPathA error");
+	}
+
+	std::string result(pathLength, '\0');
+	for (size_t i = 0; i < pathLength; ++i)
+	{
+		result[i] = buffer[i];
+	}
+	return result;
+}
+
 class CEditor
 {
 public:
 	CEditor()  //-V730
-		:m_document(make_unique<CDocument>([this](ImageKeeperPtr const&) {}))
+		: m_document(make_unique<CDocument>(
+			[this](ImageKeeperPtr const&) {},
+			[this](std::string const& path) {
+				const auto clonePath = GetClonePath(path, m_imageIndex++, m_imgPath);
+				if (!CopyFileA(path.c_str(), clonePath.c_str(), TRUE))
+				{
+					throw std::runtime_error("CopyFileA failed");
+				}
+				return clonePath;
+			}
+		))
+		, m_imgPath(GetTempPathWrapper() + "\\images")
 	{
-		CreateDirectoryA("images", NULL);
+		if (!CreateDirectoryA(m_imgPath.c_str(), NULL))
+		{
+			throw std::runtime_error("CreateDirectoryA failed");
+		}
 
 		m_menu.AddItem("Help", "Help", [this](istream&) { m_menu.ShowInstructions(); });
 		m_menu.AddItem("Exit", "Exit", [this](istream&) { m_menu.Exit(); });
@@ -31,6 +84,14 @@ public:
 		AddMenuItem("DeleteItem", "Deletes item. Args: <position>", &CEditor::DeleteItem);
 		AddMenuItem("ReplaceText", "Replaces text. Args <position> <text>", &CEditor::ReplaceText);
 		AddMenuItem("ResizeImage", "Resizes image. Args <position> <width> <height>", &CEditor::ResizeImage);
+	}
+
+	~CEditor()
+	{
+		if (!RemoveDirectoryA(m_imgPath.c_str()))
+		{
+			std::cerr << "RemoveDirectoryA failed" << std::endl;
+		}
 	}
 
 	void Start()
@@ -192,6 +253,8 @@ private:
 
 	CMenu m_menu;
 	unique_ptr<IDocument> m_document;
+	const std::string m_imgPath;
+	unsigned m_imageIndex = 0;
 };
 
 }

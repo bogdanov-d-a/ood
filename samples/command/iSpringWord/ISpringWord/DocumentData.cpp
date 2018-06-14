@@ -19,8 +19,9 @@ size_t PositionToIndex(size_t itemCount, const boost::optional<size_t>& position
 
 }
 
-DocumentData::DocumentData(OnCreateCommand const & onCreateCommand)
+DocumentData::DocumentData(OnCreateCommand const & onCreateCommand, OnCopyImage const& onCopyImage)
 	: m_onCreateCommand(onCreateCommand)
+	, m_onCopyCommand(onCopyImage)
 {
 }
 
@@ -33,7 +34,7 @@ std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & te
 
 std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
-	auto result = std::make_shared<CImage>(m_onCreateCommand, path, m_imageIndex++, width, height);
+	auto result = std::make_shared<CImage>(m_onCreateCommand, m_onCopyCommand, path, width, height);
 	m_items.insert(InsertPositionToIterator(m_items, position), result);
 	return result;
 }

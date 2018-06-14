@@ -8,8 +8,10 @@ class CImage : public IImage
 {
 public:
 	using OnCreateCommand = std::function<void(ICommandPtr&&)>;
+	using OnCopyImage = std::function<std::string(std::string const&)>;
 
-	explicit CImage(OnCreateCommand const& onCreateCommand, std::string const& path, unsigned index, int width, int height);
+	explicit CImage(OnCreateCommand const& onCreateCommand, OnCopyImage const& onCopyImage,
+		std::string const& path, int width, int height);
 
 	std::string GetPath() const final;
 	int GetWidth() const final;
