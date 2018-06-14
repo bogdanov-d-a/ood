@@ -43,10 +43,22 @@ std::string EscapeStr(std::string const& str)
 	return result;
 }
 
+std::string StripFilename(std::string const& path)
+{
+	const auto pos = path.find_last_of('\\');
+	return pos == std::string::npos ? "" : path.substr(0, pos);
 }
 
-CDocument::CDocument(OnKeepImage const& onKeepImage, OnCopyImage const& onCopyImage)
-	: m_onKeepImage(onKeepImage)
+std::string GetFilename(std::string const& path)
+{
+	size_t pos = path.find_last_of('\\');
+	return pos == std::string::npos ? path : path.substr(pos);
+}
+
+}
+
+CDocument::CDocument(OnSaveImage const& onSaveImage, OnCopyImage const& onCopyImage)
+	: m_onSaveImage(onSaveImage)
 	, m_data([this](ICommandPtr && cmd) {
 		m_history.AddAndExecuteCommand(std::move(cmd));
 	}, onCopyImage)
@@ -117,6 +129,19 @@ void CDocument::Redo()
 
 void CDocument::Save(const std::string & path) const
 {
+	const auto targetDocPath = StripFilename(path);
+	auto targetImgPath = targetDocPath + "\\images";
+	if (targetDocPath.empty())
+	{
+		targetImgPath = targetImgPath.substr(1);
+	}
+
+	if (!CreateDirectoryA(targetImgPath.c_str(), NULL))
+	{
+		throw std::runtime_error("CreateDirectoryA failed");
+	}
+
+
 	std::ofstream out(path);
 
 	out << "<!DOCTYPE html>" << std::endl;
@@ -137,8 +162,8 @@ void CDocument::Save(const std::string & path) const
 		}
 		else if (auto image = item.GetImage())
 		{
-			out << "<img src=\"" << image->GetPath() << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
-			m_onKeepImage(m_data.GetImageKeeper(i));
+			out << "<img src=\"images\\" << GetFilename(image->GetPath()) << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
+			m_onSaveImage(image->GetPath(), targetImgPath);
 		}
 		else
 		{

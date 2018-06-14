@@ -26,6 +26,12 @@ std::string GetExtension(std::string const& path)
 	return path.substr(dotIndex);
 }
 
+std::string GetFilename(std::string const& path)
+{
+	size_t pos = path.find_last_of('\\');
+	return pos == std::string::npos ? path : path.substr(pos);
+}
+
 std::string GetClonePath(std::string const& path, unsigned index, std::string const& root)
 {
 	return GetPathFromIndex(index, root, GetExtension(path));
@@ -55,7 +61,13 @@ class CEditor
 public:
 	CEditor()  //-V730
 		: m_document(make_unique<CDocument>(
-			[this](ImageKeeperPtr const&) {},
+			[this](std::string const& srcPath, std::string const& targetDir) {
+				const auto targetPath = targetDir + GetFilename(srcPath);
+				if (!CopyFileA(srcPath.c_str(), targetPath.c_str(), TRUE))
+				{
+					throw std::runtime_error("CopyFileA failed");
+				}
+			},
 			[this](std::string const& path) {
 				const auto clonePath = GetClonePath(path, m_imageIndex++, m_imgPath);
 				if (!CopyFileA(path.c_str(), clonePath.c_str(), TRUE))

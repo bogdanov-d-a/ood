@@ -7,10 +7,10 @@
 class CDocument:public IDocument
 {
 public:
-	using OnKeepImage = std::function<void(ImageKeeperPtr const& keeper)>;
+	using OnSaveImage = std::function<void(std::string const& srcPath, std::string const& targetDir)>;
 	using OnCopyImage = std::function<std::string(std::string const&)>;
 
-	explicit CDocument(OnKeepImage const& onKeepImage, OnCopyImage const& onCopyImage);
+	explicit CDocument(OnSaveImage const& onSaveImage, OnCopyImage const& onCopyImage);
 
 	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
 		const boost::optional<size_t>& position = boost::none) final;
@@ -36,7 +36,7 @@ public:
 	void Save(const std::string& path)const final;
 
 private:
-	const OnKeepImage m_onKeepImage;
+	const OnSaveImage m_onSaveImage;
 	DocumentData m_data;
 	CHistory m_history;
 };
