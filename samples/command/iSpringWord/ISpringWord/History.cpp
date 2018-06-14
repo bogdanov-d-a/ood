@@ -55,14 +55,6 @@ void CHistory::AddAndExecuteCommand(ICommandPtr && command)
 
 		assert(m_nextCommandIndex == m_commands.size());
 
-		if (m_commands.size() == maxHistoryLength)
-		{
-			--m_nextCommandIndex;
-			m_commands.pop_front();
-		}
-
-		assert(m_nextCommandIndex == m_commands.size());
-
 		// резервируем место по добавляемую команду 
 		m_commands.emplace_back(nullptr); // может выбросить исключение, но мы еще ничего не трогали
 
@@ -72,6 +64,15 @@ void CHistory::AddAndExecuteCommand(ICommandPtr && command)
 			// заменяем команду-заглушку
 			m_commands.back() = move(command); // не бросает исключений
 			++m_nextCommandIndex; // теперь можно обновить индекс следующей команды
+
+			if (m_commands.size() > maxHistoryLength)
+			{
+				--m_nextCommandIndex;
+				m_commands.pop_front(); // не бросает исключений
+			}
+
+			assert(m_nextCommandIndex == m_commands.size());
+			assert(m_commands.size() <= maxHistoryLength);
 		}
 		catch (...)
 		{
