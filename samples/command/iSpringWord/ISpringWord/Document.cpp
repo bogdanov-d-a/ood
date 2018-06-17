@@ -150,7 +150,7 @@ void CDocument::Save(const std::string & path) const
 	out << "<html>" << std::endl;
 
 	out << "<head>" << std::endl;
-	out << "<title>" << m_data.GetTitle() << "</title>" << std::endl;
+	out << "<title>" << EscapeStr(m_data.GetTitle()) << "</title>" << std::endl;
 	out << "</head>" << std::endl;
 
 	out << "<body>" << std::endl;
