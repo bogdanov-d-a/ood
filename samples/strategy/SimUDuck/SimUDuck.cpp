@@ -109,16 +109,16 @@ public:
 		cout << "I'm redhead duck" << endl;
 	}
 };
-class DeckoyDuck : public Duck
+class DecoyDuck : public Duck
 {
 public:
-	DeckoyDuck()
+	DecoyDuck()
 		: Duck(flyNoWay, muteQuackBehavior, danceNoWay)
 	{
 	}
 	void Display() const override
 	{
-		cout << "I'm deckoy duck" << endl;
+		cout << "I'm decoy duck" << endl;
 	}
 };
 class RubberDuck : public Duck
@@ -173,8 +173,8 @@ void main()
 	RubberDuck rubberDuck;
 	PlayWithDuck(rubberDuck);
 
-	DeckoyDuck deckoyDuck;
-	PlayWithDuck(deckoyDuck);
+	DecoyDuck decoyDuck;
+	PlayWithDuck(decoyDuck);
 
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
