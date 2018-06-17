@@ -4,6 +4,7 @@
 #include "InsertParagraphCommand.h"
 #include "InsertImageCommand.h"
 #include "DeleteItemCommand.h"
+#include "Utils.h"
 
 using namespace std;
 
@@ -136,9 +137,10 @@ void CDocument::Save(const std::string & path) const
 		targetImgPath = targetImgPath.substr(1);
 	}
 
-	if (!CreateDirectoryA(targetImgPath.c_str(), NULL))
+	if (!Utils::KeepCreatingDirUserPrompt(targetImgPath))
 	{
-		throw std::runtime_error("CreateDirectoryA failed");
+		std::cout << "Could not save target images" << std::endl;
+		return;
 	}
 
 

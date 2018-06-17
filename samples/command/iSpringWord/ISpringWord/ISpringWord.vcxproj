@@ -157,6 +157,7 @@
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IImage.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="ImageKeeper.h" />
     <ClInclude Include="InsertImageCommand.h" />
     <ClInclude Include="InsertParagraphCommand.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="History.cpp" />
     <ClCompile Include="DocumentItem.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ImageKeeper.cpp" />
     <ClCompile Include="InsertImageCommand.cpp" />
     <ClCompile Include="InsertParagraphCommand.cpp" />

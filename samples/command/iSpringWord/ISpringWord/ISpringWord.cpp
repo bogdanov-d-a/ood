@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Menu.h"
 #include "Document.h"
+#include "Utils.h"
 
 using namespace std;
 using namespace std::placeholders;
@@ -79,9 +80,9 @@ public:
 		))
 		, m_imgPath(GetTempPathWrapper() + "\\images")
 	{
-		if (!CreateDirectoryA(m_imgPath.c_str(), NULL))
+		if (!Utils::KeepCreatingDirUserPrompt(m_imgPath.c_str()))
 		{
-			throw std::runtime_error("CreateDirectoryA failed");
+			throw std::runtime_error("user canceled directory creation");
 		}
 
 		m_menu.AddItem("Help", "Help", [this](istream&) { m_menu.ShowInstructions(); });
