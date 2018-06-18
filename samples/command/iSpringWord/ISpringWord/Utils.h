@@ -16,6 +16,8 @@ public:
 
 	static bool TryCreateDir(std::string const& path);
 	static bool KeepCreatingDir(std::string const& path, std::function<bool()> const& promptRetry);
+	static bool TryCopyFile(std::string const& source, std::string const& destination);
+	static bool TryRemoveDirectory(std::string const& path);
 
 	static bool YesNoPrompt(std::string const& prompt);
 

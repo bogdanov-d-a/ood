@@ -48,23 +48,23 @@ public:
 		: m_document(make_unique<CDocument>(
 			[this](std::string const& srcPath, std::string const& targetDir) {
 				const auto targetPath = Utils::JoinPaths(targetDir, Utils::GetFilename(srcPath));
-				if (!CopyFileA(srcPath.c_str(), targetPath.c_str(), TRUE))
+				if (!Utils::TryCopyFile(srcPath, targetPath))
 				{
-					throw std::runtime_error("CopyFileA failed");
+					throw std::runtime_error("Utils::TryCopyFile failed");
 				}
 			},
 			[this](std::string const& path) {
 				const auto clonePath = GetClonePath(path, m_imageIndex++, m_imgPath);
-				if (!CopyFileA(path.c_str(), clonePath.c_str(), TRUE))
+				if (!Utils::TryCopyFile(path, clonePath))
 				{
-					throw std::runtime_error("CopyFileA failed");
+					throw std::runtime_error("Utils::TryCopyFile failed");
 				}
 				return clonePath;
 			}
 		))
-		, m_imgPath(GetTempPathWrapper() + "\\" + Utils::GetImagesDirName())
+		, m_imgPath(Utils::JoinPaths(GetTempPathWrapper(), Utils::GetImagesDirName()))
 	{
-		if (!Utils::KeepCreatingDirUserPrompt(m_imgPath.c_str()))
+		if (!Utils::KeepCreatingDirUserPrompt(m_imgPath))
 		{
 			throw std::runtime_error("user canceled directory creation");
 		}
@@ -86,9 +86,9 @@ public:
 	~CEditor()
 	{
 		m_document.reset();  // delete images before working dir
-		if (!RemoveDirectoryA(m_imgPath.c_str()))
+		if (!Utils::TryRemoveDirectory(m_imgPath))
 		{
-			std::cerr << "RemoveDirectoryA failed" << std::endl;
+			std::cerr << "Utils::TryRemoveDirectory failed" << std::endl;
 		}
 	}
 

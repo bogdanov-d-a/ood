@@ -90,6 +90,16 @@ bool Utils::KeepCreatingDir(std::string const & path, std::function<bool()> cons
 	}
 }
 
+bool Utils::TryCopyFile(std::string const & source, std::string const & destination)
+{
+	return CopyFileA(source.c_str(), destination.c_str(), TRUE);
+}
+
+bool Utils::TryRemoveDirectory(std::string const & path)
+{
+	return RemoveDirectoryA(path.c_str());
+}
+
 bool Utils::YesNoPrompt(std::string const & prompt)
 {
 	for (;;)
