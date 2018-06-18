@@ -14,28 +14,12 @@ namespace
 
 std::string GetPathFromIndex(unsigned index, std::string const& root, std::string const& ext)
 {
-	return root + "\\img" + std::to_string(index) + ext;
-}
-
-std::string GetExtension(std::string const& path)
-{
-	size_t dotIndex = path.find_last_of('.');
-	if (dotIndex == std::string::npos)
-	{
-		return "";
-	}
-	return path.substr(dotIndex);
-}
-
-std::string GetFilename(std::string const& path)
-{
-	size_t pos = path.find_last_of('\\');
-	return pos == std::string::npos ? path : path.substr(pos);
+	return Utils::JoinPaths(root, "IMG_" + std::to_string(index) + ext);
 }
 
 std::string GetClonePath(std::string const& path, unsigned index, std::string const& root)
 {
-	return GetPathFromIndex(index, root, GetExtension(path));
+	return GetPathFromIndex(index, root, Utils::GetExtension(path));
 }
 
 std::string GetTempPathWrapper()
@@ -54,7 +38,7 @@ std::string GetTempPathWrapper()
 	{
 		result[i] = buffer[i];
 	}
-	return result;
+	return Utils::StripTrailingSlash(result);
 }
 
 class CEditor
@@ -63,7 +47,7 @@ public:
 	CEditor()  //-V730
 		: m_document(make_unique<CDocument>(
 			[this](std::string const& srcPath, std::string const& targetDir) {
-				const auto targetPath = targetDir + GetFilename(srcPath);
+				const auto targetPath = Utils::JoinPaths(targetDir, Utils::GetFilename(srcPath));
 				if (!CopyFileA(srcPath.c_str(), targetPath.c_str(), TRUE))
 				{
 					throw std::runtime_error("CopyFileA failed");
@@ -220,7 +204,7 @@ private:
 			}
 			else if (auto &image = item.GetImage())
 			{
-				cout << "Image: " << image->GetWidth() << " " << image->GetHeight() << " " << GetFilename(image->GetPath()).substr(1);
+				cout << "Image: " << image->GetWidth() << " " << image->GetHeight() << " " << Utils::GetFilename(image->GetPath());
 			}
 			else
 			{

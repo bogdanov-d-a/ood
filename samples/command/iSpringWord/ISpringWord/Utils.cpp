@@ -1,9 +1,73 @@
 #include "stdafx.h"
 #include "Utils.h"
 
+namespace
+{
+
+constexpr char PATH_SLASH = '\\';
+
+}
+
 std::string Utils::GetImagesDirName()
 {
 	return "images";
+}
+
+bool Utils::IsSlash(char c)
+{
+	return c == PATH_SLASH || c == '/';
+}
+
+std::string Utils::StripTrailingSlash(std::string const & path)
+{
+	return (path.empty() || !IsSlash(path.back()) ||
+			path.size() == 1 || *(path.end() - 2) == ':')
+		? path
+		: path.substr(0, path.size() - 1);
+}
+
+std::string Utils::JoinPaths(std::string const & path1, std::string const & path2)
+{
+	if (path1.empty())
+	{
+		return StripTrailingSlash(path2);
+	}
+	if (path2.empty())
+	{
+		return StripTrailingSlash(path1);
+	}
+	return StripTrailingSlash(StripTrailingSlash(path1) + PATH_SLASH + path2);
+}
+
+std::string Utils::StripFilename(std::string path)
+{
+	path = StripTrailingSlash(path);
+	const auto pos = path.find_last_of(PATH_SLASH);
+	return pos == std::string::npos ? "" : path.substr(0, pos);
+}
+
+std::string Utils::GetFilename(std::string path)
+{
+	path = StripTrailingSlash(path);
+	const auto pos = path.find_last_of(PATH_SLASH);
+
+	if (pos == std::string::npos)
+	{
+		return path;
+	}
+
+	if (pos + 1 >= path.size())
+	{
+		return "";
+	}
+
+	return path.substr(pos + 1);
+}
+
+std::string Utils::GetExtension(std::string const& path)
+{
+	const auto pos = path.find_last_of('.');
+	return pos == std::string::npos ? "" : path.substr(pos);
 }
 
 bool Utils::TryCreateDir(std::string const & path)

@@ -44,18 +44,6 @@ std::string EscapeStr(std::string const& str)
 	return result;
 }
 
-std::string StripFilename(std::string const& path)
-{
-	const auto pos = path.find_last_of('\\');
-	return pos == std::string::npos ? "" : path.substr(0, pos);
-}
-
-std::string GetFilename(std::string const& path)
-{
-	size_t pos = path.find_last_of('\\');
-	return pos == std::string::npos ? path : path.substr(pos);
-}
-
 }
 
 CDocument::CDocument(OnSaveImage const& onSaveImage, OnCopyImage const& onCopyImage)
@@ -130,12 +118,8 @@ void CDocument::Redo()
 
 void CDocument::Save(const std::string & path) const
 {
-	const auto targetDocPath = StripFilename(path);
-	auto targetImgPath = targetDocPath + "\\" + Utils::GetImagesDirName();
-	if (targetDocPath.empty())
-	{
-		targetImgPath = targetImgPath.substr(1);
-	}
+	const auto targetDocDir = Utils::StripFilename(path);
+	const auto targetImgPath = Utils::JoinPaths(targetDocDir, Utils::GetImagesDirName());
 
 	if (!Utils::KeepCreatingDirUserPrompt(targetImgPath))
 	{
@@ -164,7 +148,7 @@ void CDocument::Save(const std::string & path) const
 		}
 		else if (auto image = item.GetImage())
 		{
-			out << "<img src=\"" << Utils::GetImagesDirName() << "\\" << GetFilename(image->GetPath()) << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
+			out << "<img src=\"" << Utils::GetImagesDirName() << "\\" << Utils::GetFilename(image->GetPath()) << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
 			m_onSaveImage(image->GetPath(), targetImgPath);
 		}
 		else
