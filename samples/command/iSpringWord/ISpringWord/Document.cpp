@@ -131,7 +131,7 @@ void CDocument::Redo()
 void CDocument::Save(const std::string & path) const
 {
 	const auto targetDocPath = StripFilename(path);
-	auto targetImgPath = targetDocPath + "\\images";
+	auto targetImgPath = targetDocPath + "\\" + Utils::GetImagesDirName();
 	if (targetDocPath.empty())
 	{
 		targetImgPath = targetImgPath.substr(1);
@@ -164,7 +164,7 @@ void CDocument::Save(const std::string & path) const
 		}
 		else if (auto image = item.GetImage())
 		{
-			out << "<img src=\"images\\" << GetFilename(image->GetPath()) << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
+			out << "<img src=\"" << Utils::GetImagesDirName() << "\\" << GetFilename(image->GetPath()) << "\" width=\"" << image->GetWidth() << "\" height=\"" << image->GetHeight() << "\">" << std::endl;
 			m_onSaveImage(image->GetPath(), targetImgPath);
 		}
 		else

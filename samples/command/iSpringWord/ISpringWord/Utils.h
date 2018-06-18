@@ -5,6 +5,8 @@ class Utils
 public:
 	Utils() = delete;
 
+	static std::string GetImagesDirName();
+
 	static bool TryCreateDir(std::string const& path);
 	static bool KeepCreatingDir(std::string const& path, std::function<bool()> const& promptRetry);
 

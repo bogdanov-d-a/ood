@@ -78,7 +78,7 @@ public:
 				return clonePath;
 			}
 		))
-		, m_imgPath(GetTempPathWrapper() + "\\images")
+		, m_imgPath(GetTempPathWrapper() + "\\" + Utils::GetImagesDirName())
 	{
 		if (!Utils::KeepCreatingDirUserPrompt(m_imgPath.c_str()))
 		{

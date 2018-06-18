@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Utils.h"
 
+std::string Utils::GetImagesDirName()
+{
+	return "images";
+}
+
 bool Utils::TryCreateDir(std::string const & path)
 {
 	return CreateDirectoryA(path.c_str(), NULL);
