@@ -41,6 +41,18 @@ std::string GetTempPathWrapper()
 	return Utils::StripTrailingSlash(result);
 }
 
+void PrintExceptions(std::function<void()> const& fn)
+{
+	try
+	{
+		fn();
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
 class CEditor
 {
 public:
@@ -50,14 +62,14 @@ public:
 				const auto targetPath = Utils::JoinPaths(targetDir, Utils::GetFilename(srcPath));
 				if (!Utils::TryCopyFile(srcPath, targetPath))
 				{
-					throw std::runtime_error("Utils::TryCopyFile failed");
+					throw std::runtime_error("Could not save image file");
 				}
 			},
 			[this](std::string const& path) {
 				const auto clonePath = GetClonePath(path, m_imageIndex++, m_imgPath);
 				if (!Utils::TryCopyFile(path, clonePath))
 				{
-					throw std::runtime_error("Utils::TryCopyFile failed");
+					throw std::runtime_error("Could not copy image file into document");
 				}
 				return clonePath;
 			}
@@ -108,85 +120,97 @@ private:
 
 	void SetTitle(istream & in)
 	{
-		in >> ws;
-		string title;
-		getline(in, title);
-		m_document->SetTitle(title);
+		PrintExceptions([&]() {
+			in >> ws;
+			string title;
+			getline(in, title);
+			m_document->SetTitle(title);
+		});
 	}
 
 	void InsertParagraph(istream & in)
 	{
-		string posStr;
-		in >> posStr;
+		PrintExceptions([&]() {
+			string posStr;
+			in >> posStr;
 
-		boost::optional<size_t> pos;
-		if (posStr != "end")
-		{
-			pos = std::stoi(posStr);
-		}
+			boost::optional<size_t> pos;
+			if (posStr != "end")
+			{
+				pos = std::stoi(posStr);
+			}
 
-		in >> ws;
-		string text;
-		getline(in, text);
+			in >> ws;
+			string text;
+			getline(in, text);
 
-		m_document->InsertParagraph(text, pos);
+			m_document->InsertParagraph(text, pos);
+		});
 	}
 
 	void InsertImage(istream & in)
 	{
-		string posStr;
-		in >> posStr;
+		PrintExceptions([&]() {
+			string posStr;
+			in >> posStr;
 
-		boost::optional<size_t> pos;
-		if (posStr != "end")
-		{
-			pos = std::stoi(posStr);
-		}
+			boost::optional<size_t> pos;
+			if (posStr != "end")
+			{
+				pos = std::stoi(posStr);
+			}
 
-		int width = 0;
-		in >> width;
+			int width = 0;
+			in >> width;
 
-		int height = 0;
-		in >> height;
+			int height = 0;
+			in >> height;
 
-		in >> ws;
-		string path;
-		getline(in, path);
+			in >> ws;
+			string path;
+			getline(in, path);
 
-		m_document->InsertImage(path, width, height, pos);
+			m_document->InsertImage(path, width, height, pos);
+		});
 	}
 
 	void ReplaceText(istream & in)
 	{
-		size_t pos;
-		in >> pos;
+		PrintExceptions([&]() {
+			size_t pos;
+			in >> pos;
 
-		in >> ws;
-		string text;
-		getline(in, text);
+			in >> ws;
+			string text;
+			getline(in, text);
 
-		m_document->GetItem(pos).GetParagraph()->SetText(text);
+			m_document->GetItem(pos).GetParagraph()->SetText(text);
+		});
 	}
 
 	void ResizeImage(istream & in)
 	{
-		size_t pos;
-		in >> pos;
+		PrintExceptions([&]() {
+			size_t pos;
+			in >> pos;
 
-		int width = 0;
-		in >> width;
+			int width = 0;
+			in >> width;
 
-		int height = 0;
-		in >> height;
+			int height = 0;
+			in >> height;
 
-		m_document->GetItem(pos).GetImage()->Resize(width, height);
+			m_document->GetItem(pos).GetImage()->Resize(width, height);
+		});
 	}
 
 	void DeleteItem(istream & in)
 	{
-		size_t pos;
-		in >> pos;
-		m_document->DeleteItem(pos);
+		PrintExceptions([&]() {
+			size_t pos;
+			in >> pos;
+			m_document->DeleteItem(pos);
+		});
 	}
 
 	void List(istream &)
@@ -218,35 +242,41 @@ private:
 
 	void Undo(istream &)
 	{
-		if (m_document->CanUndo())
-		{
-			m_document->Undo();
-		}
-		else
-		{
-			cout << "Can't undo" << endl;
-		}
+		PrintExceptions([&]() {
+			if (m_document->CanUndo())
+			{
+				m_document->Undo();
+			}
+			else
+			{
+				cout << "Can't undo" << endl;
+			}
+		});
 	}
 
 	void Redo(istream &)
 	{
-		if (m_document->CanRedo())
-		{
-			m_document->Redo();
-		}
-		else
-		{
-			cout << "Can't redo" << endl;
-		}
+		PrintExceptions([&]() {
+			if (m_document->CanRedo())
+			{
+				m_document->Redo();
+			}
+			else
+			{
+				cout << "Can't redo" << endl;
+			}
+		});
 	}
 
 	void Save(istream & in)
 	{
-		in >> ws;
-		string path;
-		getline(in, path);
+		PrintExceptions([&]() {
+			in >> ws;
+			string path;
+			getline(in, path);
 
-		m_document->Save(path);
+			m_document->Save(path);
+		});
 	}
 
 	CMenu m_menu;
@@ -259,8 +289,10 @@ private:
 
 int main()
 {
-	CEditor editor;
-	editor.Start();
+	PrintExceptions([&]() {
+		CEditor editor;
+		editor.Start();
+	});
 	return 0;
 }
 
