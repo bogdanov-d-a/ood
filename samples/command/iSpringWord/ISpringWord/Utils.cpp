@@ -13,6 +13,14 @@ std::string Utils::GetImagesDirName()
 	return "images";
 }
 
+void Utils::ValidateImageSize(int width, int height)
+{
+	if (width < 1 || height < 1 || width > 10000 || height > 10000)
+	{
+		throw std::runtime_error("image size is out of range");
+	}
+}
+
 bool Utils::IsSlash(char c)
 {
 	return c == PATH_SLASH || c == '/';

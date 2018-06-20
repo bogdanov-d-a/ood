@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Image.h"
 #include "ResizeImageCommand.h"
+#include "Utils.h"
 
 CImage::CImage(OnCreateCommand const& onCreateCommand, OnCopyImage const& onCopyImage,
 		std::string const & path, int width, int height)
@@ -34,6 +35,7 @@ void CImage::Resize(int width, int height)
 
 void CImage::ResizeData(int width, int height)
 {
+	Utils::ValidateImageSize(width, height);
 	m_width = width;
 	m_height = height;
 }

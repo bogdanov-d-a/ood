@@ -184,7 +184,12 @@ private:
 			string text;
 			getline(in, text);
 
-			m_document->GetItem(pos).GetParagraph()->SetText(text);
+			auto paragraph = m_document->GetItem(pos).GetParagraph();
+			if (!paragraph)
+			{
+				throw std::runtime_error("element is not a paragraph");
+			}
+			paragraph->SetText(text);
 		});
 	}
 
@@ -200,7 +205,13 @@ private:
 			int height = 0;
 			in >> height;
 
-			m_document->GetItem(pos).GetImage()->Resize(width, height);
+			auto image = m_document->GetItem(pos).GetImage();
+			if (!image)
+			{
+				throw std::runtime_error("element is not an image");
+			}
+
+			image->Resize(width, height);
 		});
 	}
 

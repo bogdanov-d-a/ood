@@ -6,6 +6,7 @@ public:
 	Utils() = delete;
 
 	static std::string GetImagesDirName();
+	static void ValidateImageSize(int width, int height);
 
 	static bool IsSlash(char c);
 	static std::string StripTrailingSlash(std::string const& path);

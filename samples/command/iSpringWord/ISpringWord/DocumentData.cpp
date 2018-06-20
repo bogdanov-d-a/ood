@@ -2,6 +2,7 @@
 #include "DocumentData.h"
 #include "Paragraph.h"
 #include "Image.h"
+#include "Utils.h"
 
 namespace
 {
@@ -9,12 +10,32 @@ namespace
 template<typename T>
 decltype(auto) InsertPositionToIterator(T &container, const boost::optional<size_t>& position)
 {
-	return position ? container.begin() + *position : container.end();
+	if (!position)
+	{
+		return container.end();
+	}
+
+	if (*position > container.size())
+	{
+		throw std::runtime_error("position is out of range");
+	}
+
+	return container.begin() + *position;
 }
 
 size_t PositionToIndex(size_t itemCount, const boost::optional<size_t>& position)
 {
-	return position ? *position : itemCount - 1;
+	if (!position)
+	{
+		return itemCount - 1;
+	}
+
+	if (*position >= itemCount)
+	{
+		throw std::runtime_error("position is out of range");
+	}
+
+	return *position;
 }
 
 }
@@ -34,8 +55,10 @@ std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & te
 
 std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
+	Utils::ValidateImageSize(width, height);
+	const auto insertIt = InsertPositionToIterator(m_items, position);
 	auto result = std::make_shared<CImage>(m_onCreateCommand, m_onCopyCommand, path, width, height);
-	m_items.insert(InsertPositionToIterator(m_items, position), result);
+	m_items.insert(insertIt, result);
 	return result;
 }
 
