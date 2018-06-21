@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "../LibISpringWord/Document.h"
 #include "../LibISpringWord/Utils.h"
+#include "../LibISpringWord/ImageKeeper.h"
 
 using namespace std;
 using namespace std::placeholders;
@@ -72,6 +73,9 @@ public:
 					throw std::runtime_error("Could not copy image file into document");
 				}
 				return clonePath;
+			},
+			[](std::string const& path) {
+				return std::make_shared<ImageKeeper>(path);
 			}
 		))
 		, m_imgPath(Utils::JoinPaths(GetTempPathWrapper(), Utils::GetImagesDirName()))

@@ -46,11 +46,12 @@ std::string EscapeStr(std::string const& str)
 
 }
 
-CDocument::CDocument(OnSaveImage const& onSaveImage, OnCopyImage const& onCopyImage)
+CDocument::CDocument(OnSaveImage const& onSaveImage,
+		OnCopyImage const& onCopyImage, ImageKeeperCreator const& imageKeeperCreator)
 	: m_onSaveImage(onSaveImage)
 	, m_data([this](ICommandPtr && cmd) {
 		m_history.AddAndExecuteCommand(std::move(cmd));
-	}, onCopyImage)
+	}, onCopyImage, imageKeeperCreator)
 {
 }
 

@@ -2,15 +2,17 @@
 #include "IDocument.h"
 #include "History.h"
 #include "DocumentData.h"
-#include "ImageKeeper.h"
+#include "IImageKeeper.h"
 
 class CDocument:public IDocument
 {
 public:
 	using OnSaveImage = std::function<void(std::string const& srcPath, std::string const& targetDir)>;
 	using OnCopyImage = std::function<std::string(std::string const&)>;
+	using ImageKeeperCreator = std::function<IImageKeeperPtr(std::string const&)>;
 
-	explicit CDocument(OnSaveImage const& onSaveImage, OnCopyImage const& onCopyImage);
+	explicit CDocument(OnSaveImage const& onSaveImage,
+		OnCopyImage const& onCopyImage, ImageKeeperCreator const& imageKeeperCreator);
 
 	std::shared_ptr<IParagraph> InsertParagraph(const std::string& text,
 		const boost::optional<size_t>& position = boost::none) final;

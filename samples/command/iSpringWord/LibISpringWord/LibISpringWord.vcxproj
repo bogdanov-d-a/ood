@@ -155,6 +155,7 @@
     <ClInclude Include="ICommand_fwd.h" />
     <ClInclude Include="IDocument.h" />
     <ClInclude Include="IImage.h" />
+    <ClInclude Include="IImageKeeper.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageKeeper.h" />
     <ClInclude Include="InsertImageCommand.h" />

@@ -40,9 +40,11 @@ size_t PositionToIndex(size_t itemCount, const boost::optional<size_t>& position
 
 }
 
-DocumentData::DocumentData(OnCreateCommand const & onCreateCommand, OnCopyImage const& onCopyImage)
+DocumentData::DocumentData(OnCreateCommand const & onCreateCommand,
+		OnCopyImage const& onCopyImage, ImageKeeperCreator const& imageKeeperCreator)
 	: m_onCreateCommand(onCreateCommand)
 	, m_onCopyCommand(onCopyImage)
+	, m_imageKeeperCreator(imageKeeperCreator)
 {
 }
 
@@ -56,7 +58,7 @@ void DocumentData::InsertImage(const std::string & path, int width, int height, 
 {
 	Utils::ValidateImageSize(width, height);
 	const auto insertIt = InsertPositionToIterator(m_items, position);
-	auto result = std::make_shared<CImage>(m_onCreateCommand, m_onCopyCommand, path, width, height);
+	auto result = std::make_shared<CImage>(m_onCreateCommand, m_onCopyCommand, m_imageKeeperCreator, path, width, height);
 	m_items.insert(insertIt, result);
 }
 
@@ -138,7 +140,7 @@ std::string DocumentData::GetTitle() const
 	return m_title;
 }
 
-ImageKeeperPtr DocumentData::GetImageKeeper(size_t index) const
+IImageKeeperPtr DocumentData::GetImageKeeper(size_t index) const
 {
 	auto &item = m_items.at(index);
 	if (auto imagePtr = boost::get<std::shared_ptr<CImage>>(&item))

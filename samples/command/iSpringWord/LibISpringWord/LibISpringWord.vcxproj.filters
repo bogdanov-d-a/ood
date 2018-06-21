@@ -143,5 +143,8 @@
     <ClInclude Include="deps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IImageKeeper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
