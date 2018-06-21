@@ -29,6 +29,7 @@ public:
 	std::string m_path;
 };
 
+const auto onCreateCommandExecuteMock = [](ICommandPtr &&cmd) { cmd->Execute(); };
 const auto onCopyImageMock = [](std::string const& s) { return "copy of " + s; };
 const auto imageKeeperCreatorMock = [](std::string const& s) { return std::make_shared<MockImageKeeper>(s); };
 
@@ -135,4 +136,23 @@ BOOST_AUTO_TEST_CASE(CanUseTitle)
 	BOOST_CHECK(data.GetTitle() == "");
 	data.SetTitle("test title");
 	BOOST_CHECK(data.GetTitle() == "test title");
+}
+
+BOOST_AUTO_TEST_CASE(CanChangeText)
+{
+	DocumentData data(onCreateCommandExecuteMock, onCopyImageThrowMock, imageKeeperCreatorThrowMock);
+	data.InsertParagraph("1");
+
+	data.GetItem(0).GetParagraph()->SetText("42");
+	BOOST_CHECK(data.GetItem(0).GetParagraph()->GetText() == "42");
+}
+
+BOOST_AUTO_TEST_CASE(CanResizeImage)
+{
+	DocumentData data(onCreateCommandExecuteMock, onCopyImageMock, imageKeeperCreatorMock);
+	data.InsertImage("img_0.png", 320, 240);
+
+	data.GetItem(0).GetImage()->Resize(640, 480);
+	BOOST_CHECK(data.GetItem(0).GetImage()->GetWidth() == 640);
+	BOOST_CHECK(data.GetItem(0).GetImage()->GetHeight() == 480);
 }
