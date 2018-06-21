@@ -46,20 +46,18 @@ DocumentData::DocumentData(OnCreateCommand const & onCreateCommand, OnCopyImage 
 {
 }
 
-std::shared_ptr<IParagraph> DocumentData::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
+void DocumentData::InsertParagraph(const std::string & text, const boost::optional<size_t>& position)
 {
 	auto result = std::make_shared<CParagraph>(m_onCreateCommand, text);
 	m_items.insert(InsertPositionToIterator(m_items, position), result);
-	return result;
 }
 
-std::shared_ptr<IImage> DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
+void DocumentData::InsertImage(const std::string & path, int width, int height, const boost::optional<size_t>& position)
 {
 	Utils::ValidateImageSize(width, height);
 	const auto insertIt = InsertPositionToIterator(m_items, position);
 	auto result = std::make_shared<CImage>(m_onCreateCommand, m_onCopyCommand, path, width, height);
 	m_items.insert(insertIt, result);
-	return result;
 }
 
 void DocumentData::InsertItem(ItemData && item, const boost::optional<size_t>& position)
