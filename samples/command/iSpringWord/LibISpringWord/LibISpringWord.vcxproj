@@ -146,6 +146,7 @@
     <ClInclude Include="AbstractCommand.h" />
     <ClInclude Include="ConstDocumentItem.h" />
     <ClInclude Include="DeleteItemCommand.h" />
+    <ClInclude Include="deps.h" />
     <ClInclude Include="Document.h" />
     <ClInclude Include="DocumentData.h" />
     <ClInclude Include="DocumentItem.h" />

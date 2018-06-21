@@ -10,23 +10,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <iostream>
-#include <boost/range/algorithm/find_if.hpp>
-#include <functional>
-#include <sstream>
-#include <deque>
-#include <cassert>
-#include <boost/scope_exit.hpp>
-#include <boost/optional.hpp>
-#include <boost/none.hpp>
-#include <boost/variant.hpp>
-#include <Windows.h>
-#include <fstream>
-#include <array>
-#include <map>
-
+#include "deps.h"
 
 // TODO: reference additional headers your program requires here
