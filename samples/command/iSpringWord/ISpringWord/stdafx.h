@@ -10,5 +10,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
+#include "../LibISpringWord/deps.h"
 
 // TODO: reference additional headers your program requires here

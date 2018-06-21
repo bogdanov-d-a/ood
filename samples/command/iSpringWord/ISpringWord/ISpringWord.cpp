@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 #include "Menu.h"
-#include "Document.h"
-#include "Utils.h"
+#include "../LibISpringWord/Document.h"
+#include "../LibISpringWord/Utils.h"
 
 using namespace std;
 using namespace std::placeholders;
