@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Unused">
+      <UniqueIdentifier>{675636ba-0ecf-414c-87db-84cf770b5b58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,17 +23,20 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="version1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CommonTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="main_old.h">
+      <Filter>Unused</Filter>
+    </ClInclude>
+    <ClInclude Include="version1.h">
+      <Filter>Unused</Filter>
+    </ClInclude>
     <ClInclude Include="version2.h">
-      <Filter>Header Files</Filter>
+      <Filter>Unused</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

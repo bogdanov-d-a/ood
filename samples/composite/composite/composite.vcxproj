@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="main_old.h" />
     <ClInclude Include="version1.h" />
     <ClInclude Include="version2.h" />
   </ItemGroup>
