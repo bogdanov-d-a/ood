@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="LeafFillStyle.cpp" />
+    <ClCompile Include="LeafLineStyle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -155,6 +156,7 @@
     <ClInclude Include="ILineStyle.h" />
     <ClInclude Include="IShape.h" />
     <ClInclude Include="LeafFillStyle.h" />
+    <ClInclude Include="LeafLineStyle.h" />
     <ClInclude Include="main_old.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="version1.h" />

@@ -14,5 +14,5 @@ public:
 	virtual void SetColor(RGBAColor color) = 0;
 
 	virtual double GetThickness() const = 0;
-	virtual void SetThickness() = 0;
+	virtual void SetThickness(double thickness) = 0;
 };

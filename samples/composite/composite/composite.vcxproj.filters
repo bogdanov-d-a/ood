@@ -27,6 +27,9 @@
     <ClCompile Include="LeafFillStyle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeafLineStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeafFillStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeafLineStyle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
