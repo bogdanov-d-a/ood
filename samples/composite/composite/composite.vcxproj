@@ -147,9 +147,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Canvas.h" />
+    <ClInclude Include="ICanvas.h" />
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="deps.h" />
+    <ClInclude Include="IFillStyle.h" />
     <ClInclude Include="main_old.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="version1.h" />
