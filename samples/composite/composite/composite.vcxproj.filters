@@ -50,5 +50,8 @@
     <ClInclude Include="ICanvas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ILineStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
