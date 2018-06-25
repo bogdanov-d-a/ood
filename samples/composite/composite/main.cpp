@@ -1,4 +1,6 @@
-﻿int main()
+﻿#include "stdafx.h"
+
+int main()
 {
 
 }
