@@ -7,9 +7,9 @@ class IFillStyle
 public:
 	virtual ~IFillStyle() = default;
 
-	virtual bool IsEnabled() const = 0;
+	virtual boost::optional<bool> IsEnabled() const = 0;
 	virtual void Enable(bool enable) = 0;
 
-	virtual RGBAColor GetColor() const = 0;
+	virtual boost::optional<RGBAColor> GetColor() const = 0;
 	virtual void SetColor(RGBAColor color) = 0;
 };

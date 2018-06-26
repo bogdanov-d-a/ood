@@ -5,13 +5,13 @@
 class LeafLineStyle : public ILineStyle
 {
 public:
-	bool IsEnabled() const final;
+	boost::optional<bool> IsEnabled() const final;
 	void Enable(bool enable) final;
 
-	RGBAColor GetColor() const final;
+	boost::optional<RGBAColor> GetColor() const final;
 	void SetColor(RGBAColor color) final;
 
-	double GetThickness() const final;
+	boost::optional<double> GetThickness() const final;
 	void SetThickness(double thickness) final;
 
 private:

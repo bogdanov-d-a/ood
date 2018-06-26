@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LeafFillStyle.h"
 
-bool LeafFillStyle::IsEnabled() const
+boost::optional<bool> LeafFillStyle::IsEnabled() const
 {
 	return m_enabled;
 }
@@ -11,7 +11,7 @@ void LeafFillStyle::Enable(bool enable)
 	m_enabled = enable;
 }
 
-RGBAColor LeafFillStyle::GetColor() const
+boost::optional<RGBAColor> LeafFillStyle::GetColor() const
 {
 	return m_color;
 }
