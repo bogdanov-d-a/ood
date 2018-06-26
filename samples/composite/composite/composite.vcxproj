@@ -142,6 +142,7 @@
     <ClCompile Include="CompositeLineStyle.cpp" />
     <ClCompile Include="LeafFillStyle.cpp" />
     <ClCompile Include="LeafLineStyle.cpp" />
+    <ClCompile Include="LeafShape.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -161,6 +162,7 @@
     <ClInclude Include="IShape.h" />
     <ClInclude Include="LeafFillStyle.h" />
     <ClInclude Include="LeafLineStyle.h" />
+    <ClInclude Include="LeafShape.h" />
     <ClInclude Include="main_old.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils.h" />
