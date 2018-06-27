@@ -1,18 +1,25 @@
 ﻿#include "stdafx.h"
-#include "Ellipse.h"
+#include "CompositeShape.h"
+#include "Rectangle.h"
 #include "GraphicCanvas.h"
 
 int main()
 {
-	Ellipse ellipse;
-	ellipse.SetFrame({ 10, 10, 100, 200 });
+	CompositeShape slide;
 
-	ellipse.GetFillStyle().Enable(true);
-	ellipse.GetFillStyle().SetColor(0x00FF007F);
+	{
+		auto r = std::make_unique<Rectangle>();
+		r->SetFrame({ 10, 10, 100, 100 });
 
-	ellipse.GetLineStyle().Enable(true);
-	ellipse.GetLineStyle().SetColor(0x0000FFFF);
-	ellipse.GetLineStyle().SetThickness(2);
+		r->GetFillStyle().Enable(true);
+		r->GetFillStyle().SetColor(0x00FF007F);
+
+		r->GetLineStyle().Enable(true);
+		r->GetLineStyle().SetColor(0x0000FFFF);
+		r->GetLineStyle().SetThickness(2);
+
+		slide.AddShape(std::move(r));
+	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
@@ -27,7 +34,7 @@ int main()
 		}
 
 		window.clear();
-		ellipse.Draw(canvas);
+		slide.Draw(canvas);
 		window.display();
 	}
 

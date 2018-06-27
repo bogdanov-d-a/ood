@@ -7,6 +7,8 @@ class CompositeShape : public IShape
 public:
 	explicit CompositeShape();
 
+	void AddShape(IShapePtr && shape);
+
 	RectD GetFrame() const final;
 	void SetFrame(RectD const& frame) final;
 
