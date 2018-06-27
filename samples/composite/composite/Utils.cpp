@@ -3,7 +3,7 @@
 
 sf::Vector2f Utils::PointToSfmlVector(PointD const & point)
 {
-	return sf::Vector2f(point.x, point.y);
+	return sf::Vector2f(static_cast<float>(point.x), static_cast<float>(point.y));
 }
 
 sf::Color Utils::ColorToSfmlColor(RGBAColor color)

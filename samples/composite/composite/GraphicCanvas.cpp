@@ -36,7 +36,7 @@ void GraphicCanvas::DrawPolygon(std::vector<PointD> const & points)
 	if (m_lineStyle)
 	{
 		convex.setOutlineColor(Utils::ColorToSfmlColor(m_lineStyle->first));
-		convex.setOutlineThickness(m_lineStyle->second);
+		convex.setOutlineThickness(static_cast<float>(m_lineStyle->second));
 	}
 
 	convex.setPointCount(points.size());
@@ -50,4 +50,20 @@ void GraphicCanvas::DrawPolygon(std::vector<PointD> const & points)
 
 void GraphicCanvas::DrawEllipse(double left, double top, double width, double height)
 {
+	const sf::Vector2f radius(static_cast<float>(width / 2), static_cast<float>(height / 2));
+	const sf::Vector2f center(static_cast<float>(left + radius.x), static_cast<float>(top + radius.y));
+
+	constexpr size_t ellipseVertexCount = 250;
+	std::vector<PointD> points(ellipseVertexCount);
+
+	for (size_t curVertexIndex = 0; curVertexIndex < ellipseVertexCount; ++curVertexIndex)
+	{
+		const auto phi = curVertexIndex * 2 * M_PI / ellipseVertexCount;
+		const auto x = center.x + radius.x * cos(phi);
+		const auto y = center.y + radius.y * sin(phi);
+		const PointD curVertex = { x, y };
+		points[curVertexIndex] = curVertex;
+	}
+
+	DrawPolygon(points);
 }

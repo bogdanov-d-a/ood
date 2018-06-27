@@ -1,18 +1,18 @@
 ﻿#include "stdafx.h"
-#include "Triangle.h"
+#include "Ellipse.h"
 #include "GraphicCanvas.h"
 
 int main()
 {
-	Triangle triangle;
-	triangle.SetFrame({ 10, 10, 100, 100 });
+	Ellipse ellipse;
+	ellipse.SetFrame({ 10, 10, 100, 200 });
 
-	triangle.GetFillStyle().Enable(true);
-	triangle.GetFillStyle().SetColor(0x00FF007F);
+	ellipse.GetFillStyle().Enable(true);
+	ellipse.GetFillStyle().SetColor(0x00FF007F);
 
-	triangle.GetLineStyle().Enable(true);
-	triangle.GetLineStyle().SetColor(0x0000FFFF);
-	triangle.GetLineStyle().SetThickness(2);
+	ellipse.GetLineStyle().Enable(true);
+	ellipse.GetLineStyle().SetColor(0x0000FFFF);
+	ellipse.GetLineStyle().SetThickness(2);
 
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
@@ -27,7 +27,7 @@ int main()
 		}
 
 		window.clear();
-		triangle.Draw(canvas);
+		ellipse.Draw(canvas);
 		window.display();
 	}
 
