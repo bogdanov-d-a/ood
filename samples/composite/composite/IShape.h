@@ -15,3 +15,5 @@ public:
 	virtual IFillStyle& GetFillStyle() = 0;
 	virtual ILineStyle& GetLineStyle() = 0;
 };
+
+using IShapePtr = std::unique_ptr<IShape>;

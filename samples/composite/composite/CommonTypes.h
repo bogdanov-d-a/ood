@@ -14,6 +14,26 @@ struct Rect
 	T top;
 	T width;
 	T height;
+
+	T GetRight() const
+	{
+		return left + width;
+	}
+
+	T GetBottom() const
+	{
+		return top + height;
+	}
+
+	void SetRight(T right)
+	{
+		width += right - GetRight();
+	}
+
+	void SetBottom(T bottom)
+	{
+		height += bottom - GetBottom();
+	}
 };
 
 typedef Point<double> PointD;

@@ -39,6 +39,9 @@
     <ClCompile Include="LeafShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CompositeShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeafShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompositeShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

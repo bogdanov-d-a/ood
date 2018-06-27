@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="CompositeFillStyle.cpp" />
     <ClCompile Include="CompositeLineStyle.cpp" />
+    <ClCompile Include="CompositeShape.cpp" />
     <ClCompile Include="LeafFillStyle.cpp" />
     <ClCompile Include="LeafLineStyle.cpp" />
     <ClCompile Include="LeafShape.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="CompositeFillStyle.h" />
     <ClInclude Include="CompositeLineStyle.h" />
+    <ClInclude Include="CompositeShape.h" />
     <ClInclude Include="ICanvas.h" />
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="deps.h" />
