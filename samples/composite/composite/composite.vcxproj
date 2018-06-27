@@ -157,6 +157,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="main_old.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="version1.h" />
     <ClInclude Include="version2.h" />

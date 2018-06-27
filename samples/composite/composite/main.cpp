@@ -1,18 +1,18 @@
 ﻿#include "stdafx.h"
-#include "Rectangle.h"
+#include "Triangle.h"
 #include "GraphicCanvas.h"
 
 int main()
 {
-	Rectangle rect;
-	rect.SetFrame({ 10, 10, 100, 100 });
+	Triangle triangle;
+	triangle.SetFrame({ 10, 10, 100, 100 });
 
-	rect.GetFillStyle().Enable(true);
-	rect.GetFillStyle().SetColor(0x00FF007F);
+	triangle.GetFillStyle().Enable(true);
+	triangle.GetFillStyle().SetColor(0x00FF007F);
 
-	rect.GetLineStyle().Enable(true);
-	rect.GetLineStyle().SetColor(0x0000FFFF);
-	rect.GetLineStyle().SetThickness(2);
+	triangle.GetLineStyle().Enable(true);
+	triangle.GetLineStyle().SetColor(0x0000FFFF);
+	triangle.GetLineStyle().SetThickness(2);
 
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
@@ -27,7 +27,7 @@ int main()
 		}
 
 		window.clear();
-		rect.Draw(canvas);
+		triangle.Draw(canvas);
 		window.display();
 	}
 
