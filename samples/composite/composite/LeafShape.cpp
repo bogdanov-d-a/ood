@@ -28,3 +28,34 @@ ILineStyle & LeafShape::GetLineStyle()
 {
 	return *m_lineStyle;
 }
+
+void LeafShape::Draw(ICanvas & canvas)
+{
+	{
+		auto &fillStyle = GetFillStyle();
+
+		if (fillStyle.IsEnabled())
+		{
+			canvas.SetFillColor(*fillStyle.GetColor());
+		}
+		else
+		{
+			canvas.ResetFillColor();
+		}
+	}
+
+	{
+		auto &lineStyle = GetLineStyle();
+
+		if (lineStyle.IsEnabled())
+		{
+			canvas.SetLineStyle(*lineStyle.GetColor(), *lineStyle.GetThickness());
+		}
+		else
+		{
+			canvas.ResetLineStyle();
+		}
+	}
+
+	DrawImpl(canvas);
+}

@@ -3,8 +3,9 @@
 #include "CommonTypes.h"
 #include "IFillStyle.h"
 #include "ILineStyle.h"
+#include "IDrawable.h"
 
-class IShape
+class IShape : public IDrawable
 {
 public:
 	virtual ~IShape() = default;

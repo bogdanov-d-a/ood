@@ -145,6 +145,7 @@
     <ClCompile Include="LeafLineStyle.cpp" />
     <ClCompile Include="LeafShape.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -159,6 +160,7 @@
     <ClInclude Include="ICanvas.h" />
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="deps.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="IFillStyle.h" />
     <ClInclude Include="ILineStyle.h" />
     <ClInclude Include="IShape.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="LeafLineStyle.h" />
     <ClInclude Include="LeafShape.h" />
     <ClInclude Include="main_old.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="version1.h" />

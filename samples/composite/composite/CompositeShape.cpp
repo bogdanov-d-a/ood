@@ -87,3 +87,11 @@ ILineStyle & CompositeShape::GetLineStyle()
 {
 	return *m_lineStyle;
 }
+
+void CompositeShape::Draw(ICanvas & canvas)
+{
+	for (auto &shape : m_shapes)
+	{
+		shape->Draw(canvas);
+	}
+}

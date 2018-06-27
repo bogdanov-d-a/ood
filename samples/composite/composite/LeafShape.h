@@ -13,6 +13,9 @@ public:
 	IFillStyle& GetFillStyle() final;
 	ILineStyle& GetLineStyle() final;
 
+	void Draw(ICanvas &canvas) final;
+	virtual void DrawImpl(ICanvas &canvas) = 0;
+
 private:
 	std::unique_ptr<IFillStyle> m_fillStyle;
 	std::unique_ptr<ILineStyle> m_lineStyle;

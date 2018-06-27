@@ -13,6 +13,8 @@ public:
 	IFillStyle& GetFillStyle() final;
 	ILineStyle& GetLineStyle() final;
 
+	void Draw(ICanvas &canvas) final;
+
 private:
 	std::forward_list<IShapePtr> m_shapes;
 	std::unique_ptr<IFillStyle> m_fillStyle;
