@@ -2,6 +2,7 @@
 #include "CompositeShape.h"
 #include "Rectangle.h"
 #include "Ellipse.h"
+#include "Triangle.h"
 #include "GraphicCanvas.h"
 
 int main()
@@ -9,33 +10,53 @@ int main()
 	CompositeShape slide;
 
 	{
-		auto e = std::make_unique<Ellipse>();
-		e->SetFrame({ 60, 60, 100, 100 });
+		auto c = std::make_unique<CompositeShape>();
 
-		e->GetFillStyle().SetColor(0xFF00003F);
+		{
+			auto e = std::make_unique<Ellipse>();
+			e->SetFrame({ 60, 60, 100, 100 });
 
-		e->GetLineStyle().SetColor(0x00FFFFFF);
-		e->GetLineStyle().SetThickness(2);
+			e->GetFillStyle().SetColor(0xFF00003F);
 
-		slide.AddShape(std::move(e));
+			e->GetLineStyle().SetColor(0x00FFFFFF);
+			e->GetLineStyle().SetThickness(2);
+
+			c->AddShape(std::move(e));
+		}
+
+		{
+			auto r = std::make_unique<Rectangle>();
+			r->SetFrame({ 10, 10, 100, 100 });
+
+			r->GetFillStyle().SetColor(0x00FF007F);
+
+			r->GetLineStyle().SetColor(0x0000FFFF);
+			r->GetLineStyle().SetThickness(2);
+
+			c->AddShape(std::move(r));
+		}
+
+		c->GetFillStyle().Enable(true);
+		c->GetLineStyle().Enable(true);
+
+		c->SetFrame({ 100, 100, 300, 200 });
+
+		slide.AddShape(std::move(c));
 	}
 
 	{
-		auto r = std::make_unique<Rectangle>();
-		r->SetFrame({ 10, 10, 100, 100 });
+		auto t = std::make_unique<Triangle>();
+		t->SetFrame({ 500, 40, 150, 100 });
 
-		r->GetFillStyle().SetColor(0x00FF007F);
+		t->GetFillStyle().Enable(true);
+		t->GetFillStyle().SetColor(0xFFFF00FF);
 
-		r->GetLineStyle().SetColor(0x0000FFFF);
-		r->GetLineStyle().SetThickness(2);
+		t->GetLineStyle().Enable(true);
+		t->GetLineStyle().SetColor(0xFF00FF7F);
+		t->GetLineStyle().SetThickness(5);
 
-		slide.AddShape(std::move(r));
+		slide.AddShape(std::move(t));
 	}
-
-	slide.GetFillStyle().Enable(true);
-	slide.GetLineStyle().Enable(true);
-
-	slide.SetFrame({ 100, 100, 300, 200 });
 
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
