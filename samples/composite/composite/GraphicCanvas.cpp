@@ -25,15 +25,15 @@ void GraphicCanvas::ResetLineStyle()
 
 void GraphicCanvas::DrawPolygon(std::vector<PointD> const & points)
 {
-	sf::VertexArray lines(sf::LinesStrip, points.size());
+	sf::ConvexShape convex;
+	convex.setPointCount(points.size());
 
 	for (size_t i = 0; i < points.size(); ++i)
 	{
-		lines[i].position = Utils::PointToSfmlVector(points[i]);
-		//lines[i].color
+		convex.setPoint(i, Utils::PointToSfmlVector(points[i]));
 	}
 
-	m_target.draw(lines);
+	m_target.draw(convex);
 }
 
 void GraphicCanvas::DrawEllipse(double left, double top, double width, double height)
