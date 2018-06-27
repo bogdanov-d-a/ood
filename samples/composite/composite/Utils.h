@@ -39,4 +39,5 @@ public:
 	}
 
 	static sf::Vector2f PointToSfmlVector(PointD const& point);
+	static sf::Color ColorToSfmlColor(RGBAColor color);
 };

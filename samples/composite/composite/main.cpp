@@ -7,6 +7,13 @@ int main()
 	Rectangle rect;
 	rect.SetFrame({ 10, 10, 100, 100 });
 
+	rect.GetFillStyle().Enable(true);
+	rect.GetFillStyle().SetColor(0x00FF007F);
+
+	rect.GetLineStyle().Enable(true);
+	rect.GetLineStyle().SetColor(0x0000FFFF);
+	rect.GetLineStyle().SetThickness(2);
+
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
 

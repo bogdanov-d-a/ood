@@ -19,4 +19,6 @@ public:
 
 private:
 	sf::RenderTarget &m_target;
+	boost::optional<RGBAColor> m_fillColor;
+	boost::optional<std::pair<RGBAColor, double>> m_lineStyle;
 };
