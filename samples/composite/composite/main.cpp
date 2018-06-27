@@ -35,6 +35,8 @@ int main()
 	slide.GetFillStyle().Enable(true);
 	slide.GetLineStyle().Enable(true);
 
+	slide.SetFrame({ 100, 100, 300, 200 });
+
 	sf::RenderWindow window(sf::VideoMode(800, 480), "SFML works!");
 	GraphicCanvas canvas(window);
 
