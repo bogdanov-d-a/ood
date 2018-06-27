@@ -1,5 +1,8 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include "CommonTypes.h"
+
 class Utils
 {
 public:
@@ -34,4 +37,6 @@ public:
 
 		return result;
 	}
+
+	static sf::Vector2f PointToSfmlVector(PointD const& point);
 };
