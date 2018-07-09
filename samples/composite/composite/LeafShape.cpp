@@ -44,7 +44,7 @@ void LeafShape::Draw(ICanvas & canvas)
 	{
 		auto &fillStyle = GetFillStyle();
 
-		if (*fillStyle.IsEnabled())
+		if (fillStyle.IsEnabled().get_value_or(false))
 		{
 			canvas.SetFillColor(*fillStyle.GetColor());
 		}
@@ -57,7 +57,7 @@ void LeafShape::Draw(ICanvas & canvas)
 	{
 		auto &lineStyle = GetLineStyle();
 
-		if (*lineStyle.IsEnabled())
+		if (lineStyle.IsEnabled().get_value_or(false))
 		{
 			canvas.SetLineStyle(*lineStyle.GetColor(), *lineStyle.GetThickness());
 		}
