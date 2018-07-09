@@ -21,7 +21,7 @@ public:
 	void Draw(ICanvas &canvas) final;
 
 private:
-	std::forward_list<IShapePtr> m_shapes;
+	std::vector<IShapePtr> m_shapes;
 	std::unique_ptr<IFillStyle> m_fillStyle;
 	std::unique_ptr<ILineStyle> m_lineStyle;
 };

@@ -27,7 +27,7 @@ CompositeShape::CompositeShape()
 
 void CompositeShape::AddShape(IShapePtr && shape)
 {
-	m_shapes.emplace_front(std::move(shape));
+	m_shapes.emplace_back(std::move(shape));
 }
 
 RectD CompositeShape::GetFrame() const
