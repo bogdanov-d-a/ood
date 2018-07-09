@@ -24,7 +24,17 @@ IFillStyle & LeafShape::GetFillStyle()
 	return *m_fillStyle;
 }
 
+IFillStyle const & LeafShape::GetFillStyle() const
+{
+	return *m_fillStyle;
+}
+
 ILineStyle & LeafShape::GetLineStyle()
+{
+	return *m_lineStyle;
+}
+
+ILineStyle const & LeafShape::GetLineStyle() const
 {
 	return *m_lineStyle;
 }

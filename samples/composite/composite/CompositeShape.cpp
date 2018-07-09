@@ -88,7 +88,17 @@ IFillStyle & CompositeShape::GetFillStyle()
 	return *m_fillStyle;
 }
 
+IFillStyle const & CompositeShape::GetFillStyle() const
+{
+	return *m_fillStyle;
+}
+
 ILineStyle & CompositeShape::GetLineStyle()
+{
+	return *m_lineStyle;
+}
+
+ILineStyle const & CompositeShape::GetLineStyle() const
 {
 	return *m_lineStyle;
 }

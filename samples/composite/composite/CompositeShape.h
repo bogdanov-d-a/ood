@@ -13,7 +13,10 @@ public:
 	void SetFrame(RectD const& frame) final;
 
 	IFillStyle& GetFillStyle() final;
+	IFillStyle const& GetFillStyle() const final;
+
 	ILineStyle& GetLineStyle() final;
+	ILineStyle const& GetLineStyle() const final;
 
 	void Draw(ICanvas &canvas) final;
 
