@@ -5,7 +5,8 @@
 class CompositeFillStyle : public IFillStyle
 {
 public:
-	using Enumerator = std::function<void(std::function<bool(IFillStyle&)>)>;
+	using EnumeratorCallback = std::function<bool(IFillStyle&)>;
+	using Enumerator = std::function<void(EnumeratorCallback)>;
 
 	explicit CompositeFillStyle(Enumerator const& enumerator);
 

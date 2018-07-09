@@ -4,7 +4,7 @@
 #include "CompositeLineStyle.h"
 
 CompositeShape::CompositeShape()
-	: m_fillStyle(std::make_unique<CompositeFillStyle>([this](std::function<bool(IFillStyle&)> function) {
+	: m_fillStyle(std::make_unique<CompositeFillStyle>([this](auto && function) {
 		for (auto &shape : m_shapes)
 		{
 			if (!function(shape->GetFillStyle()))
@@ -13,7 +13,7 @@ CompositeShape::CompositeShape()
 			}
 		}
 	}))
-	, m_lineStyle(std::make_unique<CompositeLineStyle>([this](std::function<bool(ILineStyle&)> function) {
+	, m_lineStyle(std::make_unique<CompositeLineStyle>([this](auto && function) {
 		for (auto &shape : m_shapes)
 		{
 			if (!function(shape->GetLineStyle()))

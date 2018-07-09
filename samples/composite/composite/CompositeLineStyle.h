@@ -5,7 +5,8 @@
 class CompositeLineStyle : public ILineStyle
 {
 public:
-	using Enumerator = std::function<void(std::function<bool(ILineStyle&)>)>;
+	using EnumeratorCallback = std::function<bool(ILineStyle&)>;
+	using Enumerator = std::function<void(EnumeratorCallback)>;
 
 	explicit CompositeLineStyle(Enumerator const& enumerator);
 
