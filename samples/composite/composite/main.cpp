@@ -5,6 +5,19 @@
 #include "Triangle.h"
 #include "GraphicCanvas.h"
 
+namespace
+{
+
+void SetFrame(IShape &shape, RectD const& frame)
+{
+	if (!shape.TrySetFrame(frame))
+	{
+		throw std::runtime_error("Could not set shape frame");
+	}
+}
+
+}
+
 int main()
 {
 	CompositeShape slide;
@@ -14,7 +27,7 @@ int main()
 
 		{
 			auto e = std::make_unique<Ellipse>();
-			e->SetFrame({ 60, 60, 100, 100 });
+			SetFrame(*e, { 60, 60, 100, 100 });
 
 			e->GetFillStyle().SetColor(0xFF00003F);
 
@@ -26,7 +39,7 @@ int main()
 
 		{
 			auto r = std::make_unique<Rectangle>();
-			r->SetFrame({ 10, 10, 100, 100 });
+			SetFrame(*r, { 10, 10, 100, 100 });
 
 			r->GetFillStyle().SetColor(0x00FF007F);
 
@@ -39,14 +52,14 @@ int main()
 		c->GetFillStyle().Enable(true);
 		c->GetLineStyle().Enable(true);
 
-		c->SetFrame({ 100, 100, 300, 200 });
+		SetFrame(*c, { 100, 100, 300, 200 });
 
 		slide.AddShape(std::move(c));
 	}
 
 	{
 		auto t = std::make_unique<Triangle>();
-		t->SetFrame({ 500, 40, 150, 100 });
+		SetFrame(*t, { 500, 40, 150, 100 });
 
 		t->GetFillStyle().Enable(true);
 		t->GetFillStyle().SetColor(0xFFFF00FF);

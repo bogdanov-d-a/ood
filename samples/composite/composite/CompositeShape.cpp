@@ -57,7 +57,7 @@ boost::optional<RectD> CompositeShape::GetFrame() const
 	return result;
 }
 
-bool CompositeShape::SetFrame(RectD const & frame)
+bool CompositeShape::TrySetFrame(RectD const & frame)
 {
 	const auto oldFrame = GetFrame();
 	if (!oldFrame)
@@ -89,7 +89,7 @@ bool CompositeShape::SetFrame(RectD const & frame)
 		curFrame->width *= scaleX;
 		curFrame->height *= scaleY;
 
-		result |= shape->SetFrame(*curFrame);
+		result |= shape->TrySetFrame(*curFrame);
 	}
 
 	return result;

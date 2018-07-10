@@ -11,7 +11,7 @@ public:
 	virtual ~IShape() = default;
 
 	virtual boost::optional<RectD> GetFrame() const = 0;
-	virtual bool SetFrame(RectD const& frame) = 0;
+	virtual bool TrySetFrame(RectD const& frame) = 0;
 
 	virtual IFillStyle& GetFillStyle() = 0;
 	virtual IFillStyle const& GetFillStyle() const = 0;

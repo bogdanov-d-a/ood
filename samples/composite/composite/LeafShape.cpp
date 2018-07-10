@@ -14,7 +14,7 @@ boost::optional<RectD> LeafShape::GetFrame() const
 	return m_frame;
 }
 
-bool LeafShape::SetFrame(RectD const & frame)
+bool LeafShape::TrySetFrame(RectD const & frame)
 {
 	m_frame = frame;
 	return true;

@@ -10,7 +10,7 @@ public:
 	void AddShape(IShapePtr && shape);
 
 	boost::optional<RectD> GetFrame() const final;
-	bool SetFrame(RectD const& frame) final;
+	bool TrySetFrame(RectD const& frame) final;
 
 	IFillStyle& GetFillStyle() final;
 	IFillStyle const& GetFillStyle() const final;
