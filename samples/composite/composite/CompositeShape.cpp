@@ -30,13 +30,17 @@ void CompositeShape::AddShape(IShapePtr && shape)
 	m_shapes.emplace_back(std::move(shape));
 }
 
-RectD CompositeShape::GetFrame() const
+boost::optional<RectD> CompositeShape::GetFrame() const
 {
 	boost::optional<RectD> result;
 
 	for (auto &shape : m_shapes)
 	{
-		auto frame = shape->GetFrame();
+		const auto frame = shape->GetFrame();
+		if (!frame)
+		{
+			continue;
+		}
 
 		if (!result)
 		{
@@ -44,43 +48,51 @@ RectD CompositeShape::GetFrame() const
 			continue;
 		}
 
-		result->left = std::min(result->left, frame.left);
-		result->top = std::min(result->top, frame.top);
-		result->SetRight(std::max(result->GetRight(), frame.GetRight()));
-		result->SetBottom(std::max(result->GetBottom(), frame.GetBottom()));
+		result->left = std::min(result->left, frame->left);
+		result->top = std::min(result->top, frame->top);
+		result->SetRight(std::max(result->GetRight(), frame->GetRight()));
+		result->SetBottom(std::max(result->GetBottom(), frame->GetBottom()));
 	}
 
-	if (!result)
-	{
-		throw std::runtime_error("can't get frame for empty composite shape");
-	}
-	return *result;
+	return result;
 }
 
-void CompositeShape::SetFrame(RectD const & frame)
+bool CompositeShape::SetFrame(RectD const & frame)
 {
 	const auto oldFrame = GetFrame();
+	if (!oldFrame)
+	{
+		return false;
+	}
 
-	const auto moveX = frame.left - oldFrame.left;
-	const auto moveY = frame.top - oldFrame.top;
+	const auto moveX = frame.left - oldFrame->left;
+	const auto moveY = frame.top - oldFrame->top;
 
-	const auto scaleX = frame.width / oldFrame.width;
-	const auto scaleY = frame.height / oldFrame.height;
+	const auto scaleX = frame.width / oldFrame->width;
+	const auto scaleY = frame.height / oldFrame->height;
+
+	bool result = false;
 
 	for (auto &shape : m_shapes)
 	{
 		auto curFrame = shape->GetFrame();
+		if (!curFrame)
+		{
+			continue;
+		}
 
-		const auto scaleLeftDiff = (curFrame.left - oldFrame.left) * (scaleX - 1);
-		const auto scaleTopDiff = (curFrame.top - oldFrame.top) * (scaleY - 1);
+		const auto scaleLeftDiff = (curFrame->left - oldFrame->left) * (scaleX - 1);
+		const auto scaleTopDiff = (curFrame->top - oldFrame->top) * (scaleY - 1);
 
-		curFrame.left += moveX + scaleLeftDiff;
-		curFrame.top += moveY + scaleTopDiff;
-		curFrame.width *= scaleX;
-		curFrame.height *= scaleY;
+		curFrame->left += moveX + scaleLeftDiff;
+		curFrame->top += moveY + scaleTopDiff;
+		curFrame->width *= scaleX;
+		curFrame->height *= scaleY;
 
-		shape->SetFrame(curFrame);
+		result |= shape->SetFrame(*curFrame);
 	}
+
+	return result;
 }
 
 IFillStyle & CompositeShape::GetFillStyle()

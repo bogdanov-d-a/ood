@@ -10,8 +10,8 @@ class IShape : public IDrawable
 public:
 	virtual ~IShape() = default;
 
-	virtual RectD GetFrame() const = 0;
-	virtual void SetFrame(RectD const& frame) = 0;
+	virtual boost::optional<RectD> GetFrame() const = 0;
+	virtual bool SetFrame(RectD const& frame) = 0;
 
 	virtual IFillStyle& GetFillStyle() = 0;
 	virtual IFillStyle const& GetFillStyle() const = 0;

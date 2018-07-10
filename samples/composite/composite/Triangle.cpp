@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "Triangle.h"
 
-void Triangle::DrawImpl(ICanvas & canvas)
+void Triangle::DrawImpl(ICanvas & canvas, RectD const& frame)
 {
-	const auto frame = GetFrame();
 	canvas.DrawPolygon({
 		{ frame.left, frame.GetBottom() },
 		{ (frame.left + frame.GetRight()) / 2, frame.top },

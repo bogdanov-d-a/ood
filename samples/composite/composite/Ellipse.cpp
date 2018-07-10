@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "Ellipse.h"
 
-void Ellipse::DrawImpl(ICanvas & canvas)
+void Ellipse::DrawImpl(ICanvas & canvas, RectD const& frame)
 {
-	const auto frame = GetFrame();
 	canvas.DrawEllipse(frame.left, frame.top, frame.width, frame.height);
 }

@@ -7,8 +7,8 @@ class LeafShape : public IShape
 public:
 	explicit LeafShape();
 
-	RectD GetFrame() const final;
-	void SetFrame(RectD const& frame) final;
+	boost::optional<RectD> GetFrame() const final;
+	bool SetFrame(RectD const& frame) final;
 
 	IFillStyle& GetFillStyle() final;
 	IFillStyle const& GetFillStyle() const final;
@@ -17,7 +17,7 @@ public:
 	ILineStyle const& GetLineStyle() const final;
 
 	void Draw(ICanvas &canvas) final;
-	virtual void DrawImpl(ICanvas &canvas) = 0;
+	virtual void DrawImpl(ICanvas &canvas, RectD const& frame) = 0;
 
 private:
 	std::unique_ptr<IFillStyle> m_fillStyle;

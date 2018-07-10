@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "Rectangle.h"
 
-void Rectangle::DrawImpl(ICanvas & canvas)
+void Rectangle::DrawImpl(ICanvas & canvas, RectD const& frame)
 {
-	const auto frame = GetFrame();
 	canvas.DrawPolygon({
 		{ frame.left, frame.top },
 		{ frame.GetRight(), frame.top },

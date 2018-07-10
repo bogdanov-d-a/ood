@@ -9,14 +9,15 @@ LeafShape::LeafShape()
 {
 }
 
-RectD LeafShape::GetFrame() const
+boost::optional<RectD> LeafShape::GetFrame() const
 {
 	return m_frame;
 }
 
-void LeafShape::SetFrame(RectD const & frame)
+bool LeafShape::SetFrame(RectD const & frame)
 {
 	m_frame = frame;
+	return true;
 }
 
 IFillStyle & LeafShape::GetFillStyle()
@@ -41,6 +42,12 @@ ILineStyle const & LeafShape::GetLineStyle() const
 
 void LeafShape::Draw(ICanvas & canvas)
 {
+	const auto frame = GetFrame();
+	if (!frame)
+	{
+		return;
+	}
+
 	{
 		auto &fillStyle = GetFillStyle();
 
@@ -67,5 +74,5 @@ void LeafShape::Draw(ICanvas & canvas)
 		}
 	}
 
-	DrawImpl(canvas);
+	DrawImpl(canvas, *frame);
 }

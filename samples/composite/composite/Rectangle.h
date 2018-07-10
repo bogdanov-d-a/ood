@@ -5,5 +5,5 @@
 class Rectangle : public LeafShape
 {
 public:
-	void DrawImpl(ICanvas &canvas) final;
+	void DrawImpl(ICanvas &canvas, RectD const& frame) final;
 };
