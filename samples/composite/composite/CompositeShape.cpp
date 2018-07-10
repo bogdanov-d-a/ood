@@ -60,7 +60,7 @@ boost::optional<RectD> CompositeShape::GetFrame() const
 bool CompositeShape::TrySetFrame(RectD const & frame)
 {
 	const auto oldFrame = GetFrame();
-	if (!oldFrame)
+	if (!oldFrame || oldFrame->width == 0 || oldFrame->height == 0)
 	{
 		return false;
 	}
