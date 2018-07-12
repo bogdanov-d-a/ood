@@ -1,8 +1,5 @@
 ﻿#pragma once
 
-#include <iostream>
-#include <boost/format.hpp>
-
 namespace naive
 {
 class CGumballMachine

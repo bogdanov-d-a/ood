@@ -1,3 +1,4 @@
+#include "deps.h"
 #include "NaiveGumBallMachine.h"
 #include "GumBallMachineWithState.h"
 #include "GumBallMachineWithDynamicallyCreatedState.h"
