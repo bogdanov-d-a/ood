@@ -9,7 +9,7 @@ CompositeFillStyle::CompositeFillStyle(Enumerator const & enumerator)
 
 boost::optional<bool> CompositeFillStyle::IsEnabled() const
 {
-	return Utils::GetCommonProperty<bool>([this](std::function<bool(boost::optional<bool>)> const& function) {
+	return Utils::GetCommonProperty<bool>([this](auto && function) {
 		m_enumerator([&function](IFillStyle &fillStyle) {
 			return function(fillStyle.IsEnabled());
 		});
@@ -26,7 +26,7 @@ void CompositeFillStyle::Enable(bool enable)
 
 boost::optional<RGBAColor> CompositeFillStyle::GetColor() const
 {
-	return Utils::GetCommonProperty<RGBAColor>([this](std::function<bool(boost::optional<RGBAColor>)> const& function) {
+	return Utils::GetCommonProperty<RGBAColor>([this](auto && function) {
 		m_enumerator([&function](IFillStyle &fillStyle) {
 			return function(fillStyle.GetColor());
 		});
