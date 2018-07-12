@@ -17,9 +17,10 @@ public:
 	ILineStyle const& GetLineStyle() const final;
 
 	void Draw(ICanvas &canvas) final;
-	virtual void DrawImpl(ICanvas &canvas, RectD const& frame) = 0;
 
 private:
+	virtual void DrawImpl(ICanvas &canvas, RectD const& frame) = 0;
+
 	std::unique_ptr<IFillStyle> m_fillStyle;
 	std::unique_ptr<ILineStyle> m_lineStyle;
 	RectD m_frame = { 0, 0, 0, 0 };
