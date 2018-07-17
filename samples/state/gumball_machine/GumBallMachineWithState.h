@@ -17,6 +17,7 @@ struct IGumballMachine
 {
 	virtual void ReleaseBall() = 0;
 	virtual unsigned GetBallCount()const = 0;
+	virtual void DisplayMessage(std::string const& message)const = 0;
 
 	virtual void SetSoldOutState() = 0;
 	virtual void SetNoQuarterState() = 0;
@@ -34,22 +35,22 @@ public:
 	{}
 	void InsertQuarter() override
 	{
-		std::cout << "Please wait, we're already giving you a gumball\n";
+		m_gumballMachine.DisplayMessage("Please wait, we're already giving you a gumball");
 	}
 	void EjectQuarter() override
 	{
-		std::cout << "Sorry you already turned the crank\n";
+		m_gumballMachine.DisplayMessage("Sorry you already turned the crank");
 	}
 	void TurnCrank() override
 	{
-		std::cout << "Turning twice doesn't get you another gumball\n";
+		m_gumballMachine.DisplayMessage("Turning twice doesn't get you another gumball");
 	}
 	void Dispense() override
 	{
 		m_gumballMachine.ReleaseBall();
 		if (m_gumballMachine.GetBallCount() == 0)
 		{
-			std::cout << "Oops, out of gumballs\n";
+			m_gumballMachine.DisplayMessage("Oops, out of gumballs");
 			m_gumballMachine.SetSoldOutState();
 		}
 		else
@@ -74,19 +75,19 @@ public:
 
 	void InsertQuarter() override
 	{
-		std::cout << "You can't insert a quarter, the machine is sold out\n";
+		m_gumballMachine.DisplayMessage("You can't insert a quarter, the machine is sold out");
 	}
 	void EjectQuarter() override
 	{
-		std::cout << "You can't eject, you haven't inserted a quarter yet\n";
+		m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
 	}
 	void TurnCrank() override
 	{
-		std::cout << "You turned but there's no gumballs\n";
+		m_gumballMachine.DisplayMessage("You turned but there's no gumballs");
 	}
 	void Dispense() override
 	{
-		std::cout << "No gumball dispensed\n";
+		m_gumballMachine.DisplayMessage("No gumball dispensed");
 	}
 	std::string ToString() const override
 	{
@@ -105,21 +106,21 @@ public:
 
 	void InsertQuarter() override
 	{
-		std::cout << "You can't insert another quarter\n";
+		m_gumballMachine.DisplayMessage("You can't insert another quarter");
 	}
 	void EjectQuarter() override
 	{
-		std::cout << "Quarter returned\n";
+		m_gumballMachine.DisplayMessage("Quarter returned");
 		m_gumballMachine.SetNoQuarterState();
 	}
 	void TurnCrank() override
 	{
-		std::cout << "You turned...\n";
+		m_gumballMachine.DisplayMessage("You turned...");
 		m_gumballMachine.SetSoldState();
 	}
 	void Dispense() override
 	{
-		std::cout << "No gumball dispensed\n";
+		m_gumballMachine.DisplayMessage("No gumball dispensed");
 	}
 	std::string ToString() const override
 	{
@@ -138,20 +139,20 @@ public:
 
 	void InsertQuarter() override
 	{
-		std::cout << "You inserted a quarter\n";
+		m_gumballMachine.DisplayMessage("You inserted a quarter");
 		m_gumballMachine.SetHasQuarterState();
 	}
 	void EjectQuarter() override
 	{
-		std::cout << "You haven't inserted a quarter\n";
+		m_gumballMachine.DisplayMessage("You haven't inserted a quarter");
 	}
 	void TurnCrank() override
 	{
-		std::cout << "You turned but there's no quarter\n";
+		m_gumballMachine.DisplayMessage("You turned but there's no quarter");
 	}
 	void Dispense() override
 	{
-		std::cout << "You need to pay first\n";
+		m_gumballMachine.DisplayMessage("You need to pay first");
 	}
 	std::string ToString() const override
 	{
@@ -164,13 +165,16 @@ private:
 class CGumballMachine : private IGumballMachine
 {
 public:
-	CGumballMachine(unsigned numBalls)
+	using DisplayCallback = std::function<void(std::string const&)>;
+
+	CGumballMachine(unsigned numBalls, DisplayCallback const& displayCallback)
 		: m_soldState(*this)
 		, m_soldOutState(*this)
 		, m_noQuarterState(*this)
 		, m_hasQuarterState(*this)
 		, m_state(&m_soldOutState)
 		, m_count(numBalls)
+		, m_displayCallback(displayCallback)
 	{
 		if (m_count > 0)
 		{
@@ -213,6 +217,10 @@ private:
 			--m_count;
 		}
 	}
+	void DisplayMessage(std::string const& message) const override
+	{
+		m_displayCallback(message);
+	}
 	void SetSoldOutState() override
 	{
 		m_state = &m_soldOutState;
@@ -236,7 +244,7 @@ private:
 	CNoQuarterState m_noQuarterState;
 	CHasQuarterState m_hasQuarterState;
 	IState * m_state;
-	
+	DisplayCallback m_displayCallback;
 };
 
 }

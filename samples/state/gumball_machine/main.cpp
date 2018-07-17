@@ -5,6 +5,9 @@
 
 using namespace std;
 
+namespace
+{
+
 template <typename GumballMachineType>
 void TestGumballMachine(GumballMachineType & m)
 {
@@ -48,7 +51,9 @@ void TestNaiveGumballMachine()
 
 void TestGumballMachineWithState()
 {
-	with_state::CGumballMachine m(5);
+	with_state::CGumballMachine m(5, [](std::string const& message) {
+		std::cout << message << std::endl;
+	});
 	TestGumballMachine(m);
 }
 
@@ -56,6 +61,8 @@ void TestGumballMachineWithDynamicState()
 {
 	with_dynamic_state::CGumballMachine m(5);
 	TestGumballMachine(m);
+}
+
 }
 
 int main()
