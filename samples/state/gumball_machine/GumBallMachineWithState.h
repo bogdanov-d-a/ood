@@ -213,7 +213,7 @@ private:
 	{
 		if (m_count != 0)
 		{
-			std::cout << "A gumball comes rolling out the slot...\n";
+			DisplayMessage("A gumball comes rolling out the slot...");
 			--m_count;
 		}
 	}
