@@ -6,7 +6,7 @@ namespace with_dynamic_state
 struct IState
 {
 	virtual void InsertQuarter() = 0;
-	virtual void EjectQuarter() = 0;
+	virtual void EjectQuarters() = 0;
 	virtual void TurnCrank() = 0;
 	virtual void Dispense() = 0;
 	virtual std::string ToString()const = 0;
@@ -36,7 +36,7 @@ public:
 	{
 		std::cout << "Please wait, we're already giving you a gumball\n";
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
 		std::cout << "Sorry you already turned the crank\n";
 	}
@@ -76,7 +76,7 @@ public:
 	{
 		std::cout << "You can't insert a quarter, the machine is sold out\n";
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
 		std::cout << "You can't eject, you haven't inserted a quarter yet\n";
 	}
@@ -107,7 +107,7 @@ public:
 	{
 		std::cout << "You can't insert another quarter\n";
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
 		std::cout << "Quarter returned\n";
 		m_gumballMachine.SetNoQuarterState();
@@ -141,7 +141,7 @@ public:
 		std::cout << "You inserted a quarter\n";
 		m_gumballMachine.SetHasQuarterState();
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
 		std::cout << "You haven't inserted a quarter\n";
 	}
@@ -177,9 +177,9 @@ public:
 			SetSoldOutState();
 		}
 	}
-	void EjectQuarter()
+	void EjectQuarters()
 	{
-		m_currentState->EjectQuarter();
+		m_currentState->EjectQuarters();
 	}
 	void InsertQuarter()
 	{

@@ -3,10 +3,12 @@
 namespace with_state
 {
 
+const unsigned MAX_QUARTER_COUNT = 5;
+
 struct IState
 {
 	virtual void InsertQuarter() = 0;
-	virtual void EjectQuarter() = 0;
+	virtual void EjectQuarters() = 0;
 	virtual void TurnCrank() = 0;
 	virtual void Dispense() = 0;
 	virtual std::string ToString()const = 0;
@@ -18,11 +20,12 @@ struct IGumballMachine
 	virtual void ReleaseBall() = 0;
 	virtual unsigned GetBallCount()const = 0;
 	virtual void DisplayMessage(std::string const& message)const = 0;
+	virtual unsigned GetQuarterCount()const = 0;
+	virtual void SetQuarterCount(unsigned count) = 0;
 
 	virtual void SetSoldOutState() = 0;
-	virtual void SetNoQuarterState() = 0;
 	virtual void SetSoldState() = 0;
-	virtual void SetHasQuarterState() = 0;
+	virtual void SetBasicState() = 0;
 
 	virtual ~IGumballMachine() = default;
 };
@@ -35,11 +38,31 @@ public:
 	{}
 	void InsertQuarter() override
 	{
-		m_gumballMachine.DisplayMessage("Please wait, we're already giving you a gumball");
+		const auto qc = m_gumballMachine.GetQuarterCount();
+		if (qc < MAX_QUARTER_COUNT)
+		{
+			m_gumballMachine.DisplayMessage("You inserted a quarter");
+			m_gumballMachine.SetQuarterCount(qc + 1);
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You can't insert another quarter");
+		}
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
-		m_gumballMachine.DisplayMessage("Sorry you already turned the crank");
+		const auto qc = m_gumballMachine.GetQuarterCount();
+		if (qc > 0)
+		{
+			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
+				+ (qc > 1 ? "s" : "")
+				+ " returned");
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
+		}
+		m_gumballMachine.SetQuarterCount(0);
 	}
 	void TurnCrank() override
 	{
@@ -55,7 +78,7 @@ public:
 		}
 		else
 		{
-			m_gumballMachine.SetNoQuarterState();
+			m_gumballMachine.SetBasicState();
 		}
 	}
 	std::string ToString() const override
@@ -77,9 +100,20 @@ public:
 	{
 		m_gumballMachine.DisplayMessage("You can't insert a quarter, the machine is sold out");
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
-		m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
+		const auto qc = m_gumballMachine.GetQuarterCount();
+		if (qc > 0)
+		{
+			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
+				+ (qc > 1 ? "s" : "")
+				+ " returned");
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
+		}
+		m_gumballMachine.SetQuarterCount(0);
 	}
 	void TurnCrank() override
 	{
@@ -97,26 +131,52 @@ private:
 	IGumballMachine & m_gumballMachine;
 };
 
-class CHasQuarterState : public IState
+class CBasicState : public IState
 {
 public:
-	CHasQuarterState(IGumballMachine & gumballMachine)
+	CBasicState(IGumballMachine & gumballMachine)
 		:m_gumballMachine(gumballMachine)
 	{}
 
 	void InsertQuarter() override
 	{
-		m_gumballMachine.DisplayMessage("You can't insert another quarter");
+		const auto qc = m_gumballMachine.GetQuarterCount();
+		if (qc < MAX_QUARTER_COUNT)
+		{
+			m_gumballMachine.DisplayMessage("You inserted a quarter");
+			m_gumballMachine.SetQuarterCount(qc + 1);
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You can't insert another quarter");
+		}
 	}
-	void EjectQuarter() override
+	void EjectQuarters() override
 	{
-		m_gumballMachine.DisplayMessage("Quarter returned");
-		m_gumballMachine.SetNoQuarterState();
+		const auto qc = m_gumballMachine.GetQuarterCount();
+		if (qc > 0)
+		{
+			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
+				+ (qc > 1 ? "s" : "")
+				+ " returned");
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
+		}
+		m_gumballMachine.SetQuarterCount(0);
 	}
 	void TurnCrank() override
 	{
-		m_gumballMachine.DisplayMessage("You turned...");
-		m_gumballMachine.SetSoldState();
+		if (m_gumballMachine.GetQuarterCount() > 0)
+		{
+			m_gumballMachine.DisplayMessage("You turned...");
+			m_gumballMachine.SetSoldState();
+		}
+		else
+		{
+			m_gumballMachine.DisplayMessage("You turned but there's no quarter");
+		}
 	}
 	void Dispense() override
 	{
@@ -124,39 +184,7 @@ public:
 	}
 	std::string ToString() const override
 	{
-		return "waiting for turn of crank";
-	}
-private:
-	IGumballMachine & m_gumballMachine;
-};
-
-class CNoQuarterState : public IState
-{
-public:
-	CNoQuarterState(IGumballMachine & gumballMachine)
-		: m_gumballMachine(gumballMachine)
-	{}
-
-	void InsertQuarter() override
-	{
-		m_gumballMachine.DisplayMessage("You inserted a quarter");
-		m_gumballMachine.SetHasQuarterState();
-	}
-	void EjectQuarter() override
-	{
-		m_gumballMachine.DisplayMessage("You haven't inserted a quarter");
-	}
-	void TurnCrank() override
-	{
-		m_gumballMachine.DisplayMessage("You turned but there's no quarter");
-	}
-	void Dispense() override
-	{
-		m_gumballMachine.DisplayMessage("You need to pay first");
-	}
-	std::string ToString() const override
-	{
-		return "waiting for quarter";
+		return "ready";
 	}
 private:
 	IGumballMachine & m_gumballMachine;
@@ -170,20 +198,19 @@ public:
 	CGumballMachine(unsigned numBalls, DisplayCallback const& displayCallback)
 		: m_soldState(*this)
 		, m_soldOutState(*this)
-		, m_noQuarterState(*this)
-		, m_hasQuarterState(*this)
+		, m_basicState(*this)
 		, m_state(&m_soldOutState)
-		, m_count(numBalls)
+		, m_gumballCount(numBalls)
 		, m_displayCallback(displayCallback)
 	{
-		if (m_count > 0)
+		if (m_gumballCount > 0)
 		{
-			m_state = &m_noQuarterState;
+			m_state = &m_basicState;
 		}
 	}
-	void EjectQuarter()
+	void EjectQuarters()
 	{
-		m_state->EjectQuarter();
+		m_state->EjectQuarters();
 	}
 	void InsertQuarter()
 	{
@@ -202,47 +229,54 @@ C++-enabled Standing Gumball Model #2016 (with state)
 Inventory: %1% gumball%2%
 Machine is %3%
 )");
-		return (fmt % m_count % (m_count != 1 ? "s" : "") % m_state->ToString()).str();
+		return (fmt % m_gumballCount % (m_gumballCount != 1 ? "s" : "") % m_state->ToString()).str();
 	}
 private:
 	unsigned GetBallCount() const override
 	{
-		return m_count;
+		return m_gumballCount;
 	}
 	virtual void ReleaseBall() override
 	{
-		if (m_count != 0)
+		if (m_gumballCount != 0)
 		{
 			DisplayMessage("A gumball comes rolling out the slot...");
-			--m_count;
+			--m_gumballCount;
+
+			assert(m_quarterCount > 0);
+			--m_quarterCount;
 		}
 	}
 	void DisplayMessage(std::string const& message) const override
 	{
 		m_displayCallback(message);
 	}
+	unsigned GetQuarterCount()const override
+	{
+		return m_quarterCount;
+	}
+	void SetQuarterCount(unsigned count)
+	{
+		m_quarterCount = count;
+	}
 	void SetSoldOutState() override
 	{
 		m_state = &m_soldOutState;
 	}
-	void SetNoQuarterState() override
+	void SetBasicState() override
 	{
-		m_state = &m_noQuarterState;
+		m_state = &m_basicState;
 	}
 	void SetSoldState() override
 	{
 		m_state = &m_soldState;
 	}
-	void SetHasQuarterState() override
-	{
-		m_state = &m_hasQuarterState;
-	}
 private:
-	unsigned m_count = 0;
+	unsigned m_gumballCount = 0;
+	unsigned m_quarterCount = 0;
 	CSoldState m_soldState;
 	CSoldOutState m_soldOutState;
-	CNoQuarterState m_noQuarterState;
-	CHasQuarterState m_hasQuarterState;
+	CBasicState m_basicState;
 	IState * m_state;
 	DisplayCallback m_displayCallback;
 };

@@ -19,7 +19,7 @@ void TestGumballMachine(GumballMachineType & m)
 	cout << m.ToString() << endl;
 
 	m.InsertQuarter();
-	m.EjectQuarter();
+	m.EjectQuarters();
 	m.TurnCrank();
 
 	cout << m.ToString() << endl;
@@ -28,7 +28,7 @@ void TestGumballMachine(GumballMachineType & m)
 	m.TurnCrank();
 	m.InsertQuarter();
 	m.TurnCrank();
-	m.EjectQuarter();
+	m.EjectQuarters();
 
 	cout << m.ToString() << endl;
 

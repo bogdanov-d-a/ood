@@ -40,7 +40,7 @@ public:
 		}
 	}
 
-	void EjectQuarter()
+	void EjectQuarters()
 	{
 		using namespace std;
 		switch (m_state)

@@ -20,10 +20,10 @@ BOOST_AUTO_TEST_CASE(CanConstructNormal)
 		log.push_back(message);
 	});
 	m.InsertQuarter();
-	m.EjectQuarter();
+	m.EjectQuarters();
 	BOOST_CHECK(log == std::vector<std::string>({
 		"You inserted a quarter",
-		"Quarter returned",
+		"1 quarter returned",
 	}));
 }
 
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(TestSoldOut)
 		log.push_back(message);
 	});
 	m.InsertQuarter();
-	m.EjectQuarter();
+	m.EjectQuarters();
 	m.TurnCrank();
 	BOOST_CHECK(log == std::vector<std::string>({
 		"You can't insert a quarter, the machine is sold out",
@@ -50,9 +50,9 @@ BOOST_AUTO_TEST_CASE(CantEjectQuarterIfNotInserted)
 	with_state::CGumballMachine m(42, [&log](std::string const& message) {
 		log.push_back(message);
 	});
-	m.EjectQuarter();
+	m.EjectQuarters();
 	BOOST_CHECK(log == std::vector<std::string>({
-		"You haven't inserted a quarter",
+		"You can't eject, you haven't inserted a quarter yet",
 	}));
 }
 
@@ -65,11 +65,11 @@ BOOST_AUTO_TEST_CASE(CantGetGumballForFree)
 	m.TurnCrank();
 	BOOST_CHECK(log == std::vector<std::string>({
 		"You turned but there's no quarter",
-		"You need to pay first",
+		"No gumball dispensed",
 	}));
 }
 
-BOOST_AUTO_TEST_CASE(CantInsertTwoQuarters)
+BOOST_AUTO_TEST_CASE(CanInsertThreeQuarters)
 {
 	std::vector<std::string> log;
 	with_state::CGumballMachine m(42, [&log](std::string const& message) {
@@ -80,8 +80,8 @@ BOOST_AUTO_TEST_CASE(CantInsertTwoQuarters)
 	m.InsertQuarter();
 	BOOST_CHECK(log == std::vector<std::string>({
 		"You inserted a quarter",
-		"You can't insert another quarter",
-		"You can't insert another quarter",
+		"You inserted a quarter",
+		"You inserted a quarter",
 	}));
 }
 
@@ -149,12 +149,12 @@ BOOST_AUTO_TEST_CASE(CantEjectQuarterAfterBuy)
 	});
 	m.InsertQuarter();
 	m.TurnCrank();
-	m.EjectQuarter();
+	m.EjectQuarters();
 	BOOST_CHECK(log == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",
-		"You haven't inserted a quarter",
+		"You can't eject, you haven't inserted a quarter yet",
 	}));
 }
 
@@ -172,6 +172,6 @@ BOOST_AUTO_TEST_CASE(CantDispenseExtraGumball)
 		"You turned...",
 		"A gumball comes rolling out the slot...",
 		"You turned but there's no quarter",
-		"You need to pay first",
+		"No gumball dispensed",
 	}));
 }
