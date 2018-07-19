@@ -1,27 +1,101 @@
 #include "stdafx.h"
+#include "..\gumball_machine\NaiveGumBallMachine.h"
 #include "..\gumball_machine\GumBallMachineWithState.h"
+
+namespace
+{
+
+class TestMachinesWrapper
+{
+public:
+	TestMachinesWrapper(unsigned numBalls)
+		: m_naive(numBalls, [this](std::string const& message) { OnNaiveMessage(message); })
+		, m_withState(numBalls, [this](std::string const& message) { OnWithStateMessage(message); })
+	{
+	}
+
+	std::vector<std::string> const& GetLog() const
+	{
+		return m_log;
+	}
+
+	bool TryInsertQuarter()
+	{
+		return TryPerformOperation([this](){
+			m_naive.InsertQuarter();
+			m_withState.InsertQuarter();
+		});
+	}
+
+	bool TryEjectQuarters()
+	{
+		return TryPerformOperation([this]() {
+			m_naive.EjectQuarters();
+			m_withState.EjectQuarters();
+		});
+	}
+
+	bool TryTurnCrank()
+	{
+		return TryPerformOperation([this]() {
+			m_naive.TurnCrank();
+			m_withState.TurnCrank();
+		});
+	}
+
+private:
+	void OnNaiveMessage(std::string const& message)
+	{
+		m_naiveMsgs.push_back(message);
+	}
+
+	void OnWithStateMessage(std::string const& message)
+	{
+		m_withStateMsgs.push_back(message);
+	}
+
+	bool TryPerformOperation(std::function<void()> const& callback)
+	{
+		m_naiveMsgs.clear();
+		m_withStateMsgs.clear();
+
+		callback();
+
+		if (m_naiveMsgs != m_withStateMsgs)
+		{
+			return false;
+		}
+
+		m_log.insert(m_log.end(), m_naiveMsgs.begin(), m_naiveMsgs.end());
+		return true;
+	}
+
+	naive::CGumballMachine m_naive;
+	with_state::CGumballMachine m_withState;
+
+	std::vector<std::string> m_log;
+
+	std::vector<std::string> m_naiveMsgs;
+	std::vector<std::string> m_withStateMsgs;
+};
+
+}
 
 BOOST_AUTO_TEST_CASE(CanConstructSoldOut)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(0, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(0);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You can't insert a quarter, the machine is sold out",
 	}));
 }
 
 BOOST_AUTO_TEST_CASE(CanConstructNormal)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.EjectQuarters();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryEjectQuarters());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"1 quarter returned",
 	}));
@@ -29,14 +103,11 @@ BOOST_AUTO_TEST_CASE(CanConstructNormal)
 
 BOOST_AUTO_TEST_CASE(TestSoldOut)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(0, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.EjectQuarters();
-	m.TurnCrank();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(0);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryEjectQuarters());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You can't insert a quarter, the machine is sold out",
 		"You can't eject, you haven't inserted a quarter yet",
 		"You turned but there's no gumballs",
@@ -46,24 +117,18 @@ BOOST_AUTO_TEST_CASE(TestSoldOut)
 
 BOOST_AUTO_TEST_CASE(CantEjectQuarterIfNotInserted)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.EjectQuarters();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryEjectQuarters());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You can't eject, you haven't inserted a quarter yet",
 	}));
 }
 
 BOOST_AUTO_TEST_CASE(CantGetGumballForFree)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.TurnCrank();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You turned but there's no quarter",
 		"No gumball dispensed",
 	}));
@@ -71,14 +136,11 @@ BOOST_AUTO_TEST_CASE(CantGetGumballForFree)
 
 BOOST_AUTO_TEST_CASE(CanInsertThreeQuarters)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.InsertQuarter();
-	m.InsertQuarter();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You inserted a quarter",
 		"You inserted a quarter",
@@ -87,13 +149,10 @@ BOOST_AUTO_TEST_CASE(CanInsertThreeQuarters)
 
 BOOST_AUTO_TEST_CASE(CanBuyGumball)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.TurnCrank();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",
@@ -102,14 +161,11 @@ BOOST_AUTO_TEST_CASE(CanBuyGumball)
 
 BOOST_AUTO_TEST_CASE(CanBuyLastGumball)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(1, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.TurnCrank();
-	m.InsertQuarter();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(1);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",
@@ -120,16 +176,13 @@ BOOST_AUTO_TEST_CASE(CanBuyLastGumball)
 
 BOOST_AUTO_TEST_CASE(CanBuyGumballTwice)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(2, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.TurnCrank();
-	m.InsertQuarter();
-	m.TurnCrank();
-	m.InsertQuarter();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(2);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",
@@ -143,14 +196,11 @@ BOOST_AUTO_TEST_CASE(CanBuyGumballTwice)
 
 BOOST_AUTO_TEST_CASE(CantEjectQuarterAfterBuy)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.TurnCrank();
-	m.EjectQuarters();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryEjectQuarters());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",
@@ -160,14 +210,11 @@ BOOST_AUTO_TEST_CASE(CantEjectQuarterAfterBuy)
 
 BOOST_AUTO_TEST_CASE(CantDispenseExtraGumball)
 {
-	std::vector<std::string> log;
-	with_state::CGumballMachine m(42, [&log](std::string const& message) {
-		log.push_back(message);
-	});
-	m.InsertQuarter();
-	m.TurnCrank();
-	m.TurnCrank();
-	BOOST_CHECK(log == std::vector<std::string>({
+	TestMachinesWrapper m(42);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You turned...",
 		"A gumball comes rolling out the slot...",

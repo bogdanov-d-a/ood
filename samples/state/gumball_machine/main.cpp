@@ -45,7 +45,9 @@ void TestGumballMachine(GumballMachineType & m)
 
 void TestNaiveGumballMachine()
 {
-	naive::CGumballMachine m(5);
+	naive::CGumballMachine m(5, [](std::string const& message) {
+		std::cout << message << std::endl;
+	});
 	TestGumballMachine(m);
 }
 
