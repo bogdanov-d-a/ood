@@ -114,10 +114,13 @@ public:
 		auto fmt = boost::format(R"(
 Mighty Gumball, Inc.
 C++-enabled Standing Gumball Model #2016
-Inventory: %1% gumball%2%
-Machine is %3%
+Inventory: %1% gumball%2%, %3% quarter%4%
+Machine is %5%
 )");
-		return (fmt % m_gumballCount % (m_gumballCount != 1 ? "s" : "") % state).str();
+		return (fmt
+			% m_gumballCount % (m_gumballCount != 1 ? "s" : "")
+			% m_quarterCount % (m_quarterCount != 1 ? "s" : "")
+			% state).str();
 	}
 
 private:
