@@ -76,8 +76,18 @@ public:
 
 	void Refill(unsigned numBalls)
 	{
-		m_gumballCount = numBalls;
-		m_state = numBalls > 0 ? State::Basic : State::SoldOut;
+		switch (m_state)
+		{
+		case State::Basic:
+		case State::SoldOut:
+			m_gumballCount = numBalls;
+			m_state = numBalls > 0 ? State::Basic : State::SoldOut;
+			DisplayMessage("Machine refilled to " + std::to_string(numBalls) + " gumballs");
+			break;
+		case State::Sold:
+			DisplayMessage("Can't refill machine while dispensing the gumball");
+			break;
+		}
 	}
 
 	unsigned GetQuarterCount()const

@@ -43,6 +43,14 @@ public:
 		});
 	}
 
+	bool TryRefill(unsigned numBalls)
+	{
+		return TryPerformOperation([this, numBalls]() {
+			m_naive.Refill(numBalls);
+			m_withState.Refill(numBalls);
+		});
+	}
+
 private:
 	void OnNaiveMessage(std::string const& message)
 	{
@@ -231,5 +239,32 @@ BOOST_AUTO_TEST_CASE(CantDispenseExtraGumball)
 		"A gumball comes rolling out the slot...",
 		"You turned but there's no quarter",
 		"No gumball dispensed",
+	}));
+}
+
+BOOST_AUTO_TEST_CASE(CanRefillMachine)
+{
+	TestMachinesWrapper m(1);
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryRefill(2));
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryEjectQuarters());
+	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
+		"You inserted a quarter",
+		"You inserted a quarter",
+		"You inserted a quarter",
+		"You turned...",
+		"A gumball comes rolling out the slot...",
+		"Oops, out of gumballs",
+		"You turned but there's no gumballs",
+		"No gumball dispensed",
+		"Machine refilled to 2 gumballs",
+		"You turned...",
+		"A gumball comes rolling out the slot...",
+		"1 quarter returned",
 	}));
 }

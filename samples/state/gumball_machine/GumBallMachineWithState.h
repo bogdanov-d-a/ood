@@ -11,6 +11,7 @@ struct IState
 	virtual void EjectQuarters() = 0;
 	virtual void TurnCrank() = 0;
 	virtual void Dispense() = 0;
+	virtual void Refill(unsigned numBalls) = 0;
 	virtual std::string ToString()const = 0;
 	virtual ~IState() = default;
 };
@@ -22,6 +23,7 @@ struct IGumballMachine
 	virtual void DisplayMessage(std::string const& message)const = 0;
 	virtual unsigned GetQuarterCount()const = 0;
 	virtual void SetQuarterCount(unsigned count) = 0;
+	virtual void RefillImpl(unsigned numBalls) = 0;
 
 	virtual void SetSoldOutState() = 0;
 	virtual void SetSoldState() = 0;
@@ -91,6 +93,10 @@ public:
 			m_gumballMachine.SetBasicState();
 		}
 	}
+	void Refill(unsigned) override
+	{
+		m_gumballMachine.DisplayMessage("Can't refill machine while dispensing the gumball");
+	}
 	std::string ToString() const override
 	{
 		return "delivering a gumball";
@@ -121,6 +127,10 @@ public:
 	void Dispense() override
 	{
 		m_gumballMachine.DisplayMessage("No gumball dispensed");
+	}
+	void Refill(unsigned numBalls) override
+	{
+		m_gumballMachine.RefillImpl(numBalls);
 	}
 	std::string ToString() const override
 	{
@@ -161,6 +171,10 @@ public:
 	{
 		m_gumballMachine.DisplayMessage("No gumball dispensed");
 	}
+	void Refill(unsigned numBalls) override
+	{
+		m_gumballMachine.RefillImpl(numBalls);
+	}
 	std::string ToString() const override
 	{
 		return "ready";
@@ -200,6 +214,10 @@ public:
 		m_state->TurnCrank();
 		m_state->Dispense();
 	}
+	void Refill(unsigned numBalls)
+	{
+		m_state->Refill(numBalls);
+	}
 	std::string ToString()const
 	{
 		auto fmt = boost::format(R"(
@@ -214,6 +232,12 @@ private:
 	unsigned GetBallCount() const override
 	{
 		return m_gumballCount;
+	}
+	void RefillImpl(unsigned numBalls) override
+	{
+		m_gumballCount = numBalls;
+		numBalls > 0 ? SetBasicState() : SetSoldOutState();
+		DisplayMessage("Machine refilled to " + std::to_string(numBalls) + " gumballs");
 	}
 	virtual void ReleaseBall() override
 	{
