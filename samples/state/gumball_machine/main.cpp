@@ -2,6 +2,7 @@
 #include "NaiveGumBallMachine.h"
 #include "GumBallMachineWithState.h"
 #include "GumBallMachineWithDynamicallyCreatedState.h"
+#include "Menu.h"
 
 using namespace std;
 
@@ -69,13 +70,44 @@ void TestGumballMachineWithDynamicState()
 
 int main()
 {
-	TestNaiveGumballMachine();
+	/*TestNaiveGumballMachine();
 
 	cout << "\n-----------------\n";
 	TestGumballMachineWithState();
 
 	cout << "\n-----------------\n";
-	TestGumballMachineWithDynamicState();
+	TestGumballMachineWithDynamicState();*/
+
+	CMenu menu;
+	with_state::CGumballMachine machine(2, [](std::string const& message) {
+		std::cout << message << std::endl;
+	});
+
+	menu.AddItem("Help", "Help", [&](std::istream&) {
+		menu.ShowInstructions();
+	});
+	menu.AddItem("Exit", "Exit", [&](std::istream&) {
+		menu.Exit();
+	});
+	menu.AddItem("State", "Show machine state", [&](std::istream&) {
+		cout << machine.ToString() << endl;
+	});
+	menu.AddItem("Insert", "Insert quarter", [&](std::istream&) {
+		machine.InsertQuarter();
+	});
+	menu.AddItem("Eject", "Eject quarters", [&](std::istream&) {
+		machine.EjectQuarters();
+	});
+	menu.AddItem("Turn", "Turn crank", [&](std::istream&) {
+		machine.TurnCrank();
+	});
+	menu.AddItem("Refill", "Refill <new count>", [&](std::istream &stream) {
+		unsigned count = 0;
+		stream >> count;
+		machine.Refill(count);
+	});
+
+	menu.Run();
 
 	return 0;
 }

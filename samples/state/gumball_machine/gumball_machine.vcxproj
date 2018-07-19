@@ -147,11 +147,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="deps.h" />
     <ClInclude Include="GumBallMachineWithDynamicallyCreatedState.h" />
     <ClInclude Include="GumBallMachineWithState.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="NaiveGumBallMachine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
