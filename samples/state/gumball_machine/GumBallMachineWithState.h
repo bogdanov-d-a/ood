@@ -30,6 +30,36 @@ struct IGumballMachine
 	virtual ~IGumballMachine() = default;
 };
 
+void InsertQuarterImpl(IGumballMachine &gumballMachine)
+{
+	const auto qc = gumballMachine.GetQuarterCount();
+	if (qc < MAX_QUARTER_COUNT)
+	{
+		gumballMachine.DisplayMessage("You inserted a quarter");
+		gumballMachine.SetQuarterCount(qc + 1);
+	}
+	else
+	{
+		gumballMachine.DisplayMessage("You can't insert another quarter");
+	}
+}
+
+void EjectQuartersImpl(IGumballMachine &gumballMachine)
+{
+	const auto qc = gumballMachine.GetQuarterCount();
+	if (qc > 0)
+	{
+		gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
+			+ (qc > 1 ? "s" : "")
+			+ " returned");
+	}
+	else
+	{
+		gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
+	}
+	gumballMachine.SetQuarterCount(0);
+}
+
 class CSoldState : public IState
 {
 public:
@@ -38,31 +68,11 @@ public:
 	{}
 	void InsertQuarter() override
 	{
-		const auto qc = m_gumballMachine.GetQuarterCount();
-		if (qc < MAX_QUARTER_COUNT)
-		{
-			m_gumballMachine.DisplayMessage("You inserted a quarter");
-			m_gumballMachine.SetQuarterCount(qc + 1);
-		}
-		else
-		{
-			m_gumballMachine.DisplayMessage("You can't insert another quarter");
-		}
+		InsertQuarterImpl(m_gumballMachine);
 	}
 	void EjectQuarters() override
 	{
-		const auto qc = m_gumballMachine.GetQuarterCount();
-		if (qc > 0)
-		{
-			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
-				+ (qc > 1 ? "s" : "")
-				+ " returned");
-		}
-		else
-		{
-			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
-		}
-		m_gumballMachine.SetQuarterCount(0);
+		EjectQuartersImpl(m_gumballMachine);
 	}
 	void TurnCrank() override
 	{
@@ -102,18 +112,7 @@ public:
 	}
 	void EjectQuarters() override
 	{
-		const auto qc = m_gumballMachine.GetQuarterCount();
-		if (qc > 0)
-		{
-			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
-				+ (qc > 1 ? "s" : "")
-				+ " returned");
-		}
-		else
-		{
-			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
-		}
-		m_gumballMachine.SetQuarterCount(0);
+		EjectQuartersImpl(m_gumballMachine);
 	}
 	void TurnCrank() override
 	{
@@ -140,31 +139,11 @@ public:
 
 	void InsertQuarter() override
 	{
-		const auto qc = m_gumballMachine.GetQuarterCount();
-		if (qc < MAX_QUARTER_COUNT)
-		{
-			m_gumballMachine.DisplayMessage("You inserted a quarter");
-			m_gumballMachine.SetQuarterCount(qc + 1);
-		}
-		else
-		{
-			m_gumballMachine.DisplayMessage("You can't insert another quarter");
-		}
+		InsertQuarterImpl(m_gumballMachine);
 	}
 	void EjectQuarters() override
 	{
-		const auto qc = m_gumballMachine.GetQuarterCount();
-		if (qc > 0)
-		{
-			m_gumballMachine.DisplayMessage(std::to_string(qc) + " quarter"
-				+ (qc > 1 ? "s" : "")
-				+ " returned");
-		}
-		else
-		{
-			m_gumballMachine.DisplayMessage("You can't eject, you haven't inserted a quarter yet");
-		}
-		m_gumballMachine.SetQuarterCount(0);
+		EjectQuartersImpl(m_gumballMachine);
 	}
 	void TurnCrank() override
 	{
