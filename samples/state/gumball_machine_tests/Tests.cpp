@@ -134,16 +134,27 @@ BOOST_AUTO_TEST_CASE(CantGetGumballForFree)
 	}));
 }
 
-BOOST_AUTO_TEST_CASE(CanInsertThreeQuarters)
+BOOST_AUTO_TEST_CASE(CanBuyWithFourQuarters)
 {
-	TestMachinesWrapper m(42);
+	TestMachinesWrapper m(2);
 	BOOST_CHECK(m.TryInsertQuarter());
 	BOOST_CHECK(m.TryInsertQuarter());
 	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryInsertQuarter());
+	BOOST_CHECK(m.TryTurnCrank());
+	BOOST_CHECK(m.TryEjectQuarters());
 	BOOST_CHECK(m.GetLog() == std::vector<std::string>({
 		"You inserted a quarter",
 		"You inserted a quarter",
 		"You inserted a quarter",
+		"You turned...",
+		"A gumball comes rolling out the slot...",
+		"You inserted a quarter",
+		"You turned...",
+		"A gumball comes rolling out the slot...",
+		"Oops, out of gumballs",
+		"2 quarters returned",
 	}));
 }
 
