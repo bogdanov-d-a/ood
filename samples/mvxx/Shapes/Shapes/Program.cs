@@ -13,9 +13,12 @@ namespace Shapes
         [STAThread]
         static void Main()
         {
+            Model.Canvas canvas = new Model.Canvas(new Common.Size(640, 480));
+            Presenter presenter = new Presenter(canvas);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Shapes(presenter));
         }
     }
 }

@@ -43,14 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Common\Position.cs" />
+    <Compile Include="Common\Size.cs" />
+    <Compile Include="Presenter.cs" />
+    <Compile Include="Shapes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Shapes.Designer.cs">
+      <DependentUpon>Shapes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Rectangle.cs" />
+    <Compile Include="Model\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Shapes.resx">
+      <DependentUpon>Shapes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
