@@ -62,6 +62,7 @@
             this.Name = "Shapes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Shapes";
+            this.Click += new System.EventHandler(this.Shapes_Click);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Shapes_Paint);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
