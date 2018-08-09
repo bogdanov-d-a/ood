@@ -64,6 +64,9 @@
             this.Text = "Shapes";
             this.Click += new System.EventHandler(this.Shapes_Click);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Shapes_Paint);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Shapes_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Shapes_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Shapes_MouseUp);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);

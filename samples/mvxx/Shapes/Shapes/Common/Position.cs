@@ -17,5 +17,10 @@ namespace Shapes.Common
             this.x = x;
             this.y = y;
         }
+
+        public static Size Sub(Position a, Position b)
+        {
+            return new Size(b.x - a.x, b.y - a.y);
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.Common
 {
-    public class Rectangle
+    public struct Rectangle
     {
         public Position leftTop;
         public Size size;
@@ -29,6 +29,12 @@ namespace Shapes.Common
                 pos.x < RightBottom.x &&
                 pos.y >= leftTop.y &&
                 pos.y < RightBottom.y;
+        }
+
+        public void Offset(Size offset)
+        {
+            leftTop.x += offset.width;
+            leftTop.y += offset.height;
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Optional;
+using Optional.Unsafe;
 
 namespace Shapes
 {
@@ -14,6 +16,9 @@ namespace Shapes
         private const int drawOffset = 50;
 
         private readonly Presenter presenter;
+
+        private Option<Common.Position> dragMousePos = Option.None<Common.Position>();
+        private int dragShapeIndex = -1;
 
         public Shapes(Presenter presenter)
         {
@@ -75,17 +80,51 @@ namespace Shapes
             }
         }
 
+        private Common.Position GetMousePosition()
+        {
+            Point rawPos = PointToClient(MousePosition);
+            return new Common.Position(rawPos.X - drawOffset, rawPos.Y - drawOffset);
+        }
+
         private void Shapes_Click(object sender, EventArgs e)
         {
             ResetSelection();
-            Point rawPos = PointToClient(MousePosition);
-            Common.Position pos = new Common.Position(rawPos.X - drawOffset, rawPos.Y - drawOffset);
             for (int i = presenter.RectangleCount - 1; i >= 0; --i)
             {
-                if (presenter.GetRectangle(i).Contains(pos))
+                if (presenter.GetRectangle(i).Contains(GetMousePosition()))
                 {
                     presenter.SelectRectangle(i, true);
                     return;
+                }
+            }
+        }
+
+        private void Shapes_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragMousePos = Option.Some(GetMousePosition());
+            dragShapeIndex = presenter.GetSelectedIndex();
+        }
+
+        private void Shapes_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragMousePos = Option.None<Common.Position>();
+            dragShapeIndex = -1;
+        }
+
+        private void Shapes_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragMousePos.HasValue && dragShapeIndex >= 0)
+            {
+                Common.Position newMousePos = GetMousePosition();
+                Common.Size offset = Common.Position.Sub(dragMousePos.ValueOrFailure(), newMousePos);
+
+                Common.Rectangle rect = presenter.GetRectangle(dragShapeIndex);
+                rect.Offset(offset);
+
+                if (presenter.CheckBounds(rect))
+                {
+                    presenter.ResetRectangle(dragShapeIndex, rect);
+                    dragMousePos = Option.Some(newMousePos);
                 }
             }
         }
