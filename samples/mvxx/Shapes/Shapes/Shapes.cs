@@ -29,15 +29,28 @@ namespace Shapes
         {
             Graphics g = e.Graphics;
 
+            const int offset = 50;
+            const int selOffset = 5;
+
+            g.FillRectangle(new SolidBrush(Color.White),
+                new Rectangle(offset, offset, presenter.CanvasSize.width, presenter.CanvasSize.height));
+
             for (int i = 0; i < presenter.RectangleCount; ++i)
             {
                 Common.Rectangle rect = presenter.GetRectangle(i);
-                g.DrawRectangle(new Pen(new SolidBrush(Color.Black)),
-                    new Rectangle(rect.leftTop.x, rect.leftTop.y, rect.size.width, rect.size.height));
+                Rectangle rect2 = new Rectangle(rect.leftTop.x, rect.leftTop.y, rect.size.width, rect.size.height);
+
+                g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
+                g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
+
                 if (presenter.IsRectangleSelected(i))
                 {
                     g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
-                        new Rectangle(rect.leftTop.x - 2, rect.leftTop.y - 2, rect.size.width + 4, rect.size.height + 4));
+                        new Rectangle(
+                            rect.leftTop.x - selOffset,
+                            rect.leftTop.y - selOffset,
+                            rect.size.width + 2 * selOffset,
+                            rect.size.height + 2 * selOffset));
                 }
             }
         }

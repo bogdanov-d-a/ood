@@ -47,6 +47,13 @@ namespace Shapes
             }
         }
 
+        public Common.Size CanvasSize
+        {
+            get {
+                return canvas.SizeP;
+            }
+        }
+
         public delegate void LayoutUpdatedDelegate();
         public event LayoutUpdatedDelegate LayoutUpdatedEvent;
     }
