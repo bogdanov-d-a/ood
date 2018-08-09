@@ -23,6 +23,8 @@ namespace Shapes
         public Shapes(Presenter presenter)
         {
             InitializeComponent();
+            DoubleBuffered = true;
+
             this.presenter = presenter;
             this.presenter.LayoutUpdatedEvent += new Presenter.LayoutUpdatedDelegate(this.OnLayoutUpdated);
         }
