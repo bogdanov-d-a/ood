@@ -9,10 +9,10 @@ namespace Shapes
     {
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
-        private readonly Model.Canvas canvas;
+        private readonly DomainModel.Canvas canvas;
         private readonly List<bool> selection = new List<bool>();
 
-        public Presenter(Model.Canvas canvas)
+        public Presenter(DomainModel.Canvas canvas)
         {
             this.canvas = canvas;
         }

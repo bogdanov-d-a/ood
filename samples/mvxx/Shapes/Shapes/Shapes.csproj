@@ -56,7 +56,7 @@
       <DependentUpon>Shapes.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Rectangle.cs" />
-    <Compile Include="Model\Canvas.cs" />
+    <Compile Include="DomainModel\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Shapes.resx">
@@ -81,6 +81,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AppModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

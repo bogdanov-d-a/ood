@@ -13,7 +13,7 @@ namespace Shapes
         [STAThread]
         static void Main()
         {
-            Model.Canvas canvas = new Model.Canvas(new Common.Size(640, 480));
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
             Presenter presenter = new Presenter(canvas);
 
             Application.EnableVisualStyles();
