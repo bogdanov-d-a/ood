@@ -10,7 +10,7 @@ namespace Shapes.AppModel
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Canvas canvas;
-        private readonly List<bool> selection = new List<bool>();
+        private int selectedIndex = -1;
 
         public AppModel(DomainModel.Canvas canvas)
         {
@@ -20,7 +20,6 @@ namespace Shapes.AppModel
         public void AddRectangle()
         {
             canvas.AddRectangle(defRect);
-            selection.Add(false);
             LayoutUpdatedEvent();
         }
 
@@ -40,26 +39,14 @@ namespace Shapes.AppModel
             return canvas.CheckBounds(rectangle);
         }
 
-        public bool IsRectangleSelected(int index)
-        {
-            return selection[index];
-        }
-
         public int GetSelectedIndex()
         {
-            for (int i = 0; i < selection.Count; ++i)
-            {
-                if (selection[i])
-                {
-                    return i;
-                }
-            }
-            return -1;
+            return selectedIndex;
         }
 
-        public void SelectRectangle(int index, bool selected)
+        public void SelectRectangle(int index)
         {
-            selection[index] = selected;
+            selectedIndex = index;
             LayoutUpdatedEvent();
         }
 

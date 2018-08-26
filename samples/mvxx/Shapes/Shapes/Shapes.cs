@@ -57,7 +57,7 @@ namespace Shapes
                 g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
 
-                if (presenter.IsRectangleSelected(i))
+                if (presenter.GetSelectedIndex() == i)
                 {
                     g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
                         new Rectangle(
@@ -74,14 +74,6 @@ namespace Shapes
             Invalidate();
         }
 
-        private void ResetSelection()
-        {
-            for (int i = 0; i < presenter.RectangleCount; ++i)
-            {
-                presenter.SelectRectangle(i, false);
-            }
-        }
-
         private Common.Position GetMousePosition()
         {
             Point rawPos = PointToClient(MousePosition);
@@ -90,12 +82,11 @@ namespace Shapes
 
         private void Shapes_Click(object sender, EventArgs e)
         {
-            ResetSelection();
             for (int i = presenter.RectangleCount - 1; i >= 0; --i)
             {
                 if (presenter.GetRectangle(i).Contains(GetMousePosition()))
                 {
-                    presenter.SelectRectangle(i, true);
+                    presenter.SelectRectangle(i);
                     return;
                 }
             }
