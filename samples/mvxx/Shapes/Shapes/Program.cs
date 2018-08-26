@@ -14,7 +14,7 @@ namespace Shapes
         static void Main()
         {
             DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
-            Presenter presenter = new Presenter(canvas);
+            AppModel.AppModel presenter = new AppModel.AppModel(canvas);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

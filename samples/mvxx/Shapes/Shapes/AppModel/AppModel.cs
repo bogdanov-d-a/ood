@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Shapes
+namespace Shapes.AppModel
 {
-    public class Presenter
+    public class AppModel
     {
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Canvas canvas;
         private readonly List<bool> selection = new List<bool>();
 
-        public Presenter(DomainModel.Canvas canvas)
+        public AppModel(DomainModel.Canvas canvas)
         {
             this.canvas = canvas;
         }

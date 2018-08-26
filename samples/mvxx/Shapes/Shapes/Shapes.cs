@@ -15,18 +15,18 @@ namespace Shapes
     {
         private const int drawOffset = 50;
 
-        private readonly Presenter presenter;
+        private readonly AppModel.AppModel presenter;
 
         private Option<Common.Position> dragMousePos = Option.None<Common.Position>();
         private int dragShapeIndex = -1;
 
-        public Shapes(Presenter presenter)
+        public Shapes(AppModel.AppModel presenter)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             this.presenter = presenter;
-            this.presenter.LayoutUpdatedEvent += new Presenter.LayoutUpdatedDelegate(this.OnLayoutUpdated);
+            this.presenter.LayoutUpdatedEvent += new AppModel.AppModel.LayoutUpdatedDelegate(this.OnLayoutUpdated);
         }
 
         private void addRectangleButton_Click(object sender, EventArgs e)
