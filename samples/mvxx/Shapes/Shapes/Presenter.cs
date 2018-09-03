@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Optional;
+using Optional.Unsafe;
 
 namespace Shapes
 {
@@ -30,9 +32,23 @@ namespace Shapes
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
             view.RequestRectangles += new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
+                Option<Common.Size> moveOffset = appModel.GetMoveOffset();
+
                 for (int i = 0; i < appModel.RectangleCount; ++i)
                 {
+                    if (moveOffset.HasValue && i == appModel.GetSelectedIndex())
+                    {
+                        continue;
+                    }
                     infoDelegate(appModel.GetRectangle(i), i == appModel.GetSelectedIndex());
+                }
+
+                if (moveOffset.HasValue)
+                {
+                    var moValue = moveOffset.ValueOrFailure();
+                    var rect = appModel.GetRectangle(appModel.GetSelectedIndex());
+                    rect.Offset(moValue);
+                    infoDelegate(rect, true);
                 }
             });
         }
