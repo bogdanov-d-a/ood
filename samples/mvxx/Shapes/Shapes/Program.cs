@@ -13,12 +13,16 @@ namespace Shapes
         [STAThread]
         static void Main()
         {
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
-            AppModel.AppModel presenter = new AppModel.AppModel(canvas);
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Shapes(presenter));
+
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
+            AppModel.AppModel appModel = new AppModel.AppModel(canvas);
+
+            Shapes view = new Shapes();
+            Presenter presenter = new Presenter(appModel, view);
+
+            Application.Run(view);
         }
     }
 }

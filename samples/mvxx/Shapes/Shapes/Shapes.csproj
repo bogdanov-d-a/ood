@@ -49,6 +49,7 @@
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />
+    <Compile Include="Presenter.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>
     </Compile>
