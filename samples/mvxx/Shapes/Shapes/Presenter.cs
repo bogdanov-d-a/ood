@@ -32,7 +32,7 @@ namespace Shapes
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
             view.RequestRectangles += new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
-                Option<Common.Size> moveOffset = appModel.GetMoveOffset();
+                Option<Common.Size> moveOffset = appModel.GetMoveOffsetIfMoving();
 
                 for (int i = 0; i < appModel.RectangleCount; ++i)
                 {
