@@ -20,7 +20,7 @@ namespace Shapes.Common
 
         public static Size Sub(Position a, Position b)
         {
-            return new Size(b.x - a.x, b.y - a.y);
+            return new Size(a.x - b.x, a.y - b.y);
         }
     }
 }
