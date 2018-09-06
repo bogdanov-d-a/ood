@@ -13,7 +13,6 @@ namespace Shapes.AppModel
         {
             public Common.Position startPos;
             public Common.Position curPos;
-            public bool startedInsideSelection;
         }
 
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
@@ -77,12 +76,8 @@ namespace Shapes.AppModel
             movingData.ValueOrFailure().startPos = pos;
             movingData.ValueOrFailure().curPos = pos;
 
-            movingData.ValueOrFailure().startedInsideSelection = false;
-            var selIndex = GetSelectedIndex();
-            if (selIndex != -1)
-            {
-                movingData.ValueOrFailure().startedInsideSelection = GetRectangle(selIndex).Contains(pos);
-            }
+            selectedIndex = -1;
+            SelectRectangleAtPos(pos);
         }
 
         public void Move(Common.Position pos)
@@ -114,7 +109,7 @@ namespace Shapes.AppModel
         {
             var result = GetMoveOffset();
 
-            if (result.HasValue && !movingData.ValueOrFailure().startedInsideSelection)
+            if (result.HasValue && selectedIndex == -1)
             {
                 return Option.None<Common.Size>();
             }
@@ -127,14 +122,7 @@ namespace Shapes.AppModel
             Move(pos);
             Common.Size offset = GetMoveOffset().ValueOrFailure();
 
-            if (!movingData.ValueOrFailure().startedInsideSelection)
-            {
-                if (offset.width == 0 && offset.height == 0)
-                {
-                    SelectRectangleAtPos(pos);
-                }
-            }
-            else
+            if (selectedIndex != -1)
             {
                 Common.Rectangle rect = GetRectangle(selectedIndex);
                 rect.Offset(offset);
