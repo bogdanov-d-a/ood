@@ -98,6 +98,7 @@ namespace Shapes
 
         public delegate void VoidDelegate();
         public event VoidDelegate AddRectangleEvent;
+        public event VoidDelegate RemoveShapeEvent;
 
         public delegate void MouseDelegate(Common.Position pos);
         public event MouseDelegate MouseDownEvent;
@@ -107,5 +108,10 @@ namespace Shapes
         public delegate void RectangleInfoDelegate(Common.Rectangle rect, bool isSelected);
         public delegate void RectangleEnumeratorDelegate(RectangleInfoDelegate infoDelegate);
         public event RectangleEnumeratorDelegate RequestRectangles;
+
+        private void removeShapeButton_Click(object sender, EventArgs e)
+        {
+            RemoveShapeEvent();
+        }
     }
 }

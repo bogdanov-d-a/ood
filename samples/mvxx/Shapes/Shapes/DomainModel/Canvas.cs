@@ -46,6 +46,11 @@ namespace Shapes.DomainModel
             list[index] = rectangle;
         }
 
+        public void RemoveRectangle(int index)
+        {
+            list.RemoveAt(index);
+        }
+
         public Common.Size SizeP
         {
             get {

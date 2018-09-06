@@ -65,6 +65,16 @@ namespace Shapes.AppModel
             }
         }
 
+        public void RemoveSelectedShape()
+        {
+            if (selectedIndex != -1)
+            {
+                canvas.RemoveRectangle(selectedIndex);
+                selectedIndex = -1;
+                LayoutUpdatedEvent();
+            }
+        }
+
         public void BeginMove(Common.Position pos)
         {
             if (movingData.HasValue)

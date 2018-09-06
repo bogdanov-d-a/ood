@@ -30,6 +30,7 @@
         {
             this.addRectangleButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.removeShapeButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,12 +46,22 @@
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addRectangleButton});
+            this.addRectangleButton,
+            this.removeShapeButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(734, 25);
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip";
+            // 
+            // removeShapeButton
+            // 
+            this.removeShapeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.removeShapeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeShapeButton.Name = "removeShapeButton";
+            this.removeShapeButton.Size = new System.Drawing.Size(88, 22);
+            this.removeShapeButton.Text = "Remove shape";
+            this.removeShapeButton.Click += new System.EventHandler(this.removeShapeButton_Click);
             // 
             // Shapes
             // 
@@ -77,6 +88,7 @@
 
         private System.Windows.Forms.ToolStripButton addRectangleButton;
         private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton removeShapeButton;
     }
 }
 
