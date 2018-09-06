@@ -141,11 +141,8 @@ namespace Shapes.AppModel
             {
                 Common.Rectangle rect = GetRectangle(selectedIndex);
                 rect.Offset(offset);
-
-                if (CheckBounds(rect))
-                {
-                    ResetRectangle(selectedIndex, rect);
-                }
+                ClampBounds(ref rect);
+                ResetRectangle(selectedIndex, rect);
             }
 
             movingData = Option.None<MovingData>();
