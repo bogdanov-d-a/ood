@@ -42,6 +42,11 @@ namespace Shapes.AppModel
             return canvas.CheckBounds(rectangle);
         }
 
+        public void ClampBounds(ref Common.Rectangle rectangle)
+        {
+            canvas.ClampBounds(ref rectangle);
+        }
+
         public int GetSelectedIndex()
         {
             return selectedIndex;

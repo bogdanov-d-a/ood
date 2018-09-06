@@ -23,6 +23,18 @@ namespace Shapes.Common
             }
         }
 
+        public void SetRight(int value)
+        {
+            int grow = value - RightBottom.x;
+            size.width += grow;
+        }
+
+        public void SetBottom(int value)
+        {
+            int grow = value - RightBottom.y;
+            size.height += grow;
+        }
+
         public bool Contains(Position pos)
         {
             return pos.x >= leftTop.x &&

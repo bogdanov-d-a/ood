@@ -49,6 +49,7 @@ namespace Shapes
                     var moValue = moveOffset.ValueOrFailure();
                     var rect = appModel.GetRectangle(appModel.GetSelectedIndex());
                     rect.Offset(moValue);
+                    appModel.ClampBounds(ref rect);
                     infoDelegate(rect, true);
                 }
             });
