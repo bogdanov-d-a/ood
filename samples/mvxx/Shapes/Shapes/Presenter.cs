@@ -33,24 +33,9 @@ namespace Shapes
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
             view.AssignRequestRectanglesHandler(new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
-                Option<Common.Size> moveOffset = appModel.GetMoveOffsetIfMoving();
-
                 for (int i = 0; i < appModel.RectangleCount; ++i)
                 {
-                    if (moveOffset.HasValue && i == appModel.GetSelectedIndex())
-                    {
-                        continue;
-                    }
                     infoDelegate(appModel.GetRectangle(i), i == appModel.GetSelectedIndex());
-                }
-
-                if (moveOffset.HasValue)
-                {
-                    var moValue = moveOffset.ValueOrFailure();
-                    var rect = appModel.GetRectangle(appModel.GetSelectedIndex());
-                    rect.Offset(moValue);
-                    appModel.ClampBounds(ref rect);
-                    infoDelegate(rect, true);
                 }
             }));
         }

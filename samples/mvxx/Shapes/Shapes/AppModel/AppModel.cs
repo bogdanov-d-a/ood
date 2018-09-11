@@ -34,15 +34,25 @@ namespace Shapes.AppModel
 
         public Common.Rectangle GetRectangle(int index)
         {
-            return canvas.GetRectangle(index);
+            var rect = canvas.GetRectangle(index);
+            if (index == selectedIndex)
+            {
+                var offset = GetMoveOffset();
+                if (offset.HasValue)
+                {
+                    rect.Offset(offset.ValueOrFailure());
+                    ClampBounds(ref rect);
+                }
+            }
+            return rect;
         }
 
-        public bool CheckBounds(Common.Rectangle rectangle)
+        private bool CheckBounds(Common.Rectangle rectangle)
         {
             return canvas.CheckBounds(rectangle);
         }
 
-        public void ClampBounds(ref Common.Rectangle rectangle)
+        private void ClampBounds(ref Common.Rectangle rectangle)
         {
             canvas.ClampBounds(ref rectangle);
         }
@@ -52,17 +62,17 @@ namespace Shapes.AppModel
             return selectedIndex;
         }
 
-        public void SelectRectangle(int index)
+        private void SelectRectangle(int index)
         {
             selectedIndex = index;
             LayoutUpdatedEvent();
         }
 
-        public void SelectRectangleAtPos(Common.Position pos)
+        private void SelectRectangleAtPos(Common.Position pos)
         {
             for (int i = RectangleCount - 1; i >= 0; --i)
             {
-                if (GetRectangle(i).Contains(pos))
+                if (canvas.GetRectangle(i).Contains(pos))
                 {
                     SelectRectangle(i);
                     return;
@@ -111,25 +121,13 @@ namespace Shapes.AppModel
             LayoutUpdatedEvent();
         }
 
-        public Option<Common.Size> GetMoveOffset()
+        private Option<Common.Size> GetMoveOffset()
         {
             if (!movingData.HasValue)
             {
                 return Option.None<Common.Size>();
             }
             return Option.Some(Common.Position.Sub(movingData.ValueOrFailure().curPos, movingData.ValueOrFailure().startPos));
-        }
-
-        public Option<Common.Size> GetMoveOffsetIfMoving()
-        {
-            var result = GetMoveOffset();
-
-            if (result.HasValue && selectedIndex == -1)
-            {
-                return Option.None<Common.Size>();
-            }
-
-            return result;
         }
 
         public void EndMove(Common.Position pos)
@@ -139,7 +137,7 @@ namespace Shapes.AppModel
 
             if (selectedIndex != -1)
             {
-                Common.Rectangle rect = GetRectangle(selectedIndex);
+                Common.Rectangle rect = canvas.GetRectangle(selectedIndex);
                 rect.Offset(offset);
                 ClampBounds(ref rect);
                 ResetRectangle(selectedIndex, rect);
