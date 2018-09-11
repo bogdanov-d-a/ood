@@ -32,7 +32,7 @@ namespace Shapes
             view.MouseMoveEvent += new Shapes.MouseDelegate(appModel.Move);
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
-            view.RequestRectangles += new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
+            view.AssignRequestRectanglesHandler(new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
                 Option<Common.Size> moveOffset = appModel.GetMoveOffsetIfMoving();
 
                 for (int i = 0; i < appModel.RectangleCount; ++i)
@@ -52,7 +52,7 @@ namespace Shapes
                     appModel.ClampBounds(ref rect);
                     infoDelegate(rect, true);
                 }
-            });
+            }));
         }
     }
 }

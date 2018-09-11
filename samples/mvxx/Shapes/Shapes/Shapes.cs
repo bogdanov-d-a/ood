@@ -107,7 +107,12 @@ namespace Shapes
 
         public delegate void RectangleInfoDelegate(Common.Rectangle rect, bool isSelected);
         public delegate void RectangleEnumeratorDelegate(RectangleInfoDelegate infoDelegate);
-        public event RectangleEnumeratorDelegate RequestRectangles;
+        private RectangleEnumeratorDelegate RequestRectangles;
+
+        public void AssignRequestRectanglesHandler(RectangleEnumeratorDelegate handler)
+        {
+            RequestRectangles = handler;
+        }
 
         private void removeShapeButton_Click(object sender, EventArgs e)
         {
