@@ -150,14 +150,14 @@ namespace Shapes.AppModel
         public int RectangleCount
         {
             get {
-                return canvas.Count;
+                return canvas.ShapeCount;
             }
         }
 
         public Common.Size CanvasSize
         {
             get {
-                return canvas.SizeP;
+                return canvas.CanvasSize;
             }
         }
 

@@ -63,14 +63,14 @@ namespace Shapes.DomainModel
             list.RemoveAt(index);
         }
 
-        public Common.Size SizeP
+        public Common.Size CanvasSize
         {
             get {
                 return size;
             }
         }
 
-        public int Count
+        public int ShapeCount
         {
             get {
                 return list.Count;
