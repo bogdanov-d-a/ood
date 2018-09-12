@@ -50,10 +50,10 @@ namespace Shapes
                     canvasSize.height));
 
             RequestRectangles((Common.Rectangle rect, bool isSelected) => {
-                Rectangle rect2 = new Rectangle(rect.leftTop.x + drawOffset,
-                    rect.leftTop.y + drawOffset,
-                    rect.size.width,
-                    rect.size.height);
+                Rectangle rect2 = new Rectangle(rect.LeftTop.x + drawOffset,
+                    rect.LeftTop.y + drawOffset,
+                    rect.Size.width,
+                    rect.Size.height);
 
                 g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);

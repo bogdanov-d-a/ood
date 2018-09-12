@@ -49,14 +49,14 @@ namespace Shapes.AppModel
 
         private void ClampBounds(ref Common.Rectangle rectangle)
         {
-            rectangle.leftTop.x = Math.Max(0, rectangle.leftTop.x);
-            rectangle.leftTop.y = Math.Max(0, rectangle.leftTop.y);
+            rectangle.LeftTop.x = Math.Max(0, rectangle.LeftTop.x);
+            rectangle.LeftTop.y = Math.Max(0, rectangle.LeftTop.y);
 
             int moveX = Math.Min(CanvasSize.width - 1, rectangle.RightBottom.x) - rectangle.RightBottom.x;
-            rectangle.leftTop.x += moveX;
+            rectangle.LeftTop.x += moveX;
 
             int moveY = Math.Min(CanvasSize.height - 1, rectangle.RightBottom.y) - rectangle.RightBottom.y;
-            rectangle.leftTop.y += moveY;
+            rectangle.LeftTop.y += moveY;
         }
 
         public int GetSelectedIndex()
