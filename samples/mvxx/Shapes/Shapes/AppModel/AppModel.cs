@@ -47,14 +47,16 @@ namespace Shapes.AppModel
             return rect;
         }
 
-        private bool CheckBounds(Common.Rectangle rectangle)
-        {
-            return canvas.CheckBounds(rectangle);
-        }
-
         private void ClampBounds(ref Common.Rectangle rectangle)
         {
-            canvas.ClampBounds(ref rectangle);
+            rectangle.leftTop.x = Math.Max(0, rectangle.leftTop.x);
+            rectangle.leftTop.y = Math.Max(0, rectangle.leftTop.y);
+
+            int moveX = Math.Min(CanvasSize.width - 1, rectangle.RightBottom.x) - rectangle.RightBottom.x;
+            rectangle.leftTop.x += moveX;
+
+            int moveY = Math.Min(CanvasSize.height - 1, rectangle.RightBottom.y) - rectangle.RightBottom.y;
+            rectangle.leftTop.y += moveY;
         }
 
         public int GetSelectedIndex()

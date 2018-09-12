@@ -15,24 +15,12 @@ namespace Shapes.DomainModel
             this.size = size;
         }
 
-        public bool CheckBounds(Common.Rectangle rectangle)
+        private bool CheckBounds(Common.Rectangle rectangle)
         {
             return rectangle.leftTop.x >= 0 &&
                 rectangle.leftTop.y >= 0 &&
                 rectangle.RightBottom.x < size.width &&
                 rectangle.RightBottom.y < size.height;
-        }
-
-        public void ClampBounds(ref Common.Rectangle rectangle)
-        {
-            rectangle.leftTop.x = Math.Max(0, rectangle.leftTop.x);
-            rectangle.leftTop.y = Math.Max(0, rectangle.leftTop.y);
-
-            int moveX = Math.Min(size.width - 1, rectangle.RightBottom.x) - rectangle.RightBottom.x;
-            rectangle.leftTop.x += moveX;
-
-            int moveY = Math.Min(size.height - 1, rectangle.RightBottom.y) - rectangle.RightBottom.y;
-            rectangle.leftTop.y += moveY;
         }
 
         public void AddRectangle(Common.Rectangle rectangle)
