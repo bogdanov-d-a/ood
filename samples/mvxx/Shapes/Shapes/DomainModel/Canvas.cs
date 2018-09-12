@@ -7,8 +7,26 @@ namespace Shapes.DomainModel
 {
     public class Canvas
     {
+        public enum ShapeType
+        {
+            Rectangle,
+            Triangle,
+        }
+
+        public struct Shape
+        {
+            public Shape(ShapeType type, Common.Rectangle boundingRect)
+            {
+                this.type = type;
+                this.boundingRect = boundingRect;
+            }
+
+            public ShapeType type;
+            public Common.Rectangle boundingRect;
+        }
+
         private readonly Common.Size canvasSize;
-        private readonly List<Common.Rectangle> shapeList = new List<Common.Rectangle>();
+        private readonly List<Shape> shapeList = new List<Shape>();
 
         public Canvas(Common.Size canvasSize)
         {
@@ -23,30 +41,30 @@ namespace Shapes.DomainModel
                 rectangle.RightBottom.y < canvasSize.height;
         }
 
-        public void AddRectangle(Common.Rectangle rectangle)
+        public void AddShape(Shape shape)
         {
-            if (!IsShapeInsideCanvas(rectangle))
+            if (!IsShapeInsideCanvas(shape.boundingRect))
             {
                 throw new Exception();
             }
-            shapeList.Add(rectangle);
+            shapeList.Add(shape);
         }
 
-        public Common.Rectangle GetRectangle(int index)
+        public Shape GetShape(int index)
         {
             return shapeList[index];
         }
 
-        public void ResetRectangle(int index, Common.Rectangle rectangle)
+        public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
         {
             if (!IsShapeInsideCanvas(rectangle))
             {
                 throw new Exception();
             }
-            shapeList[index] = rectangle;
+            shapeList[index] = new Shape(shapeList[index].type, rectangle);
         }
 
-        public void RemoveRectangle(int index)
+        public void RemoveShape(int index)
         {
             shapeList.RemoveAt(index);
         }

@@ -33,9 +33,9 @@ namespace Shapes
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
             view.AssignRequestRectanglesHandler(new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
-                for (int i = 0; i < appModel.RectangleCount; ++i)
+                for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
-                    infoDelegate(appModel.GetRectangle(i), i == appModel.GetSelectedIndex());
+                    infoDelegate(appModel.GetShape(i).boundingRect, i == appModel.GetSelectedIndex());
                 }
             }));
         }

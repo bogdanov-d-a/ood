@@ -28,23 +28,25 @@ namespace Shapes.AppModel
 
         public void AddRectangle()
         {
-            canvas.AddRectangle(defRect);
+            canvas.AddShape(new DomainModel.Canvas.Shape(DomainModel.Canvas.ShapeType.Rectangle, defRect));
             LayoutUpdatedEvent();
         }
 
-        public Common.Rectangle GetRectangle(int index)
+        public DomainModel.Canvas.Shape GetShape(int index)
         {
-            var rect = canvas.GetRectangle(index);
+            var shape = canvas.GetShape(index);
             if (index == selectedIndex)
             {
                 var offset = GetMoveOffset();
                 if (offset.HasValue)
                 {
+                    var rect = shape.boundingRect;
                     rect.Offset(offset.ValueOrFailure());
                     ClampBounds(ref rect);
+                    shape = new DomainModel.Canvas.Shape(shape.type, rect);
                 }
             }
-            return rect;
+            return shape;
         }
 
         private void ClampBounds(ref Common.Rectangle rectangle)
@@ -64,19 +66,19 @@ namespace Shapes.AppModel
             return selectedIndex;
         }
 
-        private void SelectRectangle(int index)
+        private void SelectShape(int index)
         {
             selectedIndex = index;
             LayoutUpdatedEvent();
         }
 
-        private void SelectRectangleAtPos(Common.Position pos)
+        private void SelectShapeAtPos(Common.Position pos)
         {
-            for (int i = RectangleCount - 1; i >= 0; --i)
+            for (int i = ShapeCount - 1; i >= 0; --i)
             {
-                if (canvas.GetRectangle(i).Contains(pos))
+                if (canvas.GetShape(i).boundingRect.Contains(pos))
                 {
-                    SelectRectangle(i);
+                    SelectShape(i);
                     return;
                 }
             }
@@ -86,7 +88,7 @@ namespace Shapes.AppModel
         {
             if (selectedIndex != -1)
             {
-                canvas.RemoveRectangle(selectedIndex);
+                canvas.RemoveShape(selectedIndex);
                 selectedIndex = -1;
                 LayoutUpdatedEvent();
             }
@@ -104,7 +106,7 @@ namespace Shapes.AppModel
             movingData.ValueOrFailure().curPos = pos;
 
             selectedIndex = -1;
-            SelectRectangleAtPos(pos);
+            SelectShapeAtPos(pos);
         }
 
         public void Move(Common.Position pos)
@@ -117,9 +119,9 @@ namespace Shapes.AppModel
             LayoutUpdatedEvent();
         }
 
-        private void ResetRectangle(int index, Common.Rectangle rect)
+        private void ResetShapeRectangle(int index, Common.Rectangle rect)
         {
-            canvas.ResetRectangle(selectedIndex, rect);
+            canvas.ResetShapeRectangle(selectedIndex, rect);
             LayoutUpdatedEvent();
         }
 
@@ -139,17 +141,17 @@ namespace Shapes.AppModel
 
             if (selectedIndex != -1)
             {
-                Common.Rectangle rect = canvas.GetRectangle(selectedIndex);
+                Common.Rectangle rect = canvas.GetShape(selectedIndex).boundingRect;
                 rect.Offset(offset);
                 ClampBounds(ref rect);
-                ResetRectangle(selectedIndex, rect);
+                ResetShapeRectangle(selectedIndex, rect);
             }
 
             movingData = Option.None<MovingData>();
             LayoutUpdatedEvent();
         }
 
-        public int RectangleCount
+        public int ShapeCount
         {
             get {
                 return canvas.ShapeCount;
