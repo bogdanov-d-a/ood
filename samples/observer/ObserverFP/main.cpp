@@ -1,24 +1,25 @@
-#include <functional>
-#include <map>
-#include <iostream>
 #include <boost/noncopyable.hpp>
+#include <functional>
+#include <iostream>
+#include <map>
 
 using namespace std;
 namespace ph = std::placeholders;
 
-
 class ICurrencyRate
 {
 public:
+	// Наблюдатель - функция, получающая сигнал об изменении курса валюты
 	using RateObserver = function<void(double rate)>;
 
 	using Token = uint64_t;
 
 	virtual Token DoOnRateChange(const RateObserver& observer) = 0;
 	virtual void RemoveRateChangeObserver(Token token) = 0;
-	virtual double GetValue()const = 0;
+	virtual double GetRate() const = 0;
 
-	virtual ~ICurrencyRate() = default;
+protected:
+	~ICurrencyRate() = default;
 };
 
 class Stock : public ICurrencyRate
@@ -29,7 +30,7 @@ public:
 		if (m_rubToUSD != rate)
 		{
 			m_rubToUSD = rate;
-			for (auto & observer : m_observers)
+			for (auto& observer : m_observers)
 			{
 				observer.second(m_rubToUSD);
 			}
@@ -38,16 +39,13 @@ public:
 
 	Token DoOnRateChange(const RateObserver& observer) override
 	{
-		do
-		{
-			++m_nextToken;
-		} while (m_observers.find(m_nextToken) != m_observers.end());
+		while (!m_observers.try_emplace(++m_nextToken, observer).second)
+			;
 
-		m_observers.emplace(m_nextToken, observer);
 		return m_nextToken;
 	}
 
-	double GetValue() const override
+	double GetRate() const override
 	{
 		return m_rubToUSD;
 	}
@@ -66,15 +64,13 @@ private:
 class AverageCurrencyRateMonitor : boost::noncopyable
 {
 public:
-	AverageCurrencyRateMonitor(ICurrencyRate & cr)
+	AverageCurrencyRateMonitor(ICurrencyRate& cr)
 		: m_currencyRate(cr)
 	{
-/*
-		cr.DoOnRateChange([this](double rate) {
+		m_rateChangeToken = cr.DoOnRateChange([this](double rate) {
 			OnCurrencyRateChange(rate);
 		});
-*/
-		m_rateChangeToken = cr.DoOnRateChange(bind(&AverageCurrencyRateMonitor::OnCurrencyRateChange, this, ph::_1));
+		//m_rateChangeToken = cr.DoOnRateChange(bind(&AverageCurrencyRateMonitor::OnCurrencyRateChange, this, ph::_1));
 	}
 
 	~AverageCurrencyRateMonitor()
@@ -82,10 +78,11 @@ public:
 		m_currencyRate.RemoveRateChangeObserver(m_rateChangeToken);
 	}
 
-	double GetAverageRate()const
+	double GetAverageRate() const
 	{
 		return (m_count != 0) ? m_accRate / m_count : 0;
 	}
+
 private:
 	void OnCurrencyRateChange(double newRate)
 	{
@@ -96,7 +93,7 @@ private:
 
 	double m_accRate = 0.0;
 	int m_count = 0;
-	ICurrencyRate & m_currencyRate;
+	ICurrencyRate& m_currencyRate;
 	ICurrencyRate::Token m_rateChangeToken;
 };
 
@@ -118,7 +115,6 @@ int main()
 		s.SetRate(70);
 		cout << "------------" << endl;
 	}
-	string ss;
 	s.SetRate(80);
 	s.SetRate(90);
 	s.SetRate(50);

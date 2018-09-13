@@ -15,7 +15,7 @@ public:
 	using RateSignal = signals::signal<void(double rate)>;
 
 	virtual signals::connection DoOnRateChange(const RateSignal::slot_type & slot) = 0;
-	virtual double GetValue()const = 0;
+	virtual double GetRate()const = 0;
 
 	virtual ~ICurrencyRate() = default;
 };
@@ -32,7 +32,7 @@ public:
 		}
 	}
 
-	double GetValue() const override
+	double GetRate() const override
 	{
 		return m_rubToUSD;
 	}
