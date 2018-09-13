@@ -79,7 +79,8 @@ namespace Shapes
                             new Point(rect2.Left, rect2.Bottom),
                             new Point(rect2.Right, rect2.Bottom),
                         };
-                        e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
+                        g.FillPolygon(new SolidBrush(Color.Yellow), points);
+                        g.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
                         break;
                 }
 
