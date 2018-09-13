@@ -42,6 +42,11 @@ namespace Shapes.AppModel
             AddShape(DomainModel.Canvas.ShapeType.Triangle);
         }
 
+        public void AddCircle()
+        {
+            AddShape(DomainModel.Canvas.ShapeType.Circle);
+        }
+
         public DomainModel.Canvas.Shape GetShape(int index)
         {
             var shape = canvas.GetShape(index);

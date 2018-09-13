@@ -28,6 +28,8 @@ namespace Shapes
                     return Shapes.ShapeType.Rectangle;
                 case DomainModel.Canvas.ShapeType.Triangle:
                     return Shapes.ShapeType.Triangle;
+                case DomainModel.Canvas.ShapeType.Circle:
+                    return Shapes.ShapeType.Circle;
                 default:
                     throw new Exception();
             }
@@ -40,6 +42,7 @@ namespace Shapes
             view.SetCanvasSize(appModel.CanvasSize);
             view.AddRectangleEvent += new Shapes.VoidDelegate(appModel.AddRectangle);
             view.AddTriangleEvent += new Shapes.VoidDelegate(appModel.AddTriangle);
+            view.AddCircleEvent += new Shapes.VoidDelegate(appModel.AddCircle);
             view.RemoveShapeEvent += new Shapes.VoidDelegate(appModel.RemoveSelectedShape);
 
             view.MouseDownEvent += new Shapes.MouseDelegate(appModel.BeginMove);

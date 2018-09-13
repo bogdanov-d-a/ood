@@ -20,6 +20,7 @@ namespace Shapes
         {
             Rectangle,
             Triangle,
+            Circle,
         }
 
         public Shapes()
@@ -41,6 +42,11 @@ namespace Shapes
         private void addTriangleButton_Click(object sender, EventArgs e)
         {
             AddTriangleEvent();
+        }
+
+        private void addCircleButton_Click(object sender, EventArgs e)
+        {
+            AddCircleEvent();
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
@@ -81,6 +87,11 @@ namespace Shapes
                         };
                         g.FillPolygon(new SolidBrush(Color.Yellow), points);
                         g.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
+                        break;
+
+                    case ShapeType.Circle:
+                        g.FillEllipse(new SolidBrush(Color.Yellow), rect2);
+                        g.DrawEllipse(new Pen(new SolidBrush(Color.Black)), rect2);
                         break;
                 }
 
@@ -125,6 +136,7 @@ namespace Shapes
         public delegate void VoidDelegate();
         public event VoidDelegate AddRectangleEvent;
         public event VoidDelegate AddTriangleEvent;
+        public event VoidDelegate AddCircleEvent;
         public event VoidDelegate RemoveShapeEvent;
 
         public delegate void MouseDelegate(Common.Position pos);

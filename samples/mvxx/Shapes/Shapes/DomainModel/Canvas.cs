@@ -11,6 +11,7 @@ namespace Shapes.DomainModel
         {
             Rectangle,
             Triangle,
+            Circle,
         }
 
         public struct Shape
