@@ -66,8 +66,22 @@ namespace Shapes
                     rect.Size.width,
                     rect.Size.height);
 
-                g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
-                g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
+                switch (type)
+                {
+                    case ShapeType.Rectangle:
+                        g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
+                        g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
+                        break;
+
+                    case ShapeType.Triangle:
+                        Point[] points = {
+                            new Point((rect2.Left + rect2.Right) / 2, rect2.Top),
+                            new Point(rect2.Left, rect2.Bottom),
+                            new Point(rect2.Right, rect2.Bottom),
+                        };
+                        e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
+                        break;
+                }
 
                 if (isSelected)
                 {
