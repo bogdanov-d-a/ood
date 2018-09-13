@@ -16,6 +16,12 @@ namespace Shapes
         private const int drawOffset = 50;
         private Option<Common.Size> canvasSizeOption;
 
+        public enum ShapeType
+        {
+            Rectangle,
+            Triangle,
+        }
+
         public Shapes()
         {
             InitializeComponent();
@@ -54,7 +60,7 @@ namespace Shapes
                     canvasSize.width,
                     canvasSize.height));
 
-            RequestRectangles((Common.Rectangle rect, bool isSelected) => {
+            RequestRectangles((Common.Rectangle rect, ShapeType type, bool isSelected) => {
                 Rectangle rect2 = new Rectangle(rect.LeftTop.x + drawOffset,
                     rect.LeftTop.y + drawOffset,
                     rect.Size.width,
@@ -111,7 +117,7 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void RectangleInfoDelegate(Common.Rectangle rect, bool isSelected);
+        public delegate void RectangleInfoDelegate(Common.Rectangle rect, ShapeType type, bool isSelected);
         public delegate void RectangleEnumeratorDelegate(RectangleInfoDelegate infoDelegate);
         private RectangleEnumeratorDelegate RequestRectangles;
 

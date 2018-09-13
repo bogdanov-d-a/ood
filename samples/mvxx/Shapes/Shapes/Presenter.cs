@@ -20,6 +20,19 @@ namespace Shapes
             Initialize();
         }
 
+        private Shapes.ShapeType MapShapeType(DomainModel.Canvas.ShapeType type)
+        {
+            switch (type)
+            {
+                case DomainModel.Canvas.ShapeType.Rectangle:
+                    return Shapes.ShapeType.Rectangle;
+                case DomainModel.Canvas.ShapeType.Triangle:
+                    return Shapes.ShapeType.Triangle;
+                default:
+                    throw new Exception();
+            }
+        }
+
         private void Initialize()
         {
             appModel.LayoutUpdatedEvent += new AppModel.AppModel.LayoutUpdatedDelegate(view.OnLayoutUpdated);
@@ -36,7 +49,8 @@ namespace Shapes
             view.AssignRequestRectanglesHandler(new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
-                    infoDelegate(appModel.GetShape(i).boundingRect, i == appModel.GetSelectedIndex());
+                    var shape = appModel.GetShape(i);
+                    infoDelegate(shape.boundingRect, MapShapeType(shape.type), i == appModel.GetSelectedIndex());
                 }
             }));
         }
