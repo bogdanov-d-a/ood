@@ -26,10 +26,20 @@ namespace Shapes.AppModel
             this.canvas = canvas;
         }
 
+        private void AddShape(DomainModel.Canvas.ShapeType type)
+        {
+            canvas.AddShape(new DomainModel.Canvas.Shape(type, defRect));
+            LayoutUpdatedEvent();
+        }
+
         public void AddRectangle()
         {
-            canvas.AddShape(new DomainModel.Canvas.Shape(DomainModel.Canvas.ShapeType.Rectangle, defRect));
-            LayoutUpdatedEvent();
+            AddShape(DomainModel.Canvas.ShapeType.Rectangle);
+        }
+
+        public void AddTriangle()
+        {
+            AddShape(DomainModel.Canvas.ShapeType.Triangle);
         }
 
         public DomainModel.Canvas.Shape GetShape(int index)

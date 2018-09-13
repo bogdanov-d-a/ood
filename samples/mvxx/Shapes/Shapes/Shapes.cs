@@ -32,6 +32,11 @@ namespace Shapes
             AddRectangleEvent();
         }
 
+        private void addTriangleButton_Click(object sender, EventArgs e)
+        {
+            AddTriangleEvent();
+        }
+
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -98,6 +103,7 @@ namespace Shapes
 
         public delegate void VoidDelegate();
         public event VoidDelegate AddRectangleEvent;
+        public event VoidDelegate AddTriangleEvent;
         public event VoidDelegate RemoveShapeEvent;
 
         public delegate void MouseDelegate(Common.Position pos);

@@ -26,6 +26,7 @@ namespace Shapes
 
             view.SetCanvasSize(appModel.CanvasSize);
             view.AddRectangleEvent += new Shapes.VoidDelegate(appModel.AddRectangle);
+            view.AddTriangleEvent += new Shapes.VoidDelegate(appModel.AddTriangle);
             view.RemoveShapeEvent += new Shapes.VoidDelegate(appModel.RemoveSelectedShape);
 
             view.MouseDownEvent += new Shapes.MouseDelegate(appModel.BeginMove);

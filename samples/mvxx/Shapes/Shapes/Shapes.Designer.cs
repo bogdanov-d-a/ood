@@ -31,6 +31,7 @@
             this.addRectangleButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.removeShapeButton = new System.Windows.Forms.ToolStripButton();
+            this.addTriangleButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +48,7 @@
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addRectangleButton,
+            this.addTriangleButton,
             this.removeShapeButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -62,6 +64,15 @@
             this.removeShapeButton.Size = new System.Drawing.Size(88, 22);
             this.removeShapeButton.Text = "Remove shape";
             this.removeShapeButton.Click += new System.EventHandler(this.removeShapeButton_Click);
+            // 
+            // addTriangleButton
+            // 
+            this.addTriangleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.addTriangleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addTriangleButton.Name = "addTriangleButton";
+            this.addTriangleButton.Size = new System.Drawing.Size(76, 22);
+            this.addTriangleButton.Text = "Add triangle";
+            this.addTriangleButton.Click += new System.EventHandler(this.addTriangleButton_Click);
             // 
             // Shapes
             // 
@@ -89,6 +100,7 @@
         private System.Windows.Forms.ToolStripButton addRectangleButton;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton removeShapeButton;
+        private System.Windows.Forms.ToolStripButton addTriangleButton;
     }
 }
 
