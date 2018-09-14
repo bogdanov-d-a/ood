@@ -16,13 +16,6 @@ namespace Shapes
         private const int drawOffset = 50;
         private Option<Common.Size> canvasSizeOption;
 
-        public enum ShapeType
-        {
-            Rectangle,
-            Triangle,
-            Circle,
-        }
-
         public Shapes()
         {
             InitializeComponent();
@@ -66,7 +59,7 @@ namespace Shapes
                     canvasSize.width,
                     canvasSize.height));
 
-            RequestRectangles((Common.Rectangle rect, ShapeType type, bool isSelected) => {
+            RequestRectangles((Common.Rectangle rect, View.ShapeType type, bool isSelected) => {
                 Rectangle rect2 = new Rectangle(rect.LeftTop.x + drawOffset,
                     rect.LeftTop.y + drawOffset,
                     rect.Size.width,
@@ -74,12 +67,12 @@ namespace Shapes
 
                 switch (type)
                 {
-                    case ShapeType.Rectangle:
+                    case View.ShapeType.Rectangle:
                         g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
                         g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
                         break;
 
-                    case ShapeType.Triangle:
+                    case View.ShapeType.Triangle:
                         Point[] points = {
                             new Point((rect2.Left + rect2.Right) / 2, rect2.Top),
                             new Point(rect2.Left, rect2.Bottom),
@@ -89,7 +82,7 @@ namespace Shapes
                         g.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
                         break;
 
-                    case ShapeType.Circle:
+                    case View.ShapeType.Circle:
                         g.FillEllipse(new SolidBrush(Color.Yellow), rect2);
                         g.DrawEllipse(new Pen(new SolidBrush(Color.Black)), rect2);
                         break;
@@ -144,7 +137,7 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void RectangleInfoDelegate(Common.Rectangle rect, ShapeType type, bool isSelected);
+        public delegate void RectangleInfoDelegate(Common.Rectangle rect, View.ShapeType type, bool isSelected);
         public delegate void RectangleEnumeratorDelegate(RectangleInfoDelegate infoDelegate);
         private RectangleEnumeratorDelegate RequestRectangles;
 

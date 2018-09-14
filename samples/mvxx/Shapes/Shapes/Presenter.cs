@@ -20,16 +20,16 @@ namespace Shapes
             Initialize();
         }
 
-        private Shapes.ShapeType MapShapeType(DomainModel.Canvas.ShapeType type)
+        private View.ShapeType MapShapeType(DomainModel.Canvas.ShapeType type)
         {
             switch (type)
             {
                 case DomainModel.Canvas.ShapeType.Rectangle:
-                    return Shapes.ShapeType.Rectangle;
+                    return View.ShapeType.Rectangle;
                 case DomainModel.Canvas.ShapeType.Triangle:
-                    return Shapes.ShapeType.Triangle;
+                    return View.ShapeType.Triangle;
                 case DomainModel.Canvas.ShapeType.Circle:
-                    return Shapes.ShapeType.Circle;
+                    return View.ShapeType.Circle;
                 default:
                     throw new Exception();
             }
