@@ -16,7 +16,7 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.ShapeFactory());
             AppModel.AppModel appModel = new AppModel.AppModel(canvas);
 
             Shapes view = new Shapes();

@@ -16,6 +16,50 @@ namespace Shapes
         private const int drawOffset = 50;
         private Option<Common.Size> canvasSizeOption;
 
+        private static Rectangle OffsetDrawRect(Common.Rectangle rect)
+        {
+            return new Rectangle(rect.LeftTop.x + drawOffset,
+                rect.LeftTop.y + drawOffset,
+                rect.Size.width,
+                rect.Size.height);
+        }
+
+        private class RenderTarget : ShapeTypes.IRenderTarget
+        {
+            private Graphics g;
+
+            public RenderTarget(Graphics g)
+            {
+                this.g = g;
+            }
+
+            public void DrawRectangle(Common.Rectangle rect)
+            {
+                var rect2 = OffsetDrawRect(rect);
+                g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
+                g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
+            }
+
+            public void DrawTriangle(Common.Rectangle rect)
+            {
+                var rect2 = OffsetDrawRect(rect);
+                Point[] points = {
+                            new Point((rect2.Left + rect2.Right) / 2, rect2.Top),
+                            new Point(rect2.Left, rect2.Bottom),
+                            new Point(rect2.Right, rect2.Bottom),
+                        };
+                g.FillPolygon(new SolidBrush(Color.Yellow), points);
+                g.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
+            }
+
+            public void DrawCircle(Common.Rectangle rect)
+            {
+                var rect2 = OffsetDrawRect(rect);
+                g.FillEllipse(new SolidBrush(Color.Yellow), rect2);
+                g.DrawEllipse(new Pen(new SolidBrush(Color.Black)), rect2);
+            }
+        }
+
         public Shapes()
         {
             InitializeComponent();
@@ -59,37 +103,14 @@ namespace Shapes
                     canvasSize.width,
                     canvasSize.height));
 
-            RequestRectangles((Common.Rectangle rect, View.ShapeType type, bool isSelected) => {
-                Rectangle rect2 = new Rectangle(rect.LeftTop.x + drawOffset,
-                    rect.LeftTop.y + drawOffset,
-                    rect.Size.width,
-                    rect.Size.height);
+            RenderTarget target = new RenderTarget(g);
 
-                switch (type)
-                {
-                    case View.ShapeType.Rectangle:
-                        g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
-                        g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
-                        break;
-
-                    case View.ShapeType.Triangle:
-                        Point[] points = {
-                            new Point((rect2.Left + rect2.Right) / 2, rect2.Top),
-                            new Point(rect2.Left, rect2.Bottom),
-                            new Point(rect2.Right, rect2.Bottom),
-                        };
-                        g.FillPolygon(new SolidBrush(Color.Yellow), points);
-                        g.DrawPolygon(new Pen(new SolidBrush(Color.Black)), points);
-                        break;
-
-                    case View.ShapeType.Circle:
-                        g.FillEllipse(new SolidBrush(Color.Yellow), rect2);
-                        g.DrawEllipse(new Pen(new SolidBrush(Color.Black)), rect2);
-                        break;
-                }
+            RequestShapes((ShapeTypes.AbstractShape shape, bool isSelected) => {
+                shape.Draw(target);
 
                 if (isSelected)
                 {
+                    Rectangle rect2 = OffsetDrawRect(shape.GetBoundingRect());
                     g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
                         new Rectangle(
                             rect2.X - selOffset,
@@ -137,13 +158,13 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void RectangleInfoDelegate(Common.Rectangle rect, View.ShapeType type, bool isSelected);
-        public delegate void RectangleEnumeratorDelegate(RectangleInfoDelegate infoDelegate);
-        private RectangleEnumeratorDelegate RequestRectangles;
+        public delegate void ShapeInfoDelegate(ShapeTypes.AbstractShape shape, bool isSelected);
+        public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate infoDelegate);
+        private ShapeEnumeratorDelegate RequestShapes;
 
-        public void AssignRequestRectanglesHandler(RectangleEnumeratorDelegate handler)
+        public void AssignRequestShapesHandler(ShapeEnumeratorDelegate handler)
         {
-            RequestRectangles = handler;
+            RequestShapes = handler;
         }
 
         private void removeShapeButton_Click(object sender, EventArgs e)

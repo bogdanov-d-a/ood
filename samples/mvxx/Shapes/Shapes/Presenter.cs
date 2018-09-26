@@ -20,21 +20,6 @@ namespace Shapes
             Initialize();
         }
 
-        private View.ShapeType MapShapeType(DomainModel.Canvas.ShapeType type)
-        {
-            switch (type)
-            {
-                case DomainModel.Canvas.ShapeType.Rectangle:
-                    return View.ShapeType.Rectangle;
-                case DomainModel.Canvas.ShapeType.Triangle:
-                    return View.ShapeType.Triangle;
-                case DomainModel.Canvas.ShapeType.Circle:
-                    return View.ShapeType.Circle;
-                default:
-                    throw new Exception();
-            }
-        }
-
         private void Initialize()
         {
             appModel.LayoutUpdatedEvent += new AppModel.AppModel.LayoutUpdatedDelegate(view.OnLayoutUpdated);
@@ -49,11 +34,11 @@ namespace Shapes
             view.MouseMoveEvent += new Shapes.MouseDelegate(appModel.Move);
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
 
-            view.AssignRequestRectanglesHandler(new Shapes.RectangleEnumeratorDelegate((Shapes.RectangleInfoDelegate infoDelegate) => {
+            view.AssignRequestShapesHandler(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate infoDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
                     var shape = appModel.GetShape(i);
-                    infoDelegate(shape.boundingRect, MapShapeType(shape.type), i == appModel.GetSelectedIndex());
+                    infoDelegate((ShapeTypes.AbstractShape)shape, i == appModel.GetSelectedIndex());
                 }
             }));
         }

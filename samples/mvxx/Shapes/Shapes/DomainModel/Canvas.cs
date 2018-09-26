@@ -7,31 +7,14 @@ namespace Shapes.DomainModel
 {
     public class Canvas
     {
-        public enum ShapeType
-        {
-            Rectangle,
-            Triangle,
-            Circle,
-        }
-
-        public struct Shape
-        {
-            public Shape(ShapeType type, Common.Rectangle boundingRect)
-            {
-                this.type = type;
-                this.boundingRect = boundingRect;
-            }
-
-            public ShapeType type;
-            public Common.Rectangle boundingRect;
-        }
-
         private readonly Common.Size canvasSize;
-        private readonly List<Shape> shapeList = new List<Shape>();
+        private readonly List<ShapeTypes.IShape> shapeList = new List<ShapeTypes.IShape>();
+        private readonly ShapeTypes.IShapeFactory shapeFactory;
 
-        public Canvas(Common.Size canvasSize)
+        public Canvas(Common.Size canvasSize, ShapeTypes.IShapeFactory shapeFactory)
         {
             this.canvasSize = canvasSize;
+            this.shapeFactory = shapeFactory;
         }
 
         private bool IsShapeInsideCanvas(Common.Rectangle rectangle)
@@ -42,16 +25,21 @@ namespace Shapes.DomainModel
                 rectangle.RightBottom.y < canvasSize.height;
         }
 
-        public void AddShape(Shape shape)
+        public void AddShape(ShapeTypes.IShape shape)
         {
-            if (!IsShapeInsideCanvas(shape.boundingRect))
+            if (!IsShapeInsideCanvas(shape.GetBoundingRect()))
             {
                 throw new Exception();
             }
             shapeList.Add(shape);
         }
 
-        public Shape GetShape(int index)
+        public void AddShape(int type, Common.Rectangle boundingRect)
+        {
+            AddShape(shapeFactory.CreateShape(type, boundingRect));
+        }
+
+        public ShapeTypes.IShape GetShape(int index)
         {
             return shapeList[index];
         }
@@ -62,7 +50,7 @@ namespace Shapes.DomainModel
             {
                 throw new Exception();
             }
-            shapeList[index] = new Shape(shapeList[index].type, rectangle);
+            shapeList[index].SetBoundingRect(rectangle);
         }
 
         public void RemoveShape(int index)

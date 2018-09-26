@@ -60,7 +60,14 @@
     <Compile Include="DomainModel\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\ShapeType.cs" />
+    <Compile Include="ShapeTypes\AbstractShape.cs" />
+    <Compile Include="ShapeTypes\Circle.cs" />
+    <Compile Include="ShapeTypes\IRenderTarget.cs" />
+    <Compile Include="ShapeTypes\IShape.cs" />
+    <Compile Include="ShapeTypes\IShapeFactory.cs" />
+    <Compile Include="ShapeTypes\Rectangle.cs" />
+    <Compile Include="ShapeTypes\ShapeFactory.cs" />
+    <Compile Include="ShapeTypes\Triangle.cs" />
     <EmbeddedResource Include="Shapes.resx">
       <DependentUpon>Shapes.cs</DependentUpon>
     </EmbeddedResource>

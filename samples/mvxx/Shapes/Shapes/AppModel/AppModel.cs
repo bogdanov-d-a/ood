@@ -26,28 +26,28 @@ namespace Shapes.AppModel
             this.canvas = canvas;
         }
 
-        private void AddShape(DomainModel.Canvas.ShapeType type)
+        private void AddShape(int type)
         {
-            canvas.AddShape(new DomainModel.Canvas.Shape(type, defRect));
+            canvas.AddShape(type, defRect);
             LayoutUpdatedEvent();
         }
 
         public void AddRectangle()
         {
-            AddShape(DomainModel.Canvas.ShapeType.Rectangle);
+            AddShape(0);
         }
 
         public void AddTriangle()
         {
-            AddShape(DomainModel.Canvas.ShapeType.Triangle);
+            AddShape(1);
         }
 
         public void AddCircle()
         {
-            AddShape(DomainModel.Canvas.ShapeType.Circle);
+            AddShape(2);
         }
 
-        public DomainModel.Canvas.Shape GetShape(int index)
+        public ShapeTypes.IShape GetShape(int index)
         {
             var shape = canvas.GetShape(index);
             if (index == selectedIndex)
@@ -55,10 +55,10 @@ namespace Shapes.AppModel
                 var offset = GetMoveOffset();
                 if (offset.HasValue)
                 {
-                    var rect = shape.boundingRect;
+                    /*var rect = shape.boundingRect;
                     rect.Offset(offset.ValueOrFailure());
                     ClampBounds(ref rect);
-                    shape = new DomainModel.Canvas.Shape(shape.type, rect);
+                    shape = new DomainModel.Canvas.Shape(shape.type, rect);*/
                 }
             }
             return shape;
@@ -91,7 +91,7 @@ namespace Shapes.AppModel
         {
             for (int i = ShapeCount - 1; i >= 0; --i)
             {
-                if (canvas.GetShape(i).boundingRect.Contains(pos))
+                if (canvas.GetShape(i).GetBoundingRect().Contains(pos))
                 {
                     SelectShape(i);
                     return;
@@ -156,7 +156,7 @@ namespace Shapes.AppModel
 
             if (selectedIndex != -1)
             {
-                Common.Rectangle rect = canvas.GetShape(selectedIndex).boundingRect;
+                Common.Rectangle rect = canvas.GetShape(selectedIndex).GetBoundingRect();
                 rect.Offset(offset);
                 ClampBounds(ref rect);
                 ResetShapeRectangle(selectedIndex, rect);
