@@ -23,7 +23,7 @@ namespace Shapes.ShapeTypes
 
         public abstract ShapeTypes.Type GetShapeType();
         public abstract void Draw(IRenderTarget target);
-        public abstract bool IsInside(Position pos);
+        public abstract bool HasPointInside(Position pos);
         public abstract IShape Clone();
 
         public AbstractShape(Common.Rectangle boundingRect)

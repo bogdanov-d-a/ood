@@ -92,7 +92,7 @@ namespace Shapes.AppModel
         {
             for (int i = ShapeCount - 1; i >= 0; --i)
             {
-                if (canvas.GetShape(i).GetBoundingRect().Contains(pos))
+                if (canvas.GetShape(i).HasPointInside(pos))
                 {
                     SelectShape(i);
                     return;

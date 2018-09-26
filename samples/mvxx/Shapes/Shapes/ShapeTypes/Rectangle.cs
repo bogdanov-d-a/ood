@@ -24,9 +24,9 @@ namespace Shapes.ShapeTypes
             target.DrawRectangle(GetBoundingRect());
         }
 
-        public override bool IsInside(Position pos)
+        public override bool HasPointInside(Position pos)
         {
-            throw new NotImplementedException();
+            return GetBoundingRect().Contains(pos);
         }
 
         public override IShape Clone()

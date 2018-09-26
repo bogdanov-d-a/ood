@@ -24,9 +24,43 @@ namespace Shapes.ShapeTypes
             target.DrawTriangle(GetBoundingRect());
         }
 
-        public override bool IsInside(Position pos)
+        public override bool HasPointInside(Position pos)
         {
-            throw new NotImplementedException();
+            var rect = GetBoundingRect();
+
+            if (!rect.Contains(pos))
+            {
+                return false;
+            }
+
+            Position leftBottom = new Position(rect.LeftTop.x, rect.RightBottom.y);
+            Position rightBottom = rect.RightBottom;
+            Position top = new Position((rect.LeftTop.x + rect.RightBottom.x) / 2, rect.LeftTop.y);
+
+            if (leftBottom.x == rightBottom.x)
+            {
+                return false;
+            }
+
+            {
+                double k = 1.0 * (top.y - leftBottom.y) / (top.x - leftBottom.x);
+                double b = leftBottom.y - k * leftBottom.x;
+                if (pos.y < k * pos.x + b)
+                {
+                    return false;
+                }
+            }
+
+            {
+                double k = 1.0 * (top.y - rightBottom.y) / (top.x - rightBottom.x);
+                double b = rightBottom.y - k * rightBottom.x;
+                if (pos.y < k * pos.x + b)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override IShape Clone()
