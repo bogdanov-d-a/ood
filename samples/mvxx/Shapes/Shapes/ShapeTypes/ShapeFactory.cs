@@ -8,19 +8,21 @@ namespace Shapes.ShapeTypes
 {
     class ShapeFactory : IShapeFactory
     {
+        private delegate IShape ShapeCreator(Common.Rectangle boundingRect);
+        private static readonly SortedDictionary<int, ShapeCreator> typeToCreatorMap = new SortedDictionary<int, ShapeCreator>(){
+            { 0, (Common.Rectangle boundingRect) => { return new Rectangle(boundingRect); } },
+            { 1, (Common.Rectangle boundingRect) => { return new Triangle(boundingRect); } },
+            { 2, (Common.Rectangle boundingRect) => { return new Circle(boundingRect); } },
+        };
+
         public IShape CreateShape(int type, Common.Rectangle boundingRect)
         {
-            switch (type)
+            ShapeCreator creator;
+            if (typeToCreatorMap.TryGetValue(type, out creator))
             {
-                case 0:
-                    return new Rectangle(boundingRect);
-                case 1:
-                    return new Triangle(boundingRect);
-                case 2:
-                    return new Circle(boundingRect);
-                default:
-                    throw new Exception();
+                return creator(boundingRect);
             }
+            throw new Exception();
         }
     }
 }
