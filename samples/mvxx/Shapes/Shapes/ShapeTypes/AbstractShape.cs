@@ -7,7 +7,7 @@ using Shapes.Common;
 
 namespace Shapes.ShapeTypes
 {
-    public abstract class AbstractShape : IShape
+    public abstract class AbstractShape : IRenderShape
     {
         private Common.Rectangle boundingRect;
 

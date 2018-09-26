@@ -38,7 +38,7 @@ namespace Shapes
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
                     var shape = appModel.GetShape(i);
-                    infoDelegate((ShapeTypes.AbstractShape)shape, i == appModel.GetSelectedIndex());
+                    infoDelegate((ShapeTypes.IRenderShape)shape, i == appModel.GetSelectedIndex());
                 }
             }));
         }

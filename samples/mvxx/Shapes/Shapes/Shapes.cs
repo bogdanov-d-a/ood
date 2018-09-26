@@ -105,7 +105,7 @@ namespace Shapes
 
             RenderTarget target = new RenderTarget(g);
 
-            RequestShapes((ShapeTypes.AbstractShape shape, bool isSelected) => {
+            RequestShapes((ShapeTypes.IRenderShape shape, bool isSelected) => {
                 shape.Draw(target);
 
                 if (isSelected)
@@ -158,7 +158,7 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void ShapeInfoDelegate(ShapeTypes.AbstractShape shape, bool isSelected);
+        public delegate void ShapeInfoDelegate(ShapeTypes.IRenderShape shape, bool isSelected);
         public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate infoDelegate);
         private ShapeEnumeratorDelegate RequestShapes;
 
