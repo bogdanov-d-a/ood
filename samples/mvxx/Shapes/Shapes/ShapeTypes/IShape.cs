@@ -11,5 +11,6 @@ namespace Shapes.ShapeTypes
         int GetTypeId();
         Common.Rectangle GetBoundingRect();
         void SetBoundingRect(Common.Rectangle rect);
+        IShape Clone();
     }
 }

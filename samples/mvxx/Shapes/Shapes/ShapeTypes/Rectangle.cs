@@ -28,5 +28,10 @@ namespace Shapes.ShapeTypes
         {
             throw new NotImplementedException();
         }
+
+        public override IShape Clone()
+        {
+            return new Rectangle(GetBoundingRect());
+        }
     }
 }

@@ -55,10 +55,11 @@ namespace Shapes.AppModel
                 var offset = GetMoveOffset();
                 if (offset.HasValue)
                 {
-                    /*var rect = shape.boundingRect;
+                    var rect = shape.GetBoundingRect();
                     rect.Offset(offset.ValueOrFailure());
                     ClampBounds(ref rect);
-                    shape = new DomainModel.Canvas.Shape(shape.type, rect);*/
+                    shape = shape.Clone();
+                    shape.SetBoundingRect(rect);
                 }
             }
             return shape;

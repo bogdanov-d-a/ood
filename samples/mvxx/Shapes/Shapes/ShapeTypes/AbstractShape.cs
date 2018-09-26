@@ -24,6 +24,7 @@ namespace Shapes.ShapeTypes
         public abstract int GetTypeId();
         public abstract void Draw(IRenderTarget target);
         public abstract bool IsInside(Position pos);
+        public abstract IShape Clone();
 
         public AbstractShape(Common.Rectangle boundingRect)
         {
