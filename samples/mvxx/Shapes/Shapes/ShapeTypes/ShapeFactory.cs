@@ -9,13 +9,13 @@ namespace Shapes.ShapeTypes
     class ShapeFactory : IShapeFactory
     {
         private delegate IShape ShapeCreator(Common.Rectangle boundingRect);
-        private static readonly SortedDictionary<int, ShapeCreator> typeToCreatorMap = new SortedDictionary<int, ShapeCreator>(){
-            { 0, (Common.Rectangle boundingRect) => { return new Rectangle(boundingRect); } },
-            { 1, (Common.Rectangle boundingRect) => { return new Triangle(boundingRect); } },
-            { 2, (Common.Rectangle boundingRect) => { return new Circle(boundingRect); } },
+        private static readonly SortedDictionary<ShapeTypes.Type, ShapeCreator> typeToCreatorMap = new SortedDictionary<ShapeTypes.Type, ShapeCreator>(){
+            { ShapeTypes.Type.Rectangle, (Common.Rectangle boundingRect) => { return new Rectangle(boundingRect); } },
+            { ShapeTypes.Type.Triangle, (Common.Rectangle boundingRect) => { return new Triangle(boundingRect); } },
+            { ShapeTypes.Type.Circle, (Common.Rectangle boundingRect) => { return new Circle(boundingRect); } },
         };
 
-        public IShape CreateShape(int type, Common.Rectangle boundingRect)
+        public IShape CreateShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
         {
             ShapeCreator creator;
             if (typeToCreatorMap.TryGetValue(type, out creator))

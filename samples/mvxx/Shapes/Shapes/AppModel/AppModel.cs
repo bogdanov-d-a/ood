@@ -26,7 +26,7 @@ namespace Shapes.AppModel
             this.canvas = canvas;
         }
 
-        private void AddShape(int type)
+        private void AddShape(ShapeTypes.Type type)
         {
             canvas.AddShape(type, defRect);
             LayoutUpdatedEvent();
@@ -34,17 +34,17 @@ namespace Shapes.AppModel
 
         public void AddRectangle()
         {
-            AddShape(0);
+            AddShape(ShapeTypes.Type.Rectangle);
         }
 
         public void AddTriangle()
         {
-            AddShape(1);
+            AddShape(ShapeTypes.Type.Triangle);
         }
 
         public void AddCircle()
         {
-            AddShape(2);
+            AddShape(ShapeTypes.Type.Circle);
         }
 
         public ShapeTypes.IShape GetShape(int index)

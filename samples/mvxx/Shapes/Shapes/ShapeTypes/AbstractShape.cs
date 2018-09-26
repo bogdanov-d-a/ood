@@ -21,7 +21,7 @@ namespace Shapes.ShapeTypes
             boundingRect = rect;
         }
 
-        public abstract int GetTypeId();
+        public abstract ShapeTypes.Type GetShapeType();
         public abstract void Draw(IRenderTarget target);
         public abstract bool IsInside(Position pos);
         public abstract IShape Clone();

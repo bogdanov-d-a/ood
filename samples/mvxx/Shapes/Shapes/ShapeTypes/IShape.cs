@@ -8,7 +8,7 @@ namespace Shapes.ShapeTypes
 {
     public interface IShape
     {
-        int GetTypeId();
+        ShapeTypes.Type GetShapeType();
         Common.Rectangle GetBoundingRect();
         void SetBoundingRect(Common.Rectangle rect);
         IShape Clone();

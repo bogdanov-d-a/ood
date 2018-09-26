@@ -68,6 +68,7 @@
     <Compile Include="ShapeTypes\Rectangle.cs" />
     <Compile Include="ShapeTypes\ShapeFactory.cs" />
     <Compile Include="ShapeTypes\Triangle.cs" />
+    <Compile Include="ShapeTypes\Type.cs" />
     <EmbeddedResource Include="Shapes.resx">
       <DependentUpon>Shapes.cs</DependentUpon>
     </EmbeddedResource>

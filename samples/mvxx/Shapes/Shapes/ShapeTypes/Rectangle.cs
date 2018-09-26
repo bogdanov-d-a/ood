@@ -14,9 +14,9 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override int GetTypeId()
+        public override ShapeTypes.Type GetShapeType()
         {
-            return 0;
+            return ShapeTypes.Type.Rectangle;
         }
 
         public override void Draw(IRenderTarget target)

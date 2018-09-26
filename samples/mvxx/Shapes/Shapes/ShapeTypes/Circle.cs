@@ -14,9 +14,9 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override int GetTypeId()
+        public override ShapeTypes.Type GetShapeType()
         {
-            return 2;
+            return ShapeTypes.Type.Circle;
         }
 
         public override void Draw(IRenderTarget target)

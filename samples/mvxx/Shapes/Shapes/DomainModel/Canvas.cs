@@ -34,7 +34,7 @@ namespace Shapes.DomainModel
             shapeList.Add(shape);
         }
 
-        public void AddShape(int type, Common.Rectangle boundingRect)
+        public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
         {
             AddShape(shapeFactory.CreateShape(type, boundingRect));
         }

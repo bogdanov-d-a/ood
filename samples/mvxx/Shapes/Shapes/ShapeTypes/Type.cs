@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Shapes.ShapeTypes
 {
-    public interface IShapeFactory
+    public enum Type
     {
-        IShape CreateShape(ShapeTypes.Type type, Common.Rectangle boundingRect);
+        Rectangle,
+        Triangle,
+        Circle,
     }
 }
