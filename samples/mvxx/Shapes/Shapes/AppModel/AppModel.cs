@@ -13,6 +13,7 @@ namespace Shapes.AppModel
         {
             public Common.Position startPos;
             public Common.Position curPos;
+            public Option<RectEdges> resize;
         }
 
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
@@ -52,20 +53,17 @@ namespace Shapes.AppModel
             var shape = canvas.GetShape(index);
             if (index == selectedIndex)
             {
-                var offset = GetMoveOffset();
-                if (offset.HasValue)
+                var rect = GetTransformingRect();
+                if (rect.HasValue)
                 {
-                    var rect = shape.GetBoundingRect();
-                    rect.Offset(offset.ValueOrFailure());
-                    ClampBounds(ref rect);
                     shape = shape.Clone();
-                    shape.SetBoundingRect(rect);
+                    shape.SetBoundingRect(rect.ValueOrFailure());
                 }
             }
             return shape;
         }
 
-        private void ClampBounds(ref Common.Rectangle rectangle)
+        private void OffsetClampBounds(ref Common.Rectangle rectangle)
         {
             rectangle.LeftTop.x = Math.Max(0, rectangle.LeftTop.x);
             rectangle.LeftTop.y = Math.Max(0, rectangle.LeftTop.y);
@@ -75,6 +73,17 @@ namespace Shapes.AppModel
 
             int moveY = Math.Min(CanvasSize.height - 1, rectangle.RightBottom.y) - rectangle.RightBottom.y;
             rectangle.LeftTop.y += moveY;
+        }
+
+        private void ResizeClampBounds(ref Common.Rectangle rectangle)
+        {
+            var oldRightBottom = rectangle.RightBottom;
+
+            rectangle.LeftTop.x = Math.Max(0, rectangle.LeftTop.x);
+            rectangle.LeftTop.y = Math.Max(0, rectangle.LeftTop.y);
+
+            rectangle.SetRight(Math.Min(CanvasSize.width - 1, oldRightBottom.x));
+            rectangle.SetBottom(Math.Min(CanvasSize.height - 1, oldRightBottom.y));
         }
 
         public int GetSelectedIndex()
@@ -110,6 +119,66 @@ namespace Shapes.AppModel
             }
         }
 
+        private static bool DoesValueMatch(int target, int tolerance, int value)
+        {
+            return (value > target - tolerance) && (value < target + tolerance);
+        }
+
+        private enum RectEdgeHor
+        {
+            Top,
+            Bottom,
+            None,
+        };
+
+        private enum RectEdgeVert
+        {
+            Left,
+            Right,
+            None,
+        };
+
+        private struct RectEdges
+        {
+            public RectEdgeHor hor;
+            public RectEdgeVert vert;
+        };
+
+        private static RectEdges FindRectEdges(Common.Rectangle rect, Common.Position point)
+        {
+            const int tolerance = 4;
+
+            RectEdges result = new RectEdges();
+            result.hor = RectEdgeHor.None;
+            result.vert = RectEdgeVert.None;
+
+            bool xMatchesLeft = DoesValueMatch(rect.LeftTop.x, tolerance, point.x);
+            bool xMatchesRight = DoesValueMatch(rect.RightBottom.x, tolerance, point.x);
+            bool xIntersects = (rect.LeftTop.x - tolerance < point.x
+                && point.x < rect.RightBottom.x + tolerance);
+
+            bool yMatchesTop = DoesValueMatch(rect.LeftTop.y, tolerance, point.y);
+            bool yMatchesBottom = DoesValueMatch(rect.RightBottom.y, tolerance, point.y);
+            bool yIntersects = (rect.LeftTop.y - tolerance < point.y
+                && point.y < rect.RightBottom.y + tolerance);
+
+            if (yIntersects)
+            {
+                result.vert = xMatchesLeft ? RectEdgeVert.Left :
+                    xMatchesRight ? RectEdgeVert.Right :
+                    RectEdgeVert.None;
+            }
+
+            if (xIntersects)
+            {
+                result.hor = yMatchesTop ? RectEdgeHor.Top :
+                    yMatchesBottom ? RectEdgeHor.Bottom :
+                    RectEdgeHor.None;
+            }
+
+            return result;
+        }
+
         public void BeginMove(Common.Position pos)
         {
             if (movingData.HasValue)
@@ -120,9 +189,24 @@ namespace Shapes.AppModel
             movingData = Option.Some(new MovingData());
             movingData.ValueOrFailure().startPos = pos;
             movingData.ValueOrFailure().curPos = pos;
+            movingData.ValueOrFailure().resize = Option.None<RectEdges>();
 
-            selectedIndex = -1;
-            SelectShapeAtPos(pos);
+            if (selectedIndex != -1)
+            {
+                var rect = GetShape(selectedIndex).GetBoundingRect();
+                var edges = FindRectEdges(rect, pos);
+
+                if (edges.hor != RectEdgeHor.None || edges.vert != RectEdgeVert.None)
+                {
+                    movingData.ValueOrFailure().resize = Option.Some(edges);
+                }
+            }
+
+            if (!movingData.ValueOrFailure().resize.HasValue)
+            {
+                selectedIndex = -1;
+                SelectShapeAtPos(pos);
+            }
         }
 
         public void Move(Common.Position pos)
@@ -141,26 +225,65 @@ namespace Shapes.AppModel
             LayoutUpdatedEvent();
         }
 
-        private Option<Common.Size> GetMoveOffset()
+        private Option<Common.Rectangle> GetTransformingRect()
         {
-            if (!movingData.HasValue)
+            if (!movingData.HasValue || selectedIndex == -1)
             {
-                return Option.None<Common.Size>();
+                return Option.None<Common.Rectangle>();
             }
-            return Option.Some(Common.Position.Sub(movingData.ValueOrFailure().curPos, movingData.ValueOrFailure().startPos));
+
+            var md = movingData.ValueOrFailure();
+            var rect = canvas.GetShape(selectedIndex).GetBoundingRect();
+            var offset = Common.Position.Sub(md.curPos, md.startPos);
+
+            if (md.resize.HasValue)
+            {
+                var rs = md.resize.ValueOrFailure();
+                const int minDimension = 10;
+
+                if (rs.hor == RectEdgeHor.Top)
+                {
+                    var shift = offset.height > 0 ? Math.Min(rect.Size.height - minDimension, offset.height) : offset.height;
+                    rect.Size.height -= shift;
+                    rect.LeftTop.y += shift;
+                }
+                else if (rs.hor == RectEdgeHor.Bottom)
+                {
+                    var shift = offset.height < 0 ? Math.Max(-(rect.Size.height - minDimension), offset.height) : offset.height;
+                    rect.Size.height += shift;
+                }
+
+                if (rs.vert == RectEdgeVert.Left)
+                {
+                    var shift = offset.width > 0 ? Math.Min(rect.Size.width - minDimension, offset.width) : offset.width;
+                    rect.Size.width -= shift;
+                    rect.LeftTop.x += shift;
+                }
+                else if (rs.vert == RectEdgeVert.Right)
+                {
+                    var shift = offset.width < 0 ? Math.Max(-(rect.Size.width - minDimension), offset.width) : offset.width;
+                    rect.Size.width += shift;
+                }
+
+                ResizeClampBounds(ref rect);
+            }
+            else
+            {
+                rect.Offset(offset);
+                OffsetClampBounds(ref rect);
+            }
+
+            return Option.Some(rect);
         }
 
         public void EndMove(Common.Position pos)
         {
             Move(pos);
-            Common.Size offset = GetMoveOffset().ValueOrFailure();
 
-            if (selectedIndex != -1)
+            var rectOpt = GetTransformingRect();
+            if (rectOpt.HasValue)
             {
-                Common.Rectangle rect = canvas.GetShape(selectedIndex).GetBoundingRect();
-                rect.Offset(offset);
-                ClampBounds(ref rect);
-                ResetShapeRectangle(selectedIndex, rect);
+                ResetShapeRectangle(selectedIndex, rectOpt.ValueOrFailure());
             }
 
             movingData = Option.None<MovingData>();
