@@ -19,10 +19,10 @@ namespace Shapes.DomainModel
 
         private bool IsShapeInsideCanvas(Common.Rectangle rectangle)
         {
-            return rectangle.LeftTop.x >= 0 &&
-                rectangle.LeftTop.y >= 0 &&
-                rectangle.RightBottom.x < canvasSize.width &&
-                rectangle.RightBottom.y < canvasSize.height;
+            return rectangle.Left >= 0 &&
+                rectangle.Top >= 0 &&
+                rectangle.Right < canvasSize.width &&
+                rectangle.Bottom < canvasSize.height;
         }
 
         public void AddShape(ShapeTypes.IShape shape)

@@ -18,10 +18,10 @@ namespace Shapes
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
-            return new Rectangle(rect.LeftTop.x + drawOffset,
-                rect.LeftTop.y + drawOffset,
-                rect.Size.width,
-                rect.Size.height);
+            return new Rectangle(rect.Left + drawOffset,
+                rect.Top + drawOffset,
+                rect.Width,
+                rect.Height);
         }
 
         private class RenderTarget : ShapeTypes.IRenderTarget

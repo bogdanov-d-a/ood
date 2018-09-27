@@ -33,9 +33,9 @@ namespace Shapes.ShapeTypes
                 return false;
             }
 
-            Position leftBottom = new Position(rect.LeftTop.x, rect.RightBottom.y);
+            Position leftBottom = new Position(rect.Left, rect.Bottom);
             Position rightBottom = rect.RightBottom;
-            Position top = new Position((rect.LeftTop.x + rect.RightBottom.x) / 2, rect.LeftTop.y);
+            Position top = new Position((rect.Left + rect.Right) / 2, rect.Top);
 
             if (leftBottom.x == rightBottom.x)
             {

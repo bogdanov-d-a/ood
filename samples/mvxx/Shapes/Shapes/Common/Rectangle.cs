@@ -7,46 +7,116 @@ namespace Shapes.Common
 {
     public struct Rectangle
     {
-        public Position LeftTop;
-        public Size Size;
+        private Position leftTop;
+        private Size size;
 
         public Rectangle(Position leftTop, Size size)
         {
-            this.LeftTop = leftTop;
-            this.Size = size;
+            this.leftTop = leftTop;
+            this.size = size;
+        }
+
+        public Position LeftTop
+        {
+            get {
+                return leftTop;
+            }
+        }
+
+        public int Left
+        {
+            get {
+                return leftTop.x;
+            }
+            set {
+                leftTop.x = value;
+            }
+        }
+
+        public int Top
+        {
+            get {
+                return leftTop.y;
+            }
+            set {
+                leftTop.y = value;
+            }
+        }
+
+        public Size Size
+        {
+            get {
+                return size;
+            }
+        }
+
+        public int Width
+        {
+            get {
+                return size.width;
+            }
+            set {
+                size.width = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return size.height;
+            }
+            set
+            {
+                size.height = value;
+            }
         }
 
         public Position RightBottom
         {
             get {
-                return new Position(LeftTop.x + Size.width, LeftTop.y + Size.height);
+                return new Position(Left + Width, Top + Height);
             }
         }
 
-        public void SetRight(int value)
+        public int Right
         {
-            int grow = value - RightBottom.x;
-            Size.width += grow;
+            get
+            {
+                return RightBottom.x;
+            }
+            set
+            {
+                int grow = value - Right;
+                Width += grow;
+            }
         }
 
-        public void SetBottom(int value)
+        public int Bottom
         {
-            int grow = value - RightBottom.y;
-            Size.height += grow;
+            get
+            {
+                return RightBottom.y;
+            }
+            set
+            {
+                int grow = value - Bottom;
+                Height += grow;
+            }
         }
 
         public bool Contains(Position pos)
         {
-            return pos.x >= LeftTop.x &&
-                pos.x < RightBottom.x &&
-                pos.y >= LeftTop.y &&
-                pos.y < RightBottom.y;
+            return pos.x >= Left &&
+                pos.x < Right &&
+                pos.y >= Top &&
+                pos.y < Bottom;
         }
 
         public void Offset(Size offset)
         {
-            LeftTop.x += offset.width;
-            LeftTop.y += offset.height;
+            Left += offset.width;
+            Top += offset.height;
         }
     }
 }

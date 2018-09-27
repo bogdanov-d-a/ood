@@ -65,25 +65,25 @@ namespace Shapes.AppModel
 
         private void OffsetClampBounds(ref Common.Rectangle rectangle)
         {
-            rectangle.LeftTop.x = Math.Max(0, rectangle.LeftTop.x);
-            rectangle.LeftTop.y = Math.Max(0, rectangle.LeftTop.y);
+            rectangle.Left = Math.Max(0, rectangle.Left);
+            rectangle.Top = Math.Max(0, rectangle.Top);
 
-            int moveX = Math.Min(CanvasSize.width - 1, rectangle.RightBottom.x) - rectangle.RightBottom.x;
-            rectangle.LeftTop.x += moveX;
+            int moveX = Math.Min(CanvasSize.width - 1, rectangle.Right) - rectangle.Right;
+            rectangle.Left += moveX;
 
-            int moveY = Math.Min(CanvasSize.height - 1, rectangle.RightBottom.y) - rectangle.RightBottom.y;
-            rectangle.LeftTop.y += moveY;
+            int moveY = Math.Min(CanvasSize.height - 1, rectangle.Bottom) - rectangle.Bottom;
+            rectangle.Top += moveY;
         }
 
         private void ResizeClampBounds(ref Common.Rectangle rectangle)
         {
             var oldRightBottom = rectangle.RightBottom;
 
-            rectangle.LeftTop.x = Math.Max(0, rectangle.LeftTop.x);
-            rectangle.LeftTop.y = Math.Max(0, rectangle.LeftTop.y);
+            rectangle.Left = Math.Max(0, rectangle.Left);
+            rectangle.Top = Math.Max(0, rectangle.Top);
 
-            rectangle.SetRight(Math.Min(CanvasSize.width - 1, oldRightBottom.x));
-            rectangle.SetBottom(Math.Min(CanvasSize.height - 1, oldRightBottom.y));
+            rectangle.Right = Math.Min(CanvasSize.width - 1, oldRightBottom.x);
+            rectangle.Bottom = Math.Min(CanvasSize.height - 1, oldRightBottom.y);
         }
 
         public int GetSelectedIndex()
@@ -146,21 +146,21 @@ namespace Shapes.AppModel
 
         private static RectEdges FindRectEdges(Common.Rectangle rect, Common.Position point)
         {
-            const int tolerance = 4;
+            const int Tolerance = 4;
 
             RectEdges result = new RectEdges();
             result.hor = RectEdgeHor.None;
             result.vert = RectEdgeVert.None;
 
-            bool xMatchesLeft = DoesValueMatch(rect.LeftTop.x, tolerance, point.x);
-            bool xMatchesRight = DoesValueMatch(rect.RightBottom.x, tolerance, point.x);
-            bool xIntersects = (rect.LeftTop.x - tolerance < point.x
-                && point.x < rect.RightBottom.x + tolerance);
+            bool xMatchesLeft = DoesValueMatch(rect.Left, Tolerance, point.x);
+            bool xMatchesRight = DoesValueMatch(rect.Right, Tolerance, point.x);
+            bool xIntersects = (rect.Left - Tolerance < point.x
+                && point.x < rect.Right + Tolerance);
 
-            bool yMatchesTop = DoesValueMatch(rect.LeftTop.y, tolerance, point.y);
-            bool yMatchesBottom = DoesValueMatch(rect.RightBottom.y, tolerance, point.y);
-            bool yIntersects = (rect.LeftTop.y - tolerance < point.y
-                && point.y < rect.RightBottom.y + tolerance);
+            bool yMatchesTop = DoesValueMatch(rect.Top, Tolerance, point.y);
+            bool yMatchesBottom = DoesValueMatch(rect.Bottom, Tolerance, point.y);
+            bool yIntersects = (rect.Top - Tolerance < point.y
+                && point.y < rect.Bottom + Tolerance);
 
             if (yIntersects)
             {
@@ -239,30 +239,30 @@ namespace Shapes.AppModel
             if (md.resize.HasValue)
             {
                 var rs = md.resize.ValueOrFailure();
-                const int minDimension = 10;
+                const int MinDimension = 10;
 
                 if (rs.hor == RectEdgeHor.Top)
                 {
-                    var shift = offset.height > 0 ? Math.Min(rect.Size.height - minDimension, offset.height) : offset.height;
-                    rect.Size.height -= shift;
-                    rect.LeftTop.y += shift;
+                    var shift = offset.height > 0 ? Math.Min(rect.Height - MinDimension, offset.height) : offset.height;
+                    rect.Height -= shift;
+                    rect.Top += shift;
                 }
                 else if (rs.hor == RectEdgeHor.Bottom)
                 {
-                    var shift = offset.height < 0 ? Math.Max(-(rect.Size.height - minDimension), offset.height) : offset.height;
-                    rect.Size.height += shift;
+                    var shift = offset.height < 0 ? Math.Max(-(rect.Height - MinDimension), offset.height) : offset.height;
+                    rect.Height += shift;
                 }
 
                 if (rs.vert == RectEdgeVert.Left)
                 {
-                    var shift = offset.width > 0 ? Math.Min(rect.Size.width - minDimension, offset.width) : offset.width;
-                    rect.Size.width -= shift;
-                    rect.LeftTop.x += shift;
+                    var shift = offset.width > 0 ? Math.Min(rect.Width - MinDimension, offset.width) : offset.width;
+                    rect.Width -= shift;
+                    rect.Left += shift;
                 }
                 else if (rs.vert == RectEdgeVert.Right)
                 {
-                    var shift = offset.width < 0 ? Math.Max(-(rect.Size.width - minDimension), offset.width) : offset.width;
-                    rect.Size.width += shift;
+                    var shift = offset.width < 0 ? Math.Max(-(rect.Width - MinDimension), offset.width) : offset.width;
+                    rect.Width += shift;
                 }
 
                 ResizeClampBounds(ref rect);

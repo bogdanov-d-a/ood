@@ -34,12 +34,12 @@ namespace Shapes.ShapeTypes
             var rect = GetBoundingRect();
 
             Position origin = new Position(
-                (rect.LeftTop.x + rect.RightBottom.x) / 2,
-                (rect.LeftTop.y + rect.RightBottom.y) / 2);
+                (rect.Left + rect.Right) / 2,
+                (rect.Top + rect.Bottom) / 2);
 
             Common.Size radius = new Common.Size(
-                rect.Size.width / 2,
-                rect.Size.height / 2);
+                rect.Width / 2,
+                rect.Height / 2);
 
             if (radius.width == 0 || radius.height == 0)
             {
