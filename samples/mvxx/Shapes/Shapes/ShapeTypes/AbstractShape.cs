@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Shapes.Common;
 
 namespace Shapes.ShapeTypes
 {
@@ -21,9 +20,9 @@ namespace Shapes.ShapeTypes
             boundingRect = rect;
         }
 
-        public abstract ShapeTypes.Type GetShapeType();
+        public abstract Type GetShapeType();
         public abstract void Draw(IRenderTarget target);
-        public abstract bool HasPointInside(Position pos);
+        public abstract bool HasPointInside(Common.Position pos);
         public abstract IShape Clone();
 
         public AbstractShape(Common.Rectangle boundingRect)

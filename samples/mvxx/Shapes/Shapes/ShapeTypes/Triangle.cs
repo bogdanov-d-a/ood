@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Shapes.Common;
 
 namespace Shapes.ShapeTypes
 {
@@ -14,9 +13,9 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override ShapeTypes.Type GetShapeType()
+        public override Type GetShapeType()
         {
-            return ShapeTypes.Type.Triangle;
+            return Type.Triangle;
         }
 
         public override void Draw(IRenderTarget target)
@@ -24,7 +23,7 @@ namespace Shapes.ShapeTypes
             target.DrawTriangle(GetBoundingRect());
         }
 
-        public override bool HasPointInside(Position pos)
+        public override bool HasPointInside(Common.Position pos)
         {
             var rect = GetBoundingRect();
 
@@ -33,9 +32,9 @@ namespace Shapes.ShapeTypes
                 return false;
             }
 
-            Position leftBottom = new Position(rect.Left, rect.Bottom);
-            Position rightBottom = rect.RightBottom;
-            Position top = new Position((rect.Left + rect.Right) / 2, rect.Top);
+            Common.Position leftBottom = new Common.Position(rect.Left, rect.Bottom);
+            Common.Position rightBottom = rect.RightBottom;
+            Common.Position top = new Common.Position((rect.Left + rect.Right) / 2, rect.Top);
 
             if (leftBottom.x == rightBottom.x)
             {

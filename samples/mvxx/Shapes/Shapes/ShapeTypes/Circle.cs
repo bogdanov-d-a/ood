@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Shapes.Common;
 
 namespace Shapes.ShapeTypes
 {
@@ -19,9 +18,9 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override ShapeTypes.Type GetShapeType()
+        public override Type GetShapeType()
         {
-            return ShapeTypes.Type.Circle;
+            return Type.Circle;
         }
 
         public override void Draw(IRenderTarget target)
@@ -29,11 +28,11 @@ namespace Shapes.ShapeTypes
             target.DrawCircle(GetBoundingRect());
         }
 
-        public override bool HasPointInside(Position pos)
+        public override bool HasPointInside(Common.Position pos)
         {
             var rect = GetBoundingRect();
 
-            Position origin = new Position(
+            Common.Position origin = new Common.Position(
                 (rect.Left + rect.Right) / 2,
                 (rect.Top + rect.Bottom) / 2);
 

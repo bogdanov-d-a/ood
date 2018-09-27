@@ -7,6 +7,6 @@ namespace Shapes.ShapeTypes
 {
     public interface IShapeFactory
     {
-        IShape CreateShape(ShapeTypes.Type type, Common.Rectangle boundingRect);
+        IShape CreateShape(Type type, Common.Rectangle boundingRect);
     }
 }

@@ -13,13 +13,13 @@ namespace Shapes
 {
     public partial class Shapes : Form
     {
-        private const int drawOffset = 50;
+        private const int DrawOffset = 50;
         private Option<Common.Size> canvasSizeOption;
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
-            return new Rectangle(rect.Left + drawOffset,
-                rect.Top + drawOffset,
+            return new Rectangle(rect.Left + DrawOffset,
+                rect.Top + DrawOffset,
                 rect.Width,
                 rect.Height);
         }
@@ -89,7 +89,7 @@ namespace Shapes
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            const int selOffset = 5;
+            const int SelOffset = 5;
 
             if (!canvasSizeOption.HasValue)
             {
@@ -98,8 +98,8 @@ namespace Shapes
             Common.Size canvasSize = canvasSizeOption.ValueOrFailure();
 
             g.FillRectangle(new SolidBrush(Color.White),
-                new Rectangle(drawOffset,
-                    drawOffset,
+                new Rectangle(DrawOffset,
+                    DrawOffset,
                     canvasSize.width,
                     canvasSize.height));
 
@@ -113,10 +113,10 @@ namespace Shapes
                     Rectangle rect2 = OffsetDrawRect(shape.GetBoundingRect());
                     g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
                         new Rectangle(
-                            rect2.X - selOffset,
-                            rect2.Y - selOffset,
-                            rect2.Width + 2 * selOffset,
-                            rect2.Height + 2 * selOffset));
+                            rect2.X - SelOffset,
+                            rect2.Y - SelOffset,
+                            rect2.Width + 2 * SelOffset,
+                            rect2.Height + 2 * SelOffset));
                 }
             });
         }
@@ -129,7 +129,7 @@ namespace Shapes
         private Common.Position GetMousePosition()
         {
             Point rawPos = PointToClient(MousePosition);
-            return new Common.Position(rawPos.X - drawOffset, rawPos.Y - drawOffset);
+            return new Common.Position(rawPos.X - DrawOffset, rawPos.Y - DrawOffset);
         }
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)

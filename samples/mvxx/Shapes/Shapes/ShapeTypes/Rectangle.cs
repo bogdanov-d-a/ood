@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Shapes.Common;
 
 namespace Shapes.ShapeTypes
 {
@@ -14,9 +13,9 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override ShapeTypes.Type GetShapeType()
+        public override Type GetShapeType()
         {
-            return ShapeTypes.Type.Rectangle;
+            return Type.Rectangle;
         }
 
         public override void Draw(IRenderTarget target)
@@ -24,7 +23,7 @@ namespace Shapes.ShapeTypes
             target.DrawRectangle(GetBoundingRect());
         }
 
-        public override bool HasPointInside(Position pos)
+        public override bool HasPointInside(Common.Position pos)
         {
             return GetBoundingRect().Contains(pos);
         }
