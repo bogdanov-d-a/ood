@@ -29,6 +29,8 @@ namespace Shapes
             view.AddTriangleEvent += new Shapes.VoidDelegate(appModel.AddTriangle);
             view.AddCircleEvent += new Shapes.VoidDelegate(appModel.AddCircle);
             view.RemoveShapeEvent += new Shapes.VoidDelegate(appModel.RemoveSelectedShape);
+            view.UndoEvent += new Shapes.VoidDelegate(appModel.Undo);
+            view.RedoEvent += new Shapes.VoidDelegate(appModel.Redo);
 
             view.MouseDownEvent += new Shapes.MouseDelegate(appModel.BeginMove);
             view.MouseMoveEvent += new Shapes.MouseDelegate(appModel.Move);

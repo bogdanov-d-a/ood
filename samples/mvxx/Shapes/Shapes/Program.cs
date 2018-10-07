@@ -17,7 +17,8 @@ namespace Shapes
             Application.SetCompatibleTextRenderingDefault(false);
 
             DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.ShapeFactory());
-            AppModel.AppModel appModel = new AppModel.AppModel(canvas);
+            DomainModel.HistoryCanvas historyCanvas = new DomainModel.HistoryCanvas(canvas);
+            AppModel.AppModel appModel = new AppModel.AppModel(historyCanvas);
 
             Shapes view = new Shapes();
             Presenter presenter = new Presenter(appModel, view);

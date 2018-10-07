@@ -49,6 +49,11 @@
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />
+    <Compile Include="DomainModel\AbstractCommand.cs" />
+    <Compile Include="DomainModel\History.cs" />
+    <Compile Include="DomainModel\HistoryCanvas.cs" />
+    <Compile Include="DomainModel\ICommand.cs" />
+    <Compile Include="DomainModel\InsertShapeCommand.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>

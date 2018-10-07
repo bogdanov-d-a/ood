@@ -32,6 +32,7 @@ namespace Shapes.DomainModel
                 throw new Exception();
             }
             shapeList.Add(shape);
+            LayoutUpdatedEvent();
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
@@ -51,11 +52,13 @@ namespace Shapes.DomainModel
                 throw new Exception();
             }
             shapeList[index].SetBoundingRect(rectangle);
+            LayoutUpdatedEvent();
         }
 
         public void RemoveShape(int index)
         {
             shapeList.RemoveAt(index);
+            LayoutUpdatedEvent();
         }
 
         public Common.Size CanvasSize
@@ -71,5 +74,8 @@ namespace Shapes.DomainModel
                 return shapeList.Count;
             }
         }
+
+        public delegate void LayoutUpdatedDelegate();
+        public event LayoutUpdatedDelegate LayoutUpdatedEvent;
     }
 }

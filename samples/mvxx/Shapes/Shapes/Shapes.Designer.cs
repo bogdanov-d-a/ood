@@ -31,8 +31,10 @@
             this.addRectangleButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addTriangleButton = new System.Windows.Forms.ToolStripButton();
-            this.removeShapeButton = new System.Windows.Forms.ToolStripButton();
             this.addCircleButton = new System.Windows.Forms.ToolStripButton();
+            this.removeShapeButton = new System.Windows.Forms.ToolStripButton();
+            this.undoButton = new System.Windows.Forms.ToolStripButton();
+            this.redoButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +53,9 @@
             this.addRectangleButton,
             this.addTriangleButton,
             this.addCircleButton,
-            this.removeShapeButton});
+            this.removeShapeButton,
+            this.undoButton,
+            this.redoButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(734, 25);
@@ -85,6 +89,24 @@
             this.addCircleButton.Text = "Add circle";
             this.addCircleButton.Click += new System.EventHandler(this.addCircleButton_Click);
             // 
+            // undoButton
+            // 
+            this.undoButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.undoButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.undoButton.Name = "undoButton";
+            this.undoButton.Size = new System.Drawing.Size(36, 22);
+            this.undoButton.Text = "Undo";
+            this.undoButton.Click += new System.EventHandler(this.undoButton_Click);
+            // 
+            // redoButton
+            // 
+            this.redoButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.redoButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.redoButton.Name = "redoButton";
+            this.redoButton.Size = new System.Drawing.Size(34, 22);
+            this.redoButton.Text = "Redo";
+            this.redoButton.Click += new System.EventHandler(this.redoButton_Click);
+            // 
             // Shapes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -113,6 +135,8 @@
         private System.Windows.Forms.ToolStripButton removeShapeButton;
         private System.Windows.Forms.ToolStripButton addTriangleButton;
         private System.Windows.Forms.ToolStripButton addCircleButton;
+        private System.Windows.Forms.ToolStripButton undoButton;
+        private System.Windows.Forms.ToolStripButton redoButton;
     }
 }
 

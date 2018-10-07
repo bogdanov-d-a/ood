@@ -18,13 +18,16 @@ namespace Shapes.AppModel
 
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
-        private readonly DomainModel.Canvas canvas;
+        private readonly DomainModel.HistoryCanvas canvas;
         private int selectedIndex = -1;
         private Option<MovingData> movingData = Option.None<MovingData>();
 
-        public AppModel(DomainModel.Canvas canvas)
+        public AppModel(DomainModel.HistoryCanvas canvas)
         {
             this.canvas = canvas;
+            canvas.LayoutUpdatedEvent += new DomainModel.HistoryCanvas.LayoutUpdatedDelegate(() => {
+                LayoutUpdatedEvent();
+            });
         }
 
         private void AddShape(ShapeTypes.Type type)
@@ -302,6 +305,16 @@ namespace Shapes.AppModel
             get {
                 return canvas.CanvasSize;
             }
+        }
+
+        public void Undo()
+        {
+            canvas.Undo();
+        }
+
+        public void Redo()
+        {
+            canvas.Redo();
         }
 
         public delegate void LayoutUpdatedDelegate();

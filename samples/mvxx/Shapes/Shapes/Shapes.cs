@@ -152,6 +152,8 @@ namespace Shapes
         public event VoidDelegate AddTriangleEvent;
         public event VoidDelegate AddCircleEvent;
         public event VoidDelegate RemoveShapeEvent;
+        public event VoidDelegate UndoEvent;
+        public event VoidDelegate RedoEvent;
 
         public delegate void MouseDelegate(Common.Position pos);
         public event MouseDelegate MouseDownEvent;
@@ -170,6 +172,16 @@ namespace Shapes
         private void removeShapeButton_Click(object sender, EventArgs e)
         {
             RemoveShapeEvent();
+        }
+
+        private void undoButton_Click(object sender, EventArgs e)
+        {
+            UndoEvent();
+        }
+
+        private void redoButton_Click(object sender, EventArgs e)
+        {
+            RedoEvent();
         }
     }
 }
