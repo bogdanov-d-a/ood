@@ -27,11 +27,16 @@ namespace Shapes.DomainModel
 
         public void AddShape(ShapeTypes.IShape shape)
         {
+            InsertShape(ShapeCount, shape);
+        }
+
+        public void InsertShape(int index, ShapeTypes.IShape shape)
+        {
             if (!IsShapeInsideCanvas(shape.GetBoundingRect()))
             {
                 throw new Exception();
             }
-            shapeList.Add(shape);
+            shapeList.Insert(index, shape);
             LayoutUpdatedEvent();
         }
 

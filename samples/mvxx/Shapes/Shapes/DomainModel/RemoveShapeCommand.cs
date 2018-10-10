@@ -26,8 +26,7 @@ namespace Shapes.DomainModel
 
         public override void UnexecuteImpl()
         {
-            // TODO: fix z-order
-            canvas.AddShape(shape);
+            canvas.InsertShape(index, shape);
             shape = null;
         }
     }
