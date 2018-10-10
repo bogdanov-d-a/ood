@@ -309,11 +309,13 @@ namespace Shapes.AppModel
 
         public void Undo()
         {
+            SelectShape(-1);
             canvas.Undo();
         }
 
         public void Redo()
         {
+            SelectShape(-1);
             canvas.Redo();
         }
 
