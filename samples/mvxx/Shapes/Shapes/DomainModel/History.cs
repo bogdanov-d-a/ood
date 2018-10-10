@@ -20,6 +20,7 @@ namespace Shapes.DomainModel
         {
             if (lastExecuted == null)
             {
+                list.Clear();
                 return;
             }
             while (lastExecuted != list.Last)
