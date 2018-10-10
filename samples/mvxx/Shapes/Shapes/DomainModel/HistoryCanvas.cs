@@ -41,12 +41,12 @@ namespace Shapes.DomainModel
 
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
         {
-            canvas.ResetShapeRectangle(index, rectangle);
+            history.AddAndExecuteCommand(new MoveShapeCommand(canvas, index, rectangle));
         }
 
         public void RemoveShape(int index)
         {
-            canvas.RemoveShape(index);
+            history.AddAndExecuteCommand(new RemoveShapeCommand(canvas, index));
         }
 
         public Common.Size CanvasSize

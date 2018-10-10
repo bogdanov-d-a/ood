@@ -54,6 +54,8 @@
     <Compile Include="DomainModel\HistoryCanvas.cs" />
     <Compile Include="DomainModel\ICommand.cs" />
     <Compile Include="DomainModel\InsertShapeCommand.cs" />
+    <Compile Include="DomainModel\MoveShapeCommand.cs" />
+    <Compile Include="DomainModel\RemoveShapeCommand.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>
