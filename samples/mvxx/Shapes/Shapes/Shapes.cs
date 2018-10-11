@@ -60,10 +60,12 @@ namespace Shapes
             }
         }
 
-        public Shapes()
+        public Shapes(ShapeEnumeratorDelegate requestShapes)
         {
             InitializeComponent();
             DoubleBuffered = true;
+
+            this.requestShapes = requestShapes;
         }
 
         public void SetCanvasSize(Common.Size size)
@@ -105,7 +107,7 @@ namespace Shapes
 
             RenderTarget target = new RenderTarget(g);
 
-            RequestShapes((ShapeTypes.IRenderShape shape, bool isSelected) => {
+            requestShapes((ShapeTypes.IRenderShape shape, bool isSelected) => {
                 shape.Draw(target);
 
                 if (isSelected)
@@ -162,12 +164,7 @@ namespace Shapes
 
         public delegate void ShapeInfoDelegate(ShapeTypes.IRenderShape shape, bool isSelected);
         public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate infoDelegate);
-        private ShapeEnumeratorDelegate RequestShapes;
-
-        public void AssignRequestShapesHandler(ShapeEnumeratorDelegate handler)
-        {
-            RequestShapes = handler;
-        }
+        private readonly ShapeEnumeratorDelegate requestShapes;
 
         private void removeShapeButton_Click(object sender, EventArgs e)
         {

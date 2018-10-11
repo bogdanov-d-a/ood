@@ -35,14 +35,6 @@ namespace Shapes
             view.MouseDownEvent += new Shapes.MouseDelegate(appModel.BeginMove);
             view.MouseMoveEvent += new Shapes.MouseDelegate(appModel.Move);
             view.MouseUpEvent += new Shapes.MouseDelegate(appModel.EndMove);
-
-            view.AssignRequestShapesHandler(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate infoDelegate) => {
-                for (int i = 0; i < appModel.ShapeCount; ++i)
-                {
-                    var shape = appModel.GetShape(i);
-                    infoDelegate((ShapeTypes.IRenderShape)shape, i == appModel.GetSelectedIndex());
-                }
-            }));
         }
     }
 }

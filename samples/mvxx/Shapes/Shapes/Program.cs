@@ -20,7 +20,13 @@ namespace Shapes
             DomainModel.HistoryCanvas historyCanvas = new DomainModel.HistoryCanvas(canvas);
             AppModel.AppModel appModel = new AppModel.AppModel(historyCanvas);
 
-            Shapes view = new Shapes();
+            Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate infoDelegate) => {
+                for (int i = 0; i < appModel.ShapeCount; ++i)
+                {
+                    var shape = appModel.GetShape(i);
+                    infoDelegate((ShapeTypes.IRenderShape)shape, i == appModel.GetSelectedIndex());
+                }
+            }));
             Presenter presenter = new Presenter(appModel, view);
 
             Application.Run(view);
