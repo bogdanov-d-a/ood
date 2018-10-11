@@ -7,7 +7,6 @@ namespace Shapes.ShapeTypes
 {
     public interface IShape
     {
-        Type GetShapeType();
         Common.Rectangle GetBoundingRect();
         void SetBoundingRect(Common.Rectangle rect);
         bool HasPointInside(Common.Position pos);

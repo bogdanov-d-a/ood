@@ -20,7 +20,6 @@ namespace Shapes.ShapeTypes
             boundingRect = rect;
         }
 
-        public abstract Type GetShapeType();
         public abstract void Draw(IRenderTarget target);
         public abstract bool HasPointInside(Common.Position pos);
         public abstract IShape Clone();

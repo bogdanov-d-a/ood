@@ -13,11 +13,6 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override Type GetShapeType()
-        {
-            return Type.Rectangle;
-        }
-
         public override void Draw(IRenderTarget target)
         {
             target.DrawRectangle(GetBoundingRect());

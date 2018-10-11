@@ -18,11 +18,6 @@ namespace Shapes.ShapeTypes
         {
         }
 
-        public override Type GetShapeType()
-        {
-            return Type.Circle;
-        }
-
         public override void Draw(IRenderTarget target)
         {
             target.DrawCircle(GetBoundingRect());
