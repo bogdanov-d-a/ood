@@ -107,19 +107,17 @@ namespace Shapes
 
             RenderTarget target = new RenderTarget(g);
 
-            requestShapes((ShapeTypes.IRenderShape shape, bool isSelected) => {
+            requestShapes((ShapeTypes.IRenderShape shape) => {
                 shape.Draw(target);
-
-                if (isSelected)
-                {
-                    Rectangle rect2 = OffsetDrawRect(shape.GetBoundingRect());
-                    g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
-                        new Rectangle(
-                            rect2.X - SelOffset,
-                            rect2.Y - SelOffset,
-                            rect2.Width + 2 * SelOffset,
-                            rect2.Height + 2 * SelOffset));
-                }
+            },
+            (Common.Rectangle rect) => {
+                Rectangle rect2 = OffsetDrawRect(rect);
+                g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
+                    new Rectangle(
+                        rect2.X - SelOffset,
+                        rect2.Y - SelOffset,
+                        rect2.Width + 2 * SelOffset,
+                        rect2.Height + 2 * SelOffset));
             });
         }
 
@@ -162,8 +160,9 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void ShapeInfoDelegate(ShapeTypes.IRenderShape shape, bool isSelected);
-        public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate infoDelegate);
+        public delegate void ShapeInfoDelegate(ShapeTypes.IRenderShape shape);
+        public delegate void SelectionInfoDelegate(Common.Rectangle rect);
+        public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate shapeDelegate, SelectionInfoDelegate selectionDelegate);
         private readonly ShapeEnumeratorDelegate requestShapes;
 
         private void removeShapeButton_Click(object sender, EventArgs e)

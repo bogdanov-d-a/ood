@@ -20,11 +20,17 @@ namespace Shapes
             DomainModel.HistoryCanvas historyCanvas = new DomainModel.HistoryCanvas(canvas);
             AppModel.AppModel appModel = new AppModel.AppModel(historyCanvas);
 
-            Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate infoDelegate) => {
+            Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate shapeDelegate, Shapes.SelectionInfoDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
                     var shape = appModel.GetShape(i);
-                    infoDelegate((ShapeTypes.IRenderShape)shape, i == appModel.GetSelectedIndex());
+                    shapeDelegate((ShapeTypes.IRenderShape)shape);
+                }
+
+                int selIndex = appModel.GetSelectedIndex();
+                if (selIndex != -1)
+                {
+                    selectionDelegate(appModel.GetShape(selIndex).GetBoundingRect());
                 }
             }));
             Presenter presenter = new Presenter(appModel, view);
