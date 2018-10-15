@@ -7,56 +7,56 @@ namespace Shapes.Common
 {
     public struct Rectangle
     {
-        private Position leftTop;
-        private Size size;
+        private Position _leftTop;
+        private Size _size;
 
         public Rectangle(Position leftTop, Size size)
         {
-            this.leftTop = leftTop;
-            this.size = size;
+            _leftTop = leftTop;
+            _size = size;
         }
 
         public Position LeftTop
         {
             get {
-                return leftTop;
+                return _leftTop;
             }
         }
 
         public int Left
         {
             get {
-                return leftTop.x;
+                return _leftTop.x;
             }
             set {
-                leftTop.x = value;
+                _leftTop.x = value;
             }
         }
 
         public int Top
         {
             get {
-                return leftTop.y;
+                return _leftTop.y;
             }
             set {
-                leftTop.y = value;
+                _leftTop.y = value;
             }
         }
 
         public Size Size
         {
             get {
-                return size;
+                return _size;
             }
         }
 
         public int Width
         {
             get {
-                return size.width;
+                return _size.width;
             }
             set {
-                size.width = value;
+                _size.width = value;
             }
         }
 
@@ -64,11 +64,11 @@ namespace Shapes.Common
         {
             get
             {
-                return size.height;
+                return _size.height;
             }
             set
             {
-                size.height = value;
+                _size.height = value;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Shapes.Common
 
         public bool Equals(Rectangle o)
         {
-            return Equals(leftTop, o.leftTop) && Equals(size, o.size);
+            return Equals(_leftTop, o._leftTop) && Equals(_size, o._size);
         }
     }
 }

@@ -7,36 +7,36 @@ namespace Shapes.DomainModel
 {
     public class HistoryCanvas
     {
-        private readonly Canvas canvas;
-        private readonly History history;
+        private readonly Canvas _canvas;
+        private readonly History _history;
 
         public HistoryCanvas(Canvas canvas)
         {
-            this.canvas = canvas;
-            canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
+            _canvas = canvas;
+            _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
-            history = new History();
+            _history = new History();
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
         {
-            history.AddAndExecuteCommand(new InsertShapeCommand(canvas, type, boundingRect));
+            _history.AddAndExecuteCommand(new InsertShapeCommand(_canvas, type, boundingRect));
         }
 
         public void Undo()
         {
-            history.Undo();
+            _history.Undo();
         }
 
         public void Redo()
         {
-            history.Redo();
+            _history.Redo();
         }
 
         public ShapeTypes.IShape GetShape(int index)
         {
-            return canvas.GetShape(index);
+            return _canvas.GetShape(index);
         }
 
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
@@ -45,19 +45,19 @@ namespace Shapes.DomainModel
             {
                 return;
             }
-            history.AddAndExecuteCommand(new MoveShapeCommand(canvas, index, rectangle));
+            _history.AddAndExecuteCommand(new MoveShapeCommand(_canvas, index, rectangle));
         }
 
         public void RemoveShape(int index)
         {
-            history.AddAndExecuteCommand(new RemoveShapeCommand(canvas, index));
+            _history.AddAndExecuteCommand(new RemoveShapeCommand(_canvas, index));
         }
 
         public Common.Size CanvasSize
         {
             get
             {
-                return canvas.CanvasSize;
+                return _canvas.CanvasSize;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Shapes.DomainModel
         {
             get
             {
-                return canvas.ShapeCount;
+                return _canvas.ShapeCount;
             }
         }
 

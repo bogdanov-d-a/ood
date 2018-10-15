@@ -7,27 +7,27 @@ namespace Shapes.DomainModel
 {
     public class RemoveShapeCommand : AbstractCommand
     {
-        private readonly Canvas canvas;
-        private readonly int index;
-        private ShapeTypes.IShape shape;
+        private readonly Canvas _canvas;
+        private readonly int _index;
+        private ShapeTypes.IShape _shape;
 
         public RemoveShapeCommand(Canvas canvas, int index)
         {
-            this.canvas = canvas;
-            this.index = index;
-            shape = null;
+            _canvas = canvas;
+            _index = index;
+            _shape = null;
         }
 
         protected override void ExecuteImpl()
         {
-            shape = canvas.GetShape(index).Clone();
-            canvas.RemoveShape(index);
+            _shape = _canvas.GetShape(_index).Clone();
+            _canvas.RemoveShape(_index);
         }
 
         protected override void UnexecuteImpl()
         {
-            canvas.InsertShape(index, shape);
-            shape = null;
+            _canvas.InsertShape(_index, _shape);
+            _shape = null;
         }
     }
 }

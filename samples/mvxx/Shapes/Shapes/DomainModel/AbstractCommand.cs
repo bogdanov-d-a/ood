@@ -7,26 +7,26 @@ namespace Shapes.DomainModel
 {
     public abstract class AbstractCommand : ICommand
     {
-        private bool isExecuted = false;
+        private bool _isExecuted = false;
 
         public void Execute()
         {
-            if (isExecuted)
+            if (_isExecuted)
             {
                 throw new Exception();
             }
             ExecuteImpl();
-            isExecuted = true;
+            _isExecuted = true;
         }
 
         public void Unexecute()
         {
-            if (!isExecuted)
+            if (!_isExecuted)
             {
                 throw new Exception();
             }
             UnexecuteImpl();
-            isExecuted = false;
+            _isExecuted = false;
         }
 
         protected abstract void ExecuteImpl();

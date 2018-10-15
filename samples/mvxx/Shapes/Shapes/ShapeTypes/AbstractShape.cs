@@ -8,16 +8,16 @@ namespace Shapes.ShapeTypes
 {
     public abstract class AbstractShape : IRenderShape
     {
-        private Common.Rectangle boundingRect;
+        private Common.Rectangle _boundingRect;
 
         public Common.Rectangle GetBoundingRect()
         {
-            return boundingRect;
+            return _boundingRect;
         }
 
         public void SetBoundingRect(Common.Rectangle rect)
         {
-            boundingRect = rect;
+            _boundingRect = rect;
         }
 
         public abstract void Draw(IRenderTarget target);
@@ -26,7 +26,7 @@ namespace Shapes.ShapeTypes
 
         public AbstractShape(Common.Rectangle boundingRect)
         {
-            this.boundingRect = boundingRect;
+            _boundingRect = boundingRect;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Shapes
     public partial class Shapes : Form
     {
         private const int DrawOffset = 50;
-        private Option<Common.Size> canvasSizeOption;
+        private Option<Common.Size> _canvasSizeOption;
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
@@ -70,7 +70,7 @@ namespace Shapes
 
         public void SetCanvasSize(Common.Size size)
         {
-            canvasSizeOption = Option.Some(size);
+            _canvasSizeOption = Option.Some(size);
         }
 
         private void addRectangleButton_Click(object sender, EventArgs e)
@@ -93,11 +93,11 @@ namespace Shapes
             Graphics g = e.Graphics;
             const int SelOffset = 5;
 
-            if (!canvasSizeOption.HasValue)
+            if (!_canvasSizeOption.HasValue)
             {
                 return;
             }
-            Common.Size canvasSize = canvasSizeOption.ValueOrFailure();
+            Common.Size canvasSize = _canvasSizeOption.ValueOrFailure();
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,

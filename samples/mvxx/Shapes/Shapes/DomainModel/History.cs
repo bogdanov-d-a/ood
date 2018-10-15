@@ -7,19 +7,19 @@ namespace Shapes.DomainModel
 {
     class History
     {
-        private readonly LinkedList<ICommand> list = new LinkedList<ICommand>();
-        private LinkedListNode<ICommand> lastExecuted = null;
+        private readonly LinkedList<ICommand> _list = new LinkedList<ICommand>();
+        private LinkedListNode<ICommand> _lastExecuted = null;
 
         private void RemoveTail()
         {
-            if (lastExecuted == null)
+            if (_lastExecuted == null)
             {
-                list.Clear();
+                _list.Clear();
                 return;
             }
-            while (lastExecuted != list.Last)
+            while (_lastExecuted != _list.Last)
             {
-                list.RemoveLast();
+                _list.RemoveLast();
             }
         }
 
@@ -27,46 +27,46 @@ namespace Shapes.DomainModel
         {
             command.Execute();
             RemoveTail();
-            list.AddLast(command);
-            lastExecuted = list.Last;
+            _list.AddLast(command);
+            _lastExecuted = _list.Last;
         }
 
         public bool Undo()
         {
-            if (lastExecuted == null)
+            if (_lastExecuted == null)
             {
                 return false;
             }
-            lastExecuted.Value.Unexecute();
-            if (lastExecuted == list.First)
+            _lastExecuted.Value.Unexecute();
+            if (_lastExecuted == _list.First)
             {
-                lastExecuted = null;
+                _lastExecuted = null;
             }
             else
             {
-                lastExecuted = lastExecuted.Previous;
+                _lastExecuted = _lastExecuted.Previous;
             }
             return true;
         }
 
         public bool Redo()
         {
-            if (lastExecuted == null)
+            if (_lastExecuted == null)
             {
-                if (list.Count > 0)
+                if (_list.Count > 0)
                 {
-                    list.First.Value.Execute();
-                    lastExecuted = list.First;
+                    _list.First.Value.Execute();
+                    _lastExecuted = _list.First;
                     return true;
                 }
                 return false;
             }
-            if (lastExecuted == list.Last)
+            if (_lastExecuted == _list.Last)
             {
                 return false;
             }
-            lastExecuted.Next.Value.Execute();
-            lastExecuted = lastExecuted.Next;
+            _lastExecuted.Next.Value.Execute();
+            _lastExecuted = _lastExecuted.Next;
             return true;
         }
     }

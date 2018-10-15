@@ -7,22 +7,22 @@ namespace Shapes.DomainModel
 {
     public class Canvas
     {
-        private readonly Common.Size canvasSize;
-        private readonly List<ShapeTypes.IShape> shapeList = new List<ShapeTypes.IShape>();
-        private readonly ShapeTypes.IShapeFactory shapeFactory;
+        private readonly Common.Size _canvasSize;
+        private readonly List<ShapeTypes.IShape> _shapeList = new List<ShapeTypes.IShape>();
+        private readonly ShapeTypes.IShapeFactory _shapeFactory;
 
         public Canvas(Common.Size canvasSize, ShapeTypes.IShapeFactory shapeFactory)
         {
-            this.canvasSize = canvasSize;
-            this.shapeFactory = shapeFactory;
+            _canvasSize = canvasSize;
+            _shapeFactory = shapeFactory;
         }
 
         private bool IsShapeInsideCanvas(Common.Rectangle rectangle)
         {
             return rectangle.Left >= 0 &&
                 rectangle.Top >= 0 &&
-                rectangle.Right < canvasSize.width &&
-                rectangle.Bottom < canvasSize.height;
+                rectangle.Right < _canvasSize.width &&
+                rectangle.Bottom < _canvasSize.height;
         }
 
         public void AddShape(ShapeTypes.IShape shape)
@@ -36,18 +36,18 @@ namespace Shapes.DomainModel
             {
                 throw new Exception();
             }
-            shapeList.Insert(index, shape);
+            _shapeList.Insert(index, shape);
             LayoutUpdatedEvent();
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
         {
-            AddShape(shapeFactory.CreateShape(type, boundingRect));
+            AddShape(_shapeFactory.CreateShape(type, boundingRect));
         }
 
         public ShapeTypes.IShape GetShape(int index)
         {
-            return shapeList[index];
+            return _shapeList[index];
         }
 
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
@@ -56,27 +56,27 @@ namespace Shapes.DomainModel
             {
                 throw new Exception();
             }
-            shapeList[index].SetBoundingRect(rectangle);
+            _shapeList[index].SetBoundingRect(rectangle);
             LayoutUpdatedEvent();
         }
 
         public void RemoveShape(int index)
         {
-            shapeList.RemoveAt(index);
+            _shapeList.RemoveAt(index);
             LayoutUpdatedEvent();
         }
 
         public Common.Size CanvasSize
         {
             get {
-                return canvasSize;
+                return _canvasSize;
             }
         }
 
         public int ShapeCount
         {
             get {
-                return shapeList.Count;
+                return _shapeList.Count;
             }
         }
 
