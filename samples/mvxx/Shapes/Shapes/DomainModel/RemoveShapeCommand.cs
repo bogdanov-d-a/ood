@@ -18,13 +18,13 @@ namespace Shapes.DomainModel
             shape = null;
         }
 
-        public override void ExecuteImpl()
+        protected override void ExecuteImpl()
         {
             shape = canvas.GetShape(index).Clone();
             canvas.RemoveShape(index);
         }
 
-        public override void UnexecuteImpl()
+        protected override void UnexecuteImpl()
         {
             canvas.InsertShape(index, shape);
             shape = null;

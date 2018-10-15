@@ -25,12 +25,12 @@ namespace Shapes.DomainModel
             rect = oldRect;
         }
 
-        public override void ExecuteImpl()
+        protected override void ExecuteImpl()
         {
             SwapRectangles();
         }
 
-        public override void UnexecuteImpl()
+        protected override void UnexecuteImpl()
         {
             SwapRectangles();
         }

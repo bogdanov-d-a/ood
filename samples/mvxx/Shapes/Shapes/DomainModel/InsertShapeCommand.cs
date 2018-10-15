@@ -18,12 +18,12 @@ namespace Shapes.DomainModel
             this.rect = rect;
         }
 
-        public override void ExecuteImpl()
+        protected override void ExecuteImpl()
         {
             canvas.AddShape(type, rect);
         }
 
-        public override void UnexecuteImpl()
+        protected override void UnexecuteImpl()
         {
             canvas.RemoveShape(canvas.ShapeCount - 1);
         }

@@ -29,7 +29,7 @@ namespace Shapes.DomainModel
             isExecuted = false;
         }
 
-        public abstract void ExecuteImpl();
-        public abstract void UnexecuteImpl();
+        protected abstract void ExecuteImpl();
+        protected abstract void UnexecuteImpl();
     }
 }
