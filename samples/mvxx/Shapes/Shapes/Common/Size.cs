@@ -17,5 +17,10 @@ namespace Shapes.Common
             this.width = width;
             this.height = height;
         }
+
+        public bool Equals(Size o)
+        {
+            return width == o.width && height == o.height;
+        }
     }
 }

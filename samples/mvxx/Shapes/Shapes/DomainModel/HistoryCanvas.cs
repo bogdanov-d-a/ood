@@ -41,6 +41,10 @@ namespace Shapes.DomainModel
 
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
         {
+            if (GetShape(index).GetBoundingRect().Equals(rectangle))
+            {
+                return;
+            }
             history.AddAndExecuteCommand(new MoveShapeCommand(canvas, index, rectangle));
         }
 

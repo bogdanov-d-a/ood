@@ -18,6 +18,11 @@ namespace Shapes.Common
             this.y = y;
         }
 
+        public bool Equals(Position o)
+        {
+            return x == o.x && y == o.y;
+        }
+
         public static Size Sub(Position a, Position b)
         {
             return new Size(a.x - b.x, a.y - b.y);

@@ -118,5 +118,10 @@ namespace Shapes.Common
             Left += offset.width;
             Top += offset.height;
         }
+
+        public bool Equals(Rectangle o)
+        {
+            return Equals(leftTop, o.leftTop) && Equals(size, o.size);
+        }
     }
 }
