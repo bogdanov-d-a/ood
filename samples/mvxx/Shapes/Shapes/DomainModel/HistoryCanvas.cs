@@ -16,7 +16,7 @@ namespace Shapes.DomainModel
             canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
-            history = new History(canvas);
+            history = new History();
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)

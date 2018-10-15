@@ -7,14 +7,8 @@ namespace Shapes.DomainModel
 {
     class History
     {
-        private readonly Canvas canvas;
         private readonly LinkedList<ICommand> list = new LinkedList<ICommand>();
         private LinkedListNode<ICommand> lastExecuted = null;
-
-        public History(Canvas canvas)
-        {
-            this.canvas = canvas;
-        }
 
         private void RemoveTail()
         {
