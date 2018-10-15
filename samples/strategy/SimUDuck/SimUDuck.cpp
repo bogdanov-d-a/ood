@@ -164,8 +164,8 @@ void PlayWithDuck(Duck& duck)
 
 void main()
 {
-	MallardDuck mallarDuck;
-	PlayWithDuck(mallarDuck);
+	MallardDuck mallardDuck;
+	PlayWithDuck(mallardDuck);
 
 	RedheadDuck redheadDuck;
 	PlayWithDuck(redheadDuck);
