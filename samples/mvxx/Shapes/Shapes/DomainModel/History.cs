@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    class History
+    public class History
     {
         private readonly LinkedList<ICommand> _list = new LinkedList<ICommand>();
         private LinkedListNode<ICommand> _lastExecuted = null;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    interface ICommand
+    public interface ICommand
     {
         void Execute();
         void Unexecute();

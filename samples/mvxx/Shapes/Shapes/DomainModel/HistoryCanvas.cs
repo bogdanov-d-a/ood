@@ -7,31 +7,23 @@ namespace Shapes.DomainModel
 {
     public class HistoryCanvas
     {
-        private readonly Canvas _canvas;
-        private readonly History _history;
+        public delegate void AddCommandHandler(ICommand command);
 
-        public HistoryCanvas(Canvas canvas)
+        private readonly Canvas _canvas;
+        private readonly AddCommandHandler _addCommandHandler;
+
+        public HistoryCanvas(Canvas canvas, AddCommandHandler addCommandHandler)
         {
             _canvas = canvas;
+            _addCommandHandler = addCommandHandler;
             _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
-            _history = new History();
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
         {
-            _history.AddAndExecuteCommand(new InsertShapeCommand(_canvas, type, boundingRect));
-        }
-
-        public void Undo()
-        {
-            _history.Undo();
-        }
-
-        public void Redo()
-        {
-            _history.Redo();
+            _addCommandHandler(new InsertShapeCommand(_canvas, type, boundingRect));
         }
 
         public ShapeTypes.IShape GetShape(int index)
@@ -45,12 +37,12 @@ namespace Shapes.DomainModel
             {
                 return;
             }
-            _history.AddAndExecuteCommand(new MoveShapeCommand(_canvas, index, rectangle));
+            _addCommandHandler(new MoveShapeCommand(_canvas, index, rectangle));
         }
 
         public void RemoveShape(int index)
         {
-            _history.AddAndExecuteCommand(new RemoveShapeCommand(_canvas, index));
+            _addCommandHandler(new RemoveShapeCommand(_canvas, index));
         }
 
         public Common.Size CanvasSize

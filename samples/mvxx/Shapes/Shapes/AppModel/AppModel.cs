@@ -293,6 +293,11 @@ namespace Shapes.AppModel
             LayoutUpdatedEvent();
         }
 
+        public void ResetSelection()
+        {
+            SelectShape(-1);
+        }
+
         public int ShapeCount
         {
             get {
@@ -305,18 +310,6 @@ namespace Shapes.AppModel
             get {
                 return _canvas.CanvasSize;
             }
-        }
-
-        public void Undo()
-        {
-            SelectShape(-1);
-            _canvas.Undo();
-        }
-
-        public void Redo()
-        {
-            SelectShape(-1);
-            _canvas.Redo();
         }
 
         public delegate void LayoutUpdatedDelegate();
