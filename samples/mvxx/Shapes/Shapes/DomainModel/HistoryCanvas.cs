@@ -18,9 +18,9 @@ namespace Shapes.DomainModel
             _addCommandHandler = addCommandHandler;
         }
 
-        public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
+        public void AddShape(ShapeTypes.IShape shape)
         {
-            _addCommandHandler(new InsertShapeCommand(_canvas, type, boundingRect));
+            _addCommandHandler(new InsertShapeCommand(_canvas, shape));
         }
 
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)

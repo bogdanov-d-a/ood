@@ -16,9 +16,9 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.ShapeFactory());
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
             DomainModel.Document document = new DomainModel.Document(canvas);
-            AppModel.AppModel appModel = new AppModel.AppModel(document);
+            AppModel.AppModel appModel = new AppModel.AppModel(document, new ShapeTypes.ShapeFactory());
 
             Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate shapeDelegate, Shapes.SelectionInfoDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)

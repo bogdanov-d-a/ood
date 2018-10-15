@@ -19,20 +19,22 @@ namespace Shapes.AppModel
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Document _document;
+        private readonly ShapeTypes.IShapeFactory _shapeFactory;
         private int _selectedIndex = -1;
         private Option<MovingData> _movingData = Option.None<MovingData>();
 
-        public AppModel(DomainModel.Document document)
+        public AppModel(DomainModel.Document document, ShapeTypes.IShapeFactory shapeFactory)
         {
             _document = document;
             _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
+            _shapeFactory = shapeFactory;
         }
 
         private void AddShape(ShapeTypes.Type type)
         {
-            _document.AddShape(type, defRect);
+            _document.AddShape(_shapeFactory.CreateShape(type, defRect));
             LayoutUpdatedEvent();
         }
 

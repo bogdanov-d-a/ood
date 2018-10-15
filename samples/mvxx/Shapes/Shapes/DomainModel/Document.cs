@@ -23,9 +23,9 @@ namespace Shapes.DomainModel
             });
         }
 
-        public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
+        public void AddShape(ShapeTypes.IShape shape)
         {
-            _historyCanvas.AddShape(type, boundingRect);
+            _historyCanvas.AddShape(shape);
         }
 
         public ShapeTypes.IShape GetShape(int index)

@@ -8,19 +8,17 @@ namespace Shapes.DomainModel
     public class InsertShapeCommand : AbstractCommand
     {
         private readonly Canvas _canvas;
-        private readonly ShapeTypes.Type _type;
-        private readonly Common.Rectangle _rect;
+        private readonly ShapeTypes.IShape _shape;
 
-        public InsertShapeCommand(Canvas canvas, ShapeTypes.Type type, Common.Rectangle rect)
+        public InsertShapeCommand(Canvas canvas, ShapeTypes.IShape shape)
         {
             _canvas = canvas;
-            _type = type;
-            _rect = rect;
+            _shape = shape;
         }
 
         protected override void ExecuteImpl()
         {
-            _canvas.AddShape(_type, _rect);
+            _canvas.AddShape(_shape);
         }
 
         protected override void UnexecuteImpl()

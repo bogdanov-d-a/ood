@@ -9,12 +9,10 @@ namespace Shapes.DomainModel
     {
         private readonly Common.Size _canvasSize;
         private readonly List<ShapeTypes.IShape> _shapeList = new List<ShapeTypes.IShape>();
-        private readonly ShapeTypes.IShapeFactory _shapeFactory;
 
-        public Canvas(Common.Size canvasSize, ShapeTypes.IShapeFactory shapeFactory)
+        public Canvas(Common.Size canvasSize)
         {
             _canvasSize = canvasSize;
-            _shapeFactory = shapeFactory;
         }
 
         private bool IsShapeInsideCanvas(Common.Rectangle rectangle)
@@ -38,11 +36,6 @@ namespace Shapes.DomainModel
             }
             _shapeList.Insert(index, shape);
             LayoutUpdatedEvent();
-        }
-
-        public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
-        {
-            AddShape(_shapeFactory.CreateShape(type, boundingRect));
         }
 
         public ShapeTypes.IShape GetShape(int index)
