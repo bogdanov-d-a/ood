@@ -16,9 +16,6 @@ namespace Shapes.DomainModel
         {
             _canvas = canvas;
             _addCommandHandler = addCommandHandler;
-            _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
-                LayoutUpdatedEvent();
-            });
         }
 
         public void AddShape(ShapeTypes.Type type, Common.Rectangle boundingRect)
@@ -26,14 +23,9 @@ namespace Shapes.DomainModel
             _addCommandHandler(new InsertShapeCommand(_canvas, type, boundingRect));
         }
 
-        public ShapeTypes.IShape GetShape(int index)
-        {
-            return _canvas.GetShape(index);
-        }
-
         public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
         {
-            if (GetShape(index).GetBoundingRect().Equals(rectangle))
+            if (_canvas.GetShape(index).GetBoundingRect().Equals(rectangle))
             {
                 return;
             }
@@ -44,24 +36,5 @@ namespace Shapes.DomainModel
         {
             _addCommandHandler(new RemoveShapeCommand(_canvas, index));
         }
-
-        public Common.Size CanvasSize
-        {
-            get
-            {
-                return _canvas.CanvasSize;
-            }
-        }
-
-        public int ShapeCount
-        {
-            get
-            {
-                return _canvas.ShapeCount;
-            }
-        }
-
-        public delegate void LayoutUpdatedDelegate();
-        public event LayoutUpdatedDelegate LayoutUpdatedEvent;
     }
 }

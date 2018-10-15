@@ -18,21 +18,21 @@ namespace Shapes.AppModel
 
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
-        private readonly DomainModel.HistoryCanvas _canvas;
+        private readonly DomainModel.Document _document;
         private int _selectedIndex = -1;
         private Option<MovingData> _movingData = Option.None<MovingData>();
 
-        public AppModel(DomainModel.HistoryCanvas canvas)
+        public AppModel(DomainModel.Document document)
         {
-            _canvas = canvas;
-            _canvas.LayoutUpdatedEvent += new DomainModel.HistoryCanvas.LayoutUpdatedDelegate(() => {
+            _document = document;
+            _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
         }
 
         private void AddShape(ShapeTypes.Type type)
         {
-            _canvas.AddShape(type, defRect);
+            _document.AddShape(type, defRect);
             LayoutUpdatedEvent();
         }
 
@@ -53,7 +53,7 @@ namespace Shapes.AppModel
 
         public ShapeTypes.IShape GetShape(int index)
         {
-            var shape = _canvas.GetShape(index);
+            var shape = _document.GetShape(index);
             if (index == _selectedIndex)
             {
                 var rect = GetTransformingRect();
@@ -104,7 +104,7 @@ namespace Shapes.AppModel
         {
             for (int i = ShapeCount - 1; i >= 0; --i)
             {
-                if (_canvas.GetShape(i).HasPointInside(pos))
+                if (_document.GetShape(i).HasPointInside(pos))
                 {
                     SelectShape(i);
                     return;
@@ -116,7 +116,7 @@ namespace Shapes.AppModel
         {
             if (_selectedIndex != -1)
             {
-                _canvas.RemoveShape(_selectedIndex);
+                _document.RemoveShape(_selectedIndex);
                 _selectedIndex = -1;
                 LayoutUpdatedEvent();
             }
@@ -224,7 +224,7 @@ namespace Shapes.AppModel
 
         private void ResetShapeRectangle(int index, Common.Rectangle rect)
         {
-            _canvas.ResetShapeRectangle(_selectedIndex, rect);
+            _document.ResetShapeRectangle(_selectedIndex, rect);
             LayoutUpdatedEvent();
         }
 
@@ -236,7 +236,7 @@ namespace Shapes.AppModel
             }
 
             var md = _movingData.ValueOrFailure();
-            var rect = _canvas.GetShape(_selectedIndex).GetBoundingRect();
+            var rect = _document.GetShape(_selectedIndex).GetBoundingRect();
             var offset = Common.Position.Sub(md.curPos, md.startPos);
 
             if (md.resize.HasValue)
@@ -301,14 +301,14 @@ namespace Shapes.AppModel
         public int ShapeCount
         {
             get {
-                return _canvas.ShapeCount;
+                return _document.ShapeCount;
             }
         }
 
         public Common.Size CanvasSize
         {
             get {
-                return _canvas.CanvasSize;
+                return _document.CanvasSize;
             }
         }
 

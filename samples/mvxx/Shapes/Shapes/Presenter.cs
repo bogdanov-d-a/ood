@@ -9,14 +9,14 @@ namespace Shapes
 {
     public class Presenter
     {
+        private readonly DomainModel.Document _document;
         private readonly AppModel.AppModel _appModel;
-        private readonly DomainModel.History _history;
         private readonly Shapes _view;
 
-        public Presenter(AppModel.AppModel appModel, DomainModel.History history, Shapes view)
+        public Presenter(DomainModel.Document document, AppModel.AppModel appModel, Shapes view)
         {
+            _document = document;
             _appModel = appModel;
-            _history = history;
             _view = view;
 
             Initialize();
@@ -33,9 +33,9 @@ namespace Shapes
             _view.RemoveShapeEvent += new Shapes.VoidDelegate(_appModel.RemoveSelectedShape);
 
             _view.UndoEvent += new Shapes.VoidDelegate(_appModel.ResetSelection);
-            _view.UndoEvent += new Shapes.VoidDelegate(() => { _history.Undo(); });
+            _view.UndoEvent += new Shapes.VoidDelegate(() => { _document.Undo(); });
             _view.RedoEvent += new Shapes.VoidDelegate(_appModel.ResetSelection);
-            _view.RedoEvent += new Shapes.VoidDelegate(() => { _history.Redo(); });
+            _view.RedoEvent += new Shapes.VoidDelegate(() => { _document.Redo(); });
 
             _view.MouseDownEvent += new Shapes.MouseDelegate(_appModel.BeginMove);
             _view.MouseMoveEvent += new Shapes.MouseDelegate(_appModel.Move);

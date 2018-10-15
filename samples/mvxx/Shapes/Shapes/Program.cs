@@ -17,11 +17,8 @@ namespace Shapes
             Application.SetCompatibleTextRenderingDefault(false);
 
             DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.ShapeFactory());
-            DomainModel.History history = new DomainModel.History();
-            DomainModel.HistoryCanvas historyCanvas = new DomainModel.HistoryCanvas(canvas, (DomainModel.ICommand command) => {
-                history.AddAndExecuteCommand(command);
-            });
-            AppModel.AppModel appModel = new AppModel.AppModel(historyCanvas);
+            DomainModel.Document document = new DomainModel.Document(canvas);
+            AppModel.AppModel appModel = new AppModel.AppModel(document);
 
             Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate shapeDelegate, Shapes.SelectionInfoDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
@@ -36,7 +33,7 @@ namespace Shapes
                     selectionDelegate(appModel.GetShape(selIndex).GetBoundingRect());
                 }
             }));
-            Presenter presenter = new Presenter(appModel, history, view);
+            Presenter presenter = new Presenter(document, appModel, view);
 
             Application.Run(view);
         }

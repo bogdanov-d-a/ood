@@ -50,6 +50,7 @@
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />
     <Compile Include="DomainModel\AbstractCommand.cs" />
+    <Compile Include="DomainModel\Document.cs" />
     <Compile Include="DomainModel\History.cs" />
     <Compile Include="DomainModel\HistoryCanvas.cs" />
     <Compile Include="DomainModel\ICommand.cs" />
