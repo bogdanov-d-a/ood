@@ -33,6 +33,15 @@ namespace Shapes.DomainModel
             return _canvas.GetShape(index);
         }
 
+        public void ResetShapeRectangle(ShapeTypes.IShape shape, Common.Rectangle rectangle)
+        {
+            int i = _canvas.GetShapeIndex(shape);
+            if (i != -1)
+            {
+                _history.AddAndExecuteCommand(new MoveShapeCommand(_canvas, i, rectangle));
+            }
+        }
+
         public void RemoveShape(int index)
         {
             _historyCanvas.RemoveShape(index);

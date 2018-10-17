@@ -8,8 +8,8 @@ namespace Shapes.ShapeTypes
 {
     public class Triangle : AbstractShape
     {
-        public Triangle(Common.Rectangle boundingRect)
-            : base(boundingRect)
+        public Triangle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
+            : base(onMoveShape, boundingRect)
         {
         }
 
@@ -59,7 +59,7 @@ namespace Shapes.ShapeTypes
 
         public override IShape Clone()
         {
-            return new Triangle(GetBoundingRect());
+            return new Triangle(_onMoveShape, GetBoundingRect());
         }
     }
 }

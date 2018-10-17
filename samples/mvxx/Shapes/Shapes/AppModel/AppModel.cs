@@ -62,7 +62,7 @@ namespace Shapes.AppModel
                 if (rect.HasValue)
                 {
                     shape = shape.Clone();
-                    shape.SetBoundingRect(rect.ValueOrFailure());
+                    ((ShapeTypes.AbstractShape)shape).SetBoundingRectDirect(rect.ValueOrFailure());
                 }
             }
             return shape;

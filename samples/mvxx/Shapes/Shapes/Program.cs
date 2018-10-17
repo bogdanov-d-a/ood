@@ -18,7 +18,9 @@ namespace Shapes
 
             DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
             DomainModel.Document document = new DomainModel.Document(canvas);
-            AppModel.AppModel appModel = new AppModel.AppModel(document, new ShapeTypes.ShapeFactory());
+            AppModel.AppModel appModel = new AppModel.AppModel(document, new ShapeTypes.ShapeFactory((ShapeTypes.IShape shape, Common.Rectangle rect) => {
+                document.ResetShapeRectangle(shape, rect);
+            }));
 
             Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate shapeDelegate, Shapes.SelectionInfoDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)

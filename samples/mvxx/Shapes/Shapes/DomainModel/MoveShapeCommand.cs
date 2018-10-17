@@ -21,7 +21,7 @@ namespace Shapes.DomainModel
         private void SwapRectangles()
         {
             Common.Rectangle oldRect = _canvas.GetShape(_index).GetBoundingRect();
-            _canvas.GetShape(_index).SetBoundingRect(_rect);
+            ((ShapeTypes.AbstractShape)_canvas.GetShape(_index)).SetBoundingRectDirect(_rect);
             _rect = oldRect;
         }
 

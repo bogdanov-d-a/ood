@@ -49,6 +49,14 @@ namespace Shapes.DomainModel
             LayoutUpdatedEvent();
         }
 
+        public int GetShapeIndex(ShapeTypes.IShape shape)
+        {
+            return _shapeList.FindIndex((ShapeTypes.IShape s) =>
+            {
+                return s == shape;
+            });
+        }
+
         public Common.Size CanvasSize
         {
             get {

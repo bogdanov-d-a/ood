@@ -13,8 +13,8 @@ namespace Shapes.ShapeTypes
             return a * a;
         }
 
-        public Circle(Common.Rectangle boundingRect)
-            : base(boundingRect)
+        public Circle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
+            : base(onMoveShape, boundingRect)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Shapes.ShapeTypes
 
         public override IShape Clone()
         {
-            return new Circle(GetBoundingRect());
+            return new Circle(_onMoveShape, GetBoundingRect());
         }
     }
 }

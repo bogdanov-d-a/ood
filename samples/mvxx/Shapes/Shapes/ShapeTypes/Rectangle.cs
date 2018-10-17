@@ -8,8 +8,8 @@ namespace Shapes.ShapeTypes
 {
     public class Rectangle : AbstractShape
     {
-        public Rectangle(Common.Rectangle boundingRect)
-            : base(boundingRect)
+        public Rectangle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
+            : base(onMoveShape, boundingRect)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Shapes.ShapeTypes
 
         public override IShape Clone()
         {
-            return new Rectangle(GetBoundingRect());
+            return new Rectangle(_onMoveShape, GetBoundingRect());
         }
     }
 }
