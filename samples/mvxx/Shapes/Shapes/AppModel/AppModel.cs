@@ -224,12 +224,6 @@ namespace Shapes.AppModel
             LayoutUpdatedEvent();
         }
 
-        private void ResetShapeRectangle(int index, Common.Rectangle rect)
-        {
-            _document.ResetShapeRectangle(_selectedIndex, rect);
-            LayoutUpdatedEvent();
-        }
-
         private Option<Common.Rectangle> GetTransformingRect()
         {
             if (!_movingData.HasValue || _selectedIndex == -1)
@@ -288,7 +282,7 @@ namespace Shapes.AppModel
             var rectOpt = GetTransformingRect();
             if (rectOpt.HasValue)
             {
-                ResetShapeRectangle(_selectedIndex, rectOpt.ValueOrFailure());
+                _document.GetShape(_selectedIndex).SetBoundingRect(rectOpt.ValueOrFailure());
             }
 
             _movingData = Option.None<MovingData>();

@@ -43,16 +43,6 @@ namespace Shapes.DomainModel
             return _shapeList[index];
         }
 
-        public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
-        {
-            if (!IsShapeInsideCanvas(rectangle))
-            {
-                throw new Exception();
-            }
-            _shapeList[index].SetBoundingRect(rectangle);
-            LayoutUpdatedEvent();
-        }
-
         public void RemoveShape(int index)
         {
             _shapeList.RemoveAt(index);

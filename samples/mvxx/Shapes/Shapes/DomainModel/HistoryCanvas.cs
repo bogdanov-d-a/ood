@@ -23,15 +23,6 @@ namespace Shapes.DomainModel
             _addCommandHandler(new InsertShapeCommand(_canvas, shape));
         }
 
-        public void ResetShapeRectangle(int index, Common.Rectangle rectangle)
-        {
-            if (_canvas.GetShape(index).GetBoundingRect().Equals(rectangle))
-            {
-                return;
-            }
-            _addCommandHandler(new MoveShapeCommand(_canvas, index, rectangle));
-        }
-
         public void RemoveShape(int index)
         {
             _addCommandHandler(new RemoveShapeCommand(_canvas, index));
