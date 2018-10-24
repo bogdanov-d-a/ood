@@ -8,24 +8,24 @@ namespace Shapes.ShapeTypes
 {
     public class Rectangle : AbstractShape
     {
-        public Rectangle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
-            : base(onMoveShape, boundingRect)
+        public Rectangle(Common.Rectangle boundingRect)
+            : base(boundingRect)
         {
         }
 
-        public override void Draw(IRenderTarget target)
+        public override Common.ShapeType GetShapeType()
         {
-            target.DrawRectangle(GetBoundingRect());
+            return Common.ShapeType.Rectangle;
+        }
+
+        public override void Draw(Shapes.IRenderTarget target, Common.Rectangle rect)
+        {
+            target.DrawRectangle(rect);
         }
 
         public override bool HasPointInside(Common.Position pos)
         {
             return GetBoundingRect().Contains(pos);
-        }
-
-        public override IShape Clone()
-        {
-            return new Rectangle(_onMoveShape, GetBoundingRect());
         }
     }
 }

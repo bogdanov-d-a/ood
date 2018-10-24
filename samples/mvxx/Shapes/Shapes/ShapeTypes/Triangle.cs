@@ -8,14 +8,19 @@ namespace Shapes.ShapeTypes
 {
     public class Triangle : AbstractShape
     {
-        public Triangle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
-            : base(onMoveShape, boundingRect)
+        public Triangle(Common.Rectangle boundingRect)
+            : base(boundingRect)
         {
         }
 
-        public override void Draw(IRenderTarget target)
+        public override Common.ShapeType GetShapeType()
         {
-            target.DrawTriangle(GetBoundingRect());
+            return Common.ShapeType.Triangle;
+        }
+
+        public override void Draw(Shapes.IRenderTarget target, Common.Rectangle rect)
+        {
+            target.DrawTriangle(rect);
         }
 
         public override bool HasPointInside(Common.Position pos)
@@ -55,11 +60,6 @@ namespace Shapes.ShapeTypes
             }
 
             return true;
-        }
-
-        public override IShape Clone()
-        {
-            return new Triangle(_onMoveShape, GetBoundingRect());
         }
     }
 }

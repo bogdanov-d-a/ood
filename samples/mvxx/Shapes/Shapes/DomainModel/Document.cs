@@ -7,6 +7,56 @@ namespace Shapes.DomainModel
 {
     public class Document
     {
+        public interface IShape
+        {
+            Common.Rectangle GetBoundingRect();
+            void SetBoundingRect(Common.Rectangle rect);
+        }
+
+        private class Shape : IShape
+        {
+            private class Movable : MoveShapeCommand.IMovable
+            {
+                private readonly Document _document;
+                private readonly int _index;
+
+                public Movable(Document document, int index)
+                {
+                    _document = document;
+                    _index = index;
+                }
+
+                public Common.Rectangle GetRect()
+                {
+                    return _document._canvas.GetShape(_index).GetBoundingRect();
+                }
+
+                public void SetRect(Common.Rectangle rect)
+                {
+                    _document._canvas.GetShape(_index).SetBoundingRect(rect);
+                }
+            }
+
+            private readonly Movable _movable;
+            private readonly History _history;
+
+            public Shape(Document document, int index, History history)
+            {
+                _movable = new Movable(document, index);
+                _history = history;
+            }
+
+            public Common.Rectangle GetBoundingRect()
+            {
+                return _movable.GetRect();
+            }
+
+            public void SetBoundingRect(Common.Rectangle rect)
+            {
+                _history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+            }
+        }
+
         private readonly Canvas _canvas;
         private readonly History _history;
         private readonly HistoryCanvas _historyCanvas;
@@ -23,23 +73,14 @@ namespace Shapes.DomainModel
             });
         }
 
-        public void AddShape(ShapeTypes.IShape shape)
+        public void AddShape(Common.ShapeType type, Common.Rectangle rect)
         {
-            _historyCanvas.AddShape(shape);
+            _historyCanvas.AddShape(type, rect);
         }
 
-        public ShapeTypes.IShape GetShape(int index)
+        public IShape GetShape(int index)
         {
-            return _canvas.GetShape(index);
-        }
-
-        public void ResetShapeRectangle(ShapeTypes.IShape shape, Common.Rectangle rectangle)
-        {
-            int i = _canvas.GetShapeIndex(shape);
-            if (i != -1)
-            {
-                _history.AddAndExecuteCommand(new MoveShapeCommand(_canvas, i, rectangle));
-            }
+            return new Shape(this, index, _history);
         }
 
         public void RemoveShape(int index)

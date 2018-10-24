@@ -7,23 +7,31 @@ namespace Shapes.DomainModel
 {
     public class InsertShapeCommand : AbstractCommand
     {
-        private readonly Canvas _canvas;
-        private readonly ShapeTypes.IShape _shape;
+        public interface ICanvas
+        {
+            void Add(Common.ShapeType type, Common.Rectangle rect);
+            void Remove();
+        }
 
-        public InsertShapeCommand(Canvas canvas, ShapeTypes.IShape shape)
+        private readonly ICanvas _canvas;
+        private readonly Common.ShapeType _type;
+        private readonly Common.Rectangle _rect;
+
+        public InsertShapeCommand(ICanvas canvas, Common.ShapeType type, Common.Rectangle rect)
         {
             _canvas = canvas;
-            _shape = shape;
+            _type = type;
+            _rect = rect;
         }
 
         protected override void ExecuteImpl()
         {
-            _canvas.AddShape(_shape);
+            _canvas.Add(_type, _rect);
         }
 
         protected override void UnexecuteImpl()
         {
-            _canvas.RemoveShape(_canvas.ShapeCount - 1);
+            _canvas.Remove();
         }
     }
 }

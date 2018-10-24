@@ -7,6 +7,23 @@ namespace Shapes
 {
     static class Program
     {
+        private class Drawable : Shapes.IDrawable
+        {
+            private readonly ShapeTypes.AbstractShape _shape;
+            private readonly Common.Rectangle _rect;
+
+            public Drawable(ShapeTypes.AbstractShape shape, Common.Rectangle rect)
+            {
+                _shape = shape;
+                _rect = rect;
+            }
+
+            public void Draw(Shapes.IRenderTarget target)
+            {
+                _shape.Draw(target, _rect);
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -16,23 +33,25 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
+            ShapeTypes.AbstractShapeList shapeList = new ShapeTypes.AbstractShapeList();
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.CanvasShapeList(shapeList));
             DomainModel.Document document = new DomainModel.Document(canvas);
-            AppModel.AppModel appModel = new AppModel.AppModel(document, new ShapeTypes.ShapeFactory((ShapeTypes.IShape shape, Common.Rectangle rect) => {
-                document.ResetShapeRectangle(shape, rect);
-            }));
+            AppModel.AppModel appModel = new AppModel.AppModel(
+                document,
+                (int index, Common.Position pos) => {
+                    return shapeList.GetAt(index).HasPointInside(pos);
+                });
 
-            Shapes view = new Shapes(new Shapes.ShapeEnumeratorDelegate((Shapes.ShapeInfoDelegate shapeDelegate, Shapes.SelectionInfoDelegate selectionDelegate) => {
+            Shapes view = new Shapes(new Shapes.RequestPaintingDelegate((Shapes.DrawableDelegate drawableDelegate, Shapes.SelectionDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
-                    var shape = appModel.GetShape(i);
-                    shapeDelegate((ShapeTypes.IRenderShape)shape);
+                    drawableDelegate(new Drawable(shapeList.GetAt(i), appModel.GetShapeBoundingRect(i)));
                 }
 
                 int selIndex = appModel.GetSelectedIndex();
                 if (selIndex != -1)
                 {
-                    selectionDelegate(appModel.GetShape(selIndex).GetBoundingRect());
+                    selectionDelegate(appModel.GetShapeBoundingRect(selIndex));
                 }
             }));
             Presenter presenter = new Presenter(document, appModel, view);

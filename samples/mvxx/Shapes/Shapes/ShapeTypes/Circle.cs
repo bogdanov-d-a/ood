@@ -13,14 +13,19 @@ namespace Shapes.ShapeTypes
             return a * a;
         }
 
-        public Circle(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
-            : base(onMoveShape, boundingRect)
+        public Circle(Common.Rectangle boundingRect)
+            : base(boundingRect)
         {
         }
 
-        public override void Draw(IRenderTarget target)
+        public override Common.ShapeType GetShapeType()
         {
-            target.DrawCircle(GetBoundingRect());
+            return Common.ShapeType.Circle;
+        }
+
+        public override void Draw(Shapes.IRenderTarget target, Common.Rectangle rect)
+        {
+            target.DrawCircle(rect);
         }
 
         public override bool HasPointInside(Common.Position pos)
@@ -42,11 +47,6 @@ namespace Shapes.ShapeTypes
 
             return (1.0 * Sqr(pos.x - origin.x) / Sqr(radius.width)) +
                 (1.0 * Sqr(pos.y - origin.y) / Sqr(radius.height)) < 1;
-        }
-
-        public override IShape Clone()
-        {
-            return new Circle(_onMoveShape, GetBoundingRect());
         }
     }
 }

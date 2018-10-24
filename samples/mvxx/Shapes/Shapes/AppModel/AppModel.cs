@@ -9,6 +9,8 @@ namespace Shapes.AppModel
 {
     public class AppModel
     {
+        public delegate bool HasPointInsideDelegate(int index, Common.Position pos);
+
         private class MovingData
         {
             public Common.Position startPos;
@@ -19,53 +21,51 @@ namespace Shapes.AppModel
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Document _document;
-        private readonly ShapeTypes.IShapeFactory _shapeFactory;
+        private readonly HasPointInsideDelegate _hasPointInside;
         private int _selectedIndex = -1;
         private Option<MovingData> _movingData = Option.None<MovingData>();
 
-        public AppModel(DomainModel.Document document, ShapeTypes.IShapeFactory shapeFactory)
+        public AppModel(DomainModel.Document document, HasPointInsideDelegate hasPointInside)
         {
             _document = document;
             _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
                 LayoutUpdatedEvent();
             });
-            _shapeFactory = shapeFactory;
+            _hasPointInside = hasPointInside;
         }
 
-        private void AddShape(ShapeTypes.Type type)
+        private void AddShape(Common.ShapeType type)
         {
-            _document.AddShape(_shapeFactory.CreateShape(type, defRect));
+            _document.AddShape(type, defRect);
             LayoutUpdatedEvent();
         }
 
         public void AddRectangle()
         {
-            AddShape(ShapeTypes.Type.Rectangle);
+            AddShape(Common.ShapeType.Rectangle);
         }
 
         public void AddTriangle()
         {
-            AddShape(ShapeTypes.Type.Triangle);
+            AddShape(Common.ShapeType.Triangle);
         }
 
         public void AddCircle()
         {
-            AddShape(ShapeTypes.Type.Circle);
+            AddShape(Common.ShapeType.Circle);
         }
 
-        public ShapeTypes.IShape GetShape(int index)
+        public Common.Rectangle GetShapeBoundingRect(int index)
         {
-            var shape = _document.GetShape(index);
             if (index == _selectedIndex)
             {
-                var rect = GetTransformingRect();
-                if (rect.HasValue)
+                var transformingRect = GetTransformingRect();
+                if (transformingRect.HasValue)
                 {
-                    shape = shape.Clone();
-                    ((ShapeTypes.AbstractShape)shape).SetBoundingRectDirect(rect.ValueOrFailure());
+                    return transformingRect.ValueOrFailure();
                 }
             }
-            return shape;
+            return _document.GetShape(index).GetBoundingRect();
         }
 
         private void OffsetClampBounds(ref Common.Rectangle rectangle)
@@ -106,7 +106,7 @@ namespace Shapes.AppModel
         {
             for (int i = ShapeCount - 1; i >= 0; --i)
             {
-                if (_document.GetShape(i).HasPointInside(pos))
+                if (_hasPointInside(i, pos))
                 {
                     SelectShape(i);
                     return;
@@ -198,7 +198,7 @@ namespace Shapes.AppModel
 
             if (_selectedIndex != -1)
             {
-                var rect = GetShape(_selectedIndex).GetBoundingRect();
+                var rect = _document.GetShape(_selectedIndex).GetBoundingRect();
                 var edges = FindRectEdges(rect, pos);
 
                 if (edges.hor != RectEdgeHor.None || edges.vert != RectEdgeVert.None)

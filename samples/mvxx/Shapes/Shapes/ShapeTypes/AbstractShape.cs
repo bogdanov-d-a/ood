@@ -6,11 +6,8 @@ using System.Text;
 
 namespace Shapes.ShapeTypes
 {
-    public abstract class AbstractShape : IRenderShape
+    public abstract class AbstractShape
     {
-        public delegate void OnMoveShape(IShape shape, Common.Rectangle rect);
-
-        protected OnMoveShape _onMoveShape;
         private Common.Rectangle _boundingRect;
 
         public Common.Rectangle GetBoundingRect()
@@ -18,23 +15,17 @@ namespace Shapes.ShapeTypes
             return _boundingRect;
         }
 
-        public void SetBoundingRectDirect(Common.Rectangle rect)
+        public void SetBoundingRect(Common.Rectangle rect)
         {
             _boundingRect = rect;
         }
 
-        public void SetBoundingRect(Common.Rectangle rect)
-        {
-            _onMoveShape(this, rect);
-        }
-
-        public abstract void Draw(IRenderTarget target);
+        public abstract Common.ShapeType GetShapeType();
+        public abstract void Draw(Shapes.IRenderTarget target, Common.Rectangle rect);
         public abstract bool HasPointInside(Common.Position pos);
-        public abstract IShape Clone();
 
-        public AbstractShape(OnMoveShape onMoveShape, Common.Rectangle boundingRect)
+        public AbstractShape(Common.Rectangle boundingRect)
         {
-            _onMoveShape = onMoveShape;
             _boundingRect = boundingRect;
         }
     }

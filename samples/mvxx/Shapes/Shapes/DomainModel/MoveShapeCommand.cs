@@ -7,21 +7,25 @@ namespace Shapes.DomainModel
 {
     public class MoveShapeCommand : AbstractCommand
     {
-        private readonly Canvas _canvas;
-        private readonly int _index;
+        public interface IMovable
+        {
+            Common.Rectangle GetRect();
+            void SetRect(Common.Rectangle rect);
+        }
+
+        private readonly IMovable _movable;
         private Common.Rectangle _rect;
 
-        public MoveShapeCommand(Canvas canvas, int index, Common.Rectangle rect)
+        public MoveShapeCommand(IMovable movable, Common.Rectangle rect)
         {
-            _canvas = canvas;
-            _index = index;
+            _movable = movable;
             _rect = rect;
         }
 
         private void SwapRectangles()
         {
-            Common.Rectangle oldRect = _canvas.GetShape(_index).GetBoundingRect();
-            ((ShapeTypes.AbstractShape)_canvas.GetShape(_index)).SetBoundingRectDirect(_rect);
+            Common.Rectangle oldRect = _movable.GetRect();
+            _movable.SetRect(_rect);
             _rect = oldRect;
         }
 

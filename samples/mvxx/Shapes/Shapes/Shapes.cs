@@ -13,6 +13,18 @@ namespace Shapes
 {
     public partial class Shapes : Form
     {
+        public interface IRenderTarget
+        {
+            void DrawRectangle(Common.Rectangle rect);
+            void DrawTriangle(Common.Rectangle rect);
+            void DrawCircle(Common.Rectangle rect);
+        }
+
+        public interface IDrawable
+        {
+            void Draw(IRenderTarget target);
+        }
+
         private const int DrawOffset = 50;
         private Option<Common.Size> _canvasSizeOption;
 
@@ -24,7 +36,7 @@ namespace Shapes
                 rect.Height);
         }
 
-        private class RenderTarget : ShapeTypes.IRenderTarget
+        private class RenderTarget : IRenderTarget
         {
             private Graphics g;
 
@@ -60,12 +72,12 @@ namespace Shapes
             }
         }
 
-        public Shapes(ShapeEnumeratorDelegate requestShapes)
+        public Shapes(RequestPaintingDelegate requestPainting)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
-            this.requestShapes = requestShapes;
+            _requestPainting = requestPainting;
         }
 
         public void SetCanvasSize(Common.Size size)
@@ -107,8 +119,8 @@ namespace Shapes
 
             RenderTarget target = new RenderTarget(g);
 
-            requestShapes((ShapeTypes.IRenderShape shape) => {
-                shape.Draw(target);
+            _requestPainting((IDrawable drawable) => {
+                drawable.Draw(target);
             },
             (Common.Rectangle rect) => {
                 Rectangle rect2 = OffsetDrawRect(rect);
@@ -160,10 +172,10 @@ namespace Shapes
         public event MouseDelegate MouseUpEvent;
         public event MouseDelegate MouseMoveEvent;
 
-        public delegate void ShapeInfoDelegate(ShapeTypes.IRenderShape shape);
-        public delegate void SelectionInfoDelegate(Common.Rectangle rect);
-        public delegate void ShapeEnumeratorDelegate(ShapeInfoDelegate shapeDelegate, SelectionInfoDelegate selectionDelegate);
-        private readonly ShapeEnumeratorDelegate requestShapes;
+        public delegate void DrawableDelegate(IDrawable drawable);
+        public delegate void SelectionDelegate(Common.Rectangle rect);
+        public delegate void RequestPaintingDelegate(DrawableDelegate drawableDelegate, SelectionDelegate selectionDelegate);
+        private readonly RequestPaintingDelegate _requestPainting;
 
         private void removeShapeButton_Click(object sender, EventArgs e)
         {
