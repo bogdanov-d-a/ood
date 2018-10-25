@@ -17,32 +17,37 @@ namespace Shapes.DomainModel
         {
             private class Movable : MoveShapeCommand.IMovable
             {
-                private readonly Document _document;
+                private readonly Canvas _canvas;
                 private readonly int _index;
 
-                public Movable(Document document, int index)
+                public Movable(Canvas canvas, int index)
                 {
-                    _document = document;
+                    _canvas = canvas;
                     _index = index;
+                }
+
+                private Canvas.IShape GetShape()
+                {
+                    return _canvas.GetShape(_index);
                 }
 
                 public Common.Rectangle GetRect()
                 {
-                    return _document._canvas.GetShape(_index).GetBoundingRect();
+                    return GetShape().GetBoundingRect();
                 }
 
                 public void SetRect(Common.Rectangle rect)
                 {
-                    _document._canvas.GetShape(_index).SetBoundingRect(rect);
+                    GetShape().SetBoundingRect(rect);
                 }
             }
 
             private readonly Movable _movable;
             private readonly History _history;
 
-            public Shape(Document document, int index, History history)
+            public Shape(Canvas canvas, int index, History history)
             {
-                _movable = new Movable(document, index);
+                _movable = new Movable(canvas, index);
                 _history = history;
             }
 
@@ -53,7 +58,10 @@ namespace Shapes.DomainModel
 
             public void SetBoundingRect(Common.Rectangle rect)
             {
-                _history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+                if (!GetBoundingRect().Equals(rect))
+                {
+                    _history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+                }
             }
         }
 
@@ -80,7 +88,7 @@ namespace Shapes.DomainModel
 
         public IShape GetShape(int index)
         {
-            return new Shape(this, index, _history);
+            return new Shape(_canvas, index, _history);
         }
 
         public void RemoveShape(int index)
