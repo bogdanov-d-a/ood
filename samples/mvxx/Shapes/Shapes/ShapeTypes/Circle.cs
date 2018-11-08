@@ -23,7 +23,7 @@ namespace Shapes.ShapeTypes
             return Common.ShapeType.Circle;
         }
 
-        public override void Draw(Shapes.IRenderTarget target, Common.Rectangle rect)
+        public override void Draw(CanvasView.IRenderTarget target, Common.Rectangle rect)
         {
             target.DrawCircle(rect);
         }

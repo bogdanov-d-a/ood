@@ -13,20 +13,8 @@ namespace Shapes
 {
     public partial class Shapes : Form
     {
-        public interface IRenderTarget
-        {
-            void DrawRectangle(Common.Rectangle rect);
-            void DrawTriangle(Common.Rectangle rect);
-            void DrawCircle(Common.Rectangle rect);
-        }
-
-        public interface IDrawable
-        {
-            void Draw(IRenderTarget target);
-        }
-
         private const int DrawOffset = 50;
-        private Option<Common.Size> _canvasSizeOption;
+        private readonly CanvasView _canvasView;
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
@@ -36,7 +24,7 @@ namespace Shapes
                 rect.Height);
         }
 
-        private class RenderTarget : IRenderTarget
+        private class RenderTarget : CanvasView.IRenderTarget
         {
             private Graphics g;
 
@@ -70,46 +58,49 @@ namespace Shapes
                 g.FillEllipse(new SolidBrush(Color.Yellow), rect2);
                 g.DrawEllipse(new Pen(new SolidBrush(Color.Black)), rect2);
             }
+
+            public void DrawSelectionRectangle(Common.Rectangle rect)
+            {
+                var rect2 = OffsetDrawRect(rect);
+                g.DrawRectangle(new Pen(new SolidBrush(Color.Red)), rect2);
+            }
         }
 
-        public Shapes(RequestPaintingDelegate requestPainting)
+        public Shapes(CanvasView canvasView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
-            _requestPainting = requestPainting;
-        }
-
-        public void SetCanvasSize(Common.Size size)
-        {
-            _canvasSizeOption = Option.Some(size);
+            _canvasView = canvasView;
+            _canvasView.LayoutUpdatedEvent += new CanvasView.VoidDelegate(() => {
+                Invalidate();
+            });
         }
 
         private void addRectangleButton_Click(object sender, EventArgs e)
         {
-            AddRectangleEvent();
+            _canvasView.AddRectangleEvent();
         }
 
         private void addTriangleButton_Click(object sender, EventArgs e)
         {
-            AddTriangleEvent();
+            _canvasView.AddTriangleEvent();
         }
 
         private void addCircleButton_Click(object sender, EventArgs e)
         {
-            AddCircleEvent();
+            _canvasView.AddCircleEvent();
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            const int SelOffset = 5;
 
-            if (!_canvasSizeOption.HasValue)
+            if (!_canvasView.CanvasSize.HasValue)
             {
                 return;
             }
-            Common.Size canvasSize = _canvasSizeOption.ValueOrFailure();
+            Common.Size canvasSize = _canvasView.CanvasSize.ValueOrFailure();
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,
@@ -117,25 +108,7 @@ namespace Shapes
                     canvasSize.width,
                     canvasSize.height));
 
-            RenderTarget target = new RenderTarget(g);
-
-            _requestPainting((IDrawable drawable) => {
-                drawable.Draw(target);
-            },
-            (Common.Rectangle rect) => {
-                Rectangle rect2 = OffsetDrawRect(rect);
-                g.DrawRectangle(new Pen(new SolidBrush(Color.Red)),
-                    new Rectangle(
-                        rect2.X - SelOffset,
-                        rect2.Y - SelOffset,
-                        rect2.Width + 2 * SelOffset,
-                        rect2.Height + 2 * SelOffset));
-            });
-        }
-
-        public void OnLayoutUpdated()
-        {
-            Invalidate();
+            _canvasView.Paint(new RenderTarget(g));
         }
 
         private Common.Position GetMousePosition()
@@ -146,50 +119,32 @@ namespace Shapes
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            MouseDownEvent(GetMousePosition());
+            _canvasView.MouseDownEvent(GetMousePosition());
         }
 
         private void Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            MouseUpEvent(GetMousePosition());
+            _canvasView.MouseUpEvent(GetMousePosition());
         }
 
         private void Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            MouseMoveEvent(GetMousePosition());
+            _canvasView.MouseMoveEvent(GetMousePosition());
         }
-
-        public delegate void VoidDelegate();
-        public event VoidDelegate AddRectangleEvent;
-        public event VoidDelegate AddTriangleEvent;
-        public event VoidDelegate AddCircleEvent;
-        public event VoidDelegate RemoveShapeEvent;
-        public event VoidDelegate UndoEvent;
-        public event VoidDelegate RedoEvent;
-
-        public delegate void MouseDelegate(Common.Position pos);
-        public event MouseDelegate MouseDownEvent;
-        public event MouseDelegate MouseUpEvent;
-        public event MouseDelegate MouseMoveEvent;
-
-        public delegate void DrawableDelegate(IDrawable drawable);
-        public delegate void SelectionDelegate(Common.Rectangle rect);
-        public delegate void RequestPaintingDelegate(DrawableDelegate drawableDelegate, SelectionDelegate selectionDelegate);
-        private readonly RequestPaintingDelegate _requestPainting;
 
         private void removeShapeButton_Click(object sender, EventArgs e)
         {
-            RemoveShapeEvent();
+            _canvasView.RemoveShapeEvent();
         }
 
         private void undoButton_Click(object sender, EventArgs e)
         {
-            UndoEvent();
+            _canvasView.UndoEvent();
         }
 
         private void redoButton_Click(object sender, EventArgs e)
         {
-            RedoEvent();
+            _canvasView.RedoEvent();
         }
     }
 }

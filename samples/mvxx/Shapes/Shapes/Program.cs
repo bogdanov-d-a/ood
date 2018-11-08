@@ -7,7 +7,7 @@ namespace Shapes
 {
     static class Program
     {
-        private class Drawable : Shapes.IDrawable
+        private class Drawable : CanvasView.IDrawable
         {
             private readonly ShapeTypes.AbstractShape _shape;
             private readonly Common.Rectangle _rect;
@@ -18,7 +18,7 @@ namespace Shapes
                 _rect = rect;
             }
 
-            public void Draw(Shapes.IRenderTarget target)
+            public void Draw(CanvasView.IRenderTarget target)
             {
                 _shape.Draw(target, _rect);
             }
@@ -42,7 +42,7 @@ namespace Shapes
                     return shapeList.GetAt(index).HasPointInside(pos);
                 });
 
-            Shapes view = new Shapes(new Shapes.RequestPaintingDelegate((Shapes.DrawableDelegate drawableDelegate, Shapes.SelectionDelegate selectionDelegate) => {
+            CanvasView canvasView = new CanvasView(new CanvasView.RequestPaintingDelegate((CanvasView.DrawableDelegate drawableDelegate, CanvasView.SelectionDelegate selectionDelegate) => {
                 for (int i = 0; i < appModel.ShapeCount; ++i)
                 {
                     drawableDelegate(new Drawable(shapeList.GetAt(i), appModel.GetShapeBoundingRect(i)));
@@ -54,9 +54,9 @@ namespace Shapes
                     selectionDelegate(appModel.GetShapeBoundingRect(selIndex));
                 }
             }));
-            Presenter presenter = new Presenter(document, appModel, view);
+            Presenter presenter = new Presenter(document, appModel, canvasView);
 
-            Application.Run(view);
+            Application.Run(new Shapes(canvasView));
         }
     }
 }

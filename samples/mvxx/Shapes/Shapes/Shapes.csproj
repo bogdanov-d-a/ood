@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanvasView.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />

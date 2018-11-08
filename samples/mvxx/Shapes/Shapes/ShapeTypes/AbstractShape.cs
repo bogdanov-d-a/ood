@@ -21,7 +21,7 @@ namespace Shapes.ShapeTypes
         }
 
         public abstract Common.ShapeType GetShapeType();
-        public abstract void Draw(Shapes.IRenderTarget target, Common.Rectangle rect);
+        public abstract void Draw(CanvasView.IRenderTarget target, Common.Rectangle rect);
         public abstract bool HasPointInside(Common.Position pos);
 
         public AbstractShape(Common.Rectangle boundingRect)

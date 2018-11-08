@@ -18,7 +18,7 @@ namespace Shapes.ShapeTypes
             return Common.ShapeType.Triangle;
         }
 
-        public override void Draw(Shapes.IRenderTarget target, Common.Rectangle rect)
+        public override void Draw(CanvasView.IRenderTarget target, Common.Rectangle rect)
         {
             target.DrawTriangle(rect);
         }
