@@ -22,10 +22,8 @@ namespace Shapes
             void Draw(IRenderTarget target);
         }
 
-        public CanvasView(RequestPaintingDelegate requestPainting)
-        {
-            _requestPainting = requestPainting;
-        }
+        private IList<IDrawable> _drawables = null;
+        private Option<Common.Rectangle> _selectionRect = Option.None<Common.Rectangle>();
 
         public Option<Common.Size> CanvasSize
         {
@@ -34,12 +32,20 @@ namespace Shapes
 
         public void Paint(IRenderTarget target)
         {
-            const int SelOffset = 5;
+            if (_drawables == null)
+            {
+                return;
+            }
 
-            _requestPainting((IDrawable drawable) => {
+            foreach (var drawable in _drawables)
+            {
                 drawable.Draw(target);
-            },
-            (Common.Rectangle rect) => {
+            }
+
+            if (_selectionRect.HasValue)
+            {
+                const int SelOffset = 5;
+                var rect = _selectionRect.ValueOrFailure();
                 target.DrawSelectionRectangle(new Common.Rectangle(
                     new Common.Position(
                         rect.Left - SelOffset,
@@ -47,7 +53,14 @@ namespace Shapes
                     new Common.Size(
                         rect.Width + 2 * SelOffset,
                         rect.Height + 2 * SelOffset)));
-            });
+            }
+        }
+
+        public void UpdateLayout(IList<IDrawable> drawables, Option<Common.Rectangle> selectionRect)
+        {
+            _drawables = drawables;
+            _selectionRect = selectionRect;
+            LayoutUpdatedEvent();
         }
 
         public delegate void VoidDelegate();
@@ -57,16 +70,11 @@ namespace Shapes
         public VoidDelegate RemoveShapeEvent;
         public VoidDelegate UndoEvent;
         public VoidDelegate RedoEvent;
-        public VoidDelegate LayoutUpdatedEvent;
+        public event VoidDelegate LayoutUpdatedEvent;
 
         public delegate void MouseDelegate(Common.Position pos);
         public MouseDelegate MouseDownEvent;
         public MouseDelegate MouseUpEvent;
         public MouseDelegate MouseMoveEvent;
-
-        public delegate void DrawableDelegate(IDrawable drawable);
-        public delegate void SelectionDelegate(Common.Rectangle rect);
-        public delegate void RequestPaintingDelegate(DrawableDelegate drawableDelegate, SelectionDelegate selectionDelegate);
-        private readonly RequestPaintingDelegate _requestPainting;
     }
 }
