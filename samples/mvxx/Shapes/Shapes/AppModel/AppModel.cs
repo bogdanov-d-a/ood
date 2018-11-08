@@ -118,8 +118,9 @@ namespace Shapes.AppModel
         {
             if (_selectedIndex != -1)
             {
-                _document.RemoveShape(_selectedIndex);
+                int tmpSelectedIndex = _selectedIndex;
                 _selectedIndex = -1;
+                _document.RemoveShape(tmpSelectedIndex);
                 LayoutUpdatedEvent();
             }
         }

@@ -115,11 +115,13 @@ namespace Shapes.DomainModel
         public void Undo()
         {
             _history.Undo();
+            LayoutUpdatedEvent();
         }
 
         public void Redo()
         {
             _history.Redo();
+            LayoutUpdatedEvent();
         }
 
         public delegate void LayoutUpdatedDelegate();
