@@ -72,8 +72,39 @@ namespace Shapes
             DoubleBuffered = true;
 
             _canvasView = canvasView;
+
             _canvasView.LayoutUpdatedEvent += new CanvasView.VoidDelegate(() => {
                 Invalidate();
+            });
+
+            _canvasView.ShowOpenFileDialogEvent += new CanvasView.RequestDocumentPathDelegate(() => {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(openFileDialog.FileName);
+                }
+                return Option.None<string>();
+            });
+
+            _canvasView.ShowSaveFileDialogEvent += new CanvasView.RequestDocumentPathDelegate(() => {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(saveFileDialog.FileName);
+                }
+                return Option.None<string>();
+            });
+
+            _canvasView.ShowUnsavedDocumentClosePrompt += new CanvasView.RequestUnsavedDocumentClosingDelegate(() => {
+                DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    return DomainModel.DocumentLifecycleController.ClosingAction.Save;
+                }
+                else if (result == DialogResult.No)
+                {
+                    return DomainModel.DocumentLifecycleController.ClosingAction.DontSave;
+                }
+                return DomainModel.DocumentLifecycleController.ClosingAction.DontClose;
             });
         }
 

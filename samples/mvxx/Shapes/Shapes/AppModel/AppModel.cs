@@ -90,6 +90,10 @@ namespace Shapes.AppModel
         {
             _document = document;
             _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
+                if (_selectedIndex >= _document.ShapeCount)
+                {
+                    _selectedIndex = -1;
+                }
                 LayoutUpdatedEvent();
             });
             _hasPointInside = hasPointInside;

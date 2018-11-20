@@ -9,6 +9,31 @@ namespace Shapes
 {
     public class Presenter
     {
+        public class DocumentDelegateProxy : DomainModel.Document.IDelegate
+        {
+            public Option<string> RequestDocumentOpenPath()
+            {
+                return RequestDocumentOpenPathEvent();
+            }
+
+            public Option<string> RequestDocumentSavePath()
+            {
+                return RequestDocumentSavePathEvent();
+            }
+
+            public DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosing()
+            {
+                return RequestUnsavedDocumentClosingEvent();
+            }
+
+            public delegate Option<string> RequestDocumentPathDelegate();
+            public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
+
+            public RequestDocumentPathDelegate RequestDocumentOpenPathEvent;
+            public RequestDocumentPathDelegate RequestDocumentSavePathEvent;
+            public RequestUnsavedDocumentClosingDelegate RequestUnsavedDocumentClosingEvent;
+        }
+
         private class Drawable : CanvasView.IDrawable
         {
             private readonly ShapeTypes.AbstractShape _shape;
@@ -27,13 +52,15 @@ namespace Shapes
         }
 
         private readonly DomainModel.Document _document;
+        private readonly DocumentDelegateProxy _documentDelegateProxy;
         private readonly AppModel.AppModel _appModel;
         private readonly ShapeTypes.AbstractShapeList _shapeList;
         private readonly CanvasView _view;
 
-        public Presenter(DomainModel.Document document, AppModel.AppModel appModel, ShapeTypes.AbstractShapeList shapeList, CanvasView view)
+        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, ShapeTypes.AbstractShapeList shapeList, CanvasView view)
         {
             _document = document;
+            _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
             _shapeList = shapeList;
             _view = view;
@@ -60,11 +87,28 @@ namespace Shapes
                 _view.UpdateLayout(drawables, selRect);
             });
 
+            _documentDelegateProxy.RequestDocumentOpenPathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
+                return _view.ShowOpenFileDialogEvent();
+            });
+
+            _documentDelegateProxy.RequestDocumentSavePathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
+                return _view.ShowSaveFileDialogEvent();
+            });
+
+            _documentDelegateProxy.RequestUnsavedDocumentClosingEvent += new DocumentDelegateProxy.RequestUnsavedDocumentClosingDelegate(() => {
+                return _view.ShowUnsavedDocumentClosePrompt();
+            });
+
             _view.CanvasSize = Option.Some(_appModel.CanvasSize);
             _view.AddRectangleEvent += new CanvasView.VoidDelegate(_appModel.AddRectangle);
             _view.AddTriangleEvent += new CanvasView.VoidDelegate(_appModel.AddTriangle);
             _view.AddCircleEvent += new CanvasView.VoidDelegate(_appModel.AddCircle);
             _view.RemoveShapeEvent += new CanvasView.VoidDelegate(_appModel.RemoveSelectedShape);
+
+            _view.CreateNewDocumentEvent += new CanvasView.VoidDelegate(_document.New);
+            _view.OpenDocumentEvent += new CanvasView.VoidDelegate(_document.Open);
+            _view.SaveDocumentEvent += new CanvasView.VoidDelegate(_document.Save);
+            _view.SaveAsDocumentEvent += new CanvasView.VoidDelegate(_document.SaveAs);
 
             _view.UndoEvent += new CanvasView.VoidDelegate(_appModel.ResetSelection);
             _view.UndoEvent += new CanvasView.VoidDelegate(() => { _document.Undo(); });

@@ -65,6 +65,15 @@ namespace Shapes.DomainModel
             LayoutUpdatedEvent();
         }
 
+        public void RemoveAllShapes()
+        {
+            while (_shapeList.GetCount() > 0)
+            {
+                _shapeList.RemoveAt(0);
+            }
+            LayoutUpdatedEvent();
+        }
+
         public Common.Size CanvasSize
         {
             get {

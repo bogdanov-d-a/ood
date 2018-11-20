@@ -18,7 +18,8 @@ namespace Shapes
 
             ShapeTypes.AbstractShapeList shapeList = new ShapeTypes.AbstractShapeList();
             DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.CanvasShapeList(shapeList));
-            DomainModel.Document document = new DomainModel.Document(canvas);
+            Presenter.DocumentDelegateProxy documentDelegateProxy = new Presenter.DocumentDelegateProxy();
+            DomainModel.Document document = new DomainModel.Document(documentDelegateProxy, canvas);
             AppModel.AppModel appModel = new AppModel.AppModel(
                 document,
                 (int index, Common.Position pos) => {
@@ -26,7 +27,7 @@ namespace Shapes
                 });
 
             CanvasView canvasView = new CanvasView();
-            Presenter presenter = new Presenter(document, appModel, shapeList, canvasView);
+            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, shapeList, canvasView);
 
             Application.Run(new Shapes(canvasView));
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Optional;
 
 namespace Shapes.DomainModel
 {
@@ -11,6 +12,13 @@ namespace Shapes.DomainModel
         {
             Common.Rectangle GetBoundingRect();
             void SetBoundingRect(Common.Rectangle rect);
+        }
+
+        public interface IDelegate
+        {
+            Option<string> RequestDocumentOpenPath();
+            DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosing();
+            Option<string> RequestDocumentSavePath();
         }
 
         private class Shape : IShape
@@ -65,20 +73,92 @@ namespace Shapes.DomainModel
             }
         }
 
+        private delegate void VoidDelegate();
+
+        private void ExecuteWithLayoutUpdatedEventSuspended(VoidDelegate delegate_)
+        {
+            if (_suspendLayoutUpdatedEvent)
+            {
+                throw new Exception();
+            }
+            _suspendLayoutUpdatedEvent = true;
+
+            try
+            {
+                delegate_();
+            }
+            finally
+            {
+                _suspendLayoutUpdatedEvent = false;
+            }
+        }
+
+        private class DocumentLifecycleControllerDelegate : DocumentLifecycleController.IDelegate
+        {
+            private readonly Document _parent;
+
+            public DocumentLifecycleControllerDelegate(Document parent)
+            {
+                _parent = parent;
+            }
+
+            public void OnEraseMemoryDocument()
+            {
+                _parent.ExecuteWithLayoutUpdatedEventSuspended(() => {
+                    _parent._canvas.RemoveAllShapes();
+                    _parent._history.Clear();
+                });
+                _parent.LayoutUpdatedEvent();
+            }
+
+            public void OnOpenDocument(string path)
+            {
+                System.Windows.Forms.MessageBox.Show("OnOpenDocument " + path);
+            }
+
+            public void OnSaveDocument(string path)
+            {
+                System.Windows.Forms.MessageBox.Show("OnSaveDocument " + path);
+            }
+
+            public Option<string> RequestDocumentOpenPath()
+            {
+                return _parent._delegate.RequestDocumentOpenPath();
+            }
+
+            public Option<string> RequestDocumentSavePath()
+            {
+                return _parent._delegate.RequestDocumentSavePath();
+            }
+
+            public DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosing()
+            {
+                return _parent._delegate.RequestUnsavedDocumentClosing();
+            }
+        }
+
+        private readonly IDelegate _delegate;
         private readonly Canvas _canvas;
         private readonly History _history;
         private readonly HistoryCanvas _historyCanvas;
+        private readonly DocumentLifecycleController _dlc;
+        private bool _suspendLayoutUpdatedEvent = false;
 
-        public Document(Canvas canvas)
+        public Document(IDelegate delegate_, Canvas canvas)
         {
+            _delegate = delegate_;
             _canvas = canvas;
             _history = new History();
             _historyCanvas = new HistoryCanvas(_canvas, (ICommand command) => {
                 _history.AddAndExecuteCommand(command);
             });
             _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
-                LayoutUpdatedEvent();
+                if (!_suspendLayoutUpdatedEvent)
+                {
+                    LayoutUpdatedEvent();
+                }
             });
+            _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerDelegate(this));
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
@@ -110,6 +190,26 @@ namespace Shapes.DomainModel
             {
                 return _canvas.ShapeCount;
             }
+        }
+
+        public void New()
+        {
+            _dlc.New();
+        }
+
+        public void Open()
+        {
+            _dlc.Open();
+        }
+
+        public void Save()
+        {
+            _dlc.Save(false);
+        }
+
+        public void SaveAs()
+        {
+            _dlc.Save(true);
         }
 
         public void Undo()

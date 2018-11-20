@@ -84,5 +84,12 @@ namespace Shapes
         public MouseDelegate MouseDownEvent;
         public MouseDelegate MouseUpEvent;
         public MouseDelegate MouseMoveEvent;
+
+        public delegate Option<string> RequestDocumentPathDelegate();
+        public RequestDocumentPathDelegate ShowOpenFileDialogEvent;
+        public RequestDocumentPathDelegate ShowSaveFileDialogEvent;
+
+        public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
+        public RequestUnsavedDocumentClosingDelegate ShowUnsavedDocumentClosePrompt;
     }
 }

@@ -69,5 +69,11 @@ namespace Shapes.DomainModel
             _lastExecuted = _lastExecuted.Next;
             return true;
         }
+
+        public void Clear()
+        {
+            _list.Clear();
+            _lastExecuted = null;
+        }
     }
 }
