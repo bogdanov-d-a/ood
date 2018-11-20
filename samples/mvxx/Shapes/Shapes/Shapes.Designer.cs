@@ -36,12 +36,18 @@
             this.removeShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoButton = new System.Windows.Forms.ToolStripButton();
             this.redoButton = new System.Windows.Forms.ToolStripButton();
+            this.fileDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileDropDownButton,
             this.shapesDropDownButton,
             this.undoButton,
             this.redoButton});
@@ -67,28 +73,28 @@
             // addRectangleToolStripMenuItem
             // 
             this.addRectangleToolStripMenuItem.Name = "addRectangleToolStripMenuItem";
-            this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addRectangleToolStripMenuItem.Text = "Add rectangle";
             this.addRectangleToolStripMenuItem.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
             // addTriangleToolStripMenuItem
             // 
             this.addTriangleToolStripMenuItem.Name = "addTriangleToolStripMenuItem";
-            this.addTriangleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addTriangleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addTriangleToolStripMenuItem.Text = "Add triangle";
             this.addTriangleToolStripMenuItem.Click += new System.EventHandler(this.addTriangleToolStripMenuItem_Click);
             // 
             // addCircleToolStripMenuItem
             // 
             this.addCircleToolStripMenuItem.Name = "addCircleToolStripMenuItem";
-            this.addCircleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addCircleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addCircleToolStripMenuItem.Text = "Add circle";
             this.addCircleToolStripMenuItem.Click += new System.EventHandler(this.addCircleToolStripMenuItem_Click);
             // 
             // removeShapeToolStripMenuItem
             // 
             this.removeShapeToolStripMenuItem.Name = "removeShapeToolStripMenuItem";
-            this.removeShapeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.removeShapeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeShapeToolStripMenuItem.Text = "Remove shape";
             this.removeShapeToolStripMenuItem.Click += new System.EventHandler(this.removeShapeToolStripMenuItem_Click);
             // 
@@ -109,6 +115,47 @@
             this.redoButton.Size = new System.Drawing.Size(38, 22);
             this.redoButton.Text = "Redo";
             this.redoButton.Click += new System.EventHandler(this.redoButton_Click);
+            // 
+            // fileDropDownButton
+            // 
+            this.fileDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.fileDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.openToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
+            this.fileDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fileDropDownButton.Name = "fileDropDownButton";
+            this.fileDropDownButton.Size = new System.Drawing.Size(38, 22);
+            this.fileDropDownButton.Text = "File";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Text = "Save as";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // Shapes
             // 
@@ -140,6 +187,11 @@
         private System.Windows.Forms.ToolStripMenuItem addTriangleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addCircleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeShapeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton fileDropDownButton;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }
 

@@ -146,5 +146,25 @@ namespace Shapes
         {
             _canvasView.RemoveShapeEvent();
         }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.CreateNewDocumentEvent();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.OpenDocumentEvent();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.SaveDocumentEvent();
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.SaveAsDocumentEvent();
+        }
     }
 }
