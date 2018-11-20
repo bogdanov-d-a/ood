@@ -77,21 +77,6 @@ namespace Shapes
             });
         }
 
-        private void addRectangleButton_Click(object sender, EventArgs e)
-        {
-            _canvasView.AddRectangleEvent();
-        }
-
-        private void addTriangleButton_Click(object sender, EventArgs e)
-        {
-            _canvasView.AddTriangleEvent();
-        }
-
-        private void addCircleButton_Click(object sender, EventArgs e)
-        {
-            _canvasView.AddCircleEvent();
-        }
-
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -132,11 +117,6 @@ namespace Shapes
             _canvasView.MouseMoveEvent(GetMousePosition());
         }
 
-        private void removeShapeButton_Click(object sender, EventArgs e)
-        {
-            _canvasView.RemoveShapeEvent();
-        }
-
         private void undoButton_Click(object sender, EventArgs e)
         {
             _canvasView.UndoEvent();
@@ -145,6 +125,26 @@ namespace Shapes
         private void redoButton_Click(object sender, EventArgs e)
         {
             _canvasView.RedoEvent();
+        }
+
+        private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.AddRectangleEvent();
+        }
+
+        private void addTriangleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.AddTriangleEvent();
+        }
+
+        private void addCircleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.AddCircleEvent();
+        }
+
+        private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _canvasView.RemoveShapeEvent();
         }
     }
 }

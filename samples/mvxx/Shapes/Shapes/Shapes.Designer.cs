@@ -28,32 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.addRectangleButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.addTriangleButton = new System.Windows.Forms.ToolStripButton();
-            this.addCircleButton = new System.Windows.Forms.ToolStripButton();
-            this.removeShapeButton = new System.Windows.Forms.ToolStripButton();
+            this.shapesDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addTriangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCircleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoButton = new System.Windows.Forms.ToolStripButton();
             this.redoButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // addRectangleButton
-            // 
-            this.addRectangleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.addRectangleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addRectangleButton.Name = "addRectangleButton";
-            this.addRectangleButton.Size = new System.Drawing.Size(85, 22);
-            this.addRectangleButton.Text = "Add rectangle";
-            this.addRectangleButton.Click += new System.EventHandler(this.addRectangleButton_Click);
-            // 
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addRectangleButton,
-            this.addTriangleButton,
-            this.addCircleButton,
-            this.removeShapeButton,
+            this.shapesDropDownButton,
             this.undoButton,
             this.redoButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
@@ -62,39 +51,53 @@
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip";
             // 
-            // addTriangleButton
+            // shapesDropDownButton
             // 
-            this.addTriangleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.addTriangleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addTriangleButton.Name = "addTriangleButton";
-            this.addTriangleButton.Size = new System.Drawing.Size(76, 22);
-            this.addTriangleButton.Text = "Add triangle";
-            this.addTriangleButton.Click += new System.EventHandler(this.addTriangleButton_Click);
+            this.shapesDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.shapesDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addRectangleToolStripMenuItem,
+            this.addTriangleToolStripMenuItem,
+            this.addCircleToolStripMenuItem,
+            this.removeShapeToolStripMenuItem});
+            this.shapesDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.shapesDropDownButton.Name = "shapesDropDownButton";
+            this.shapesDropDownButton.Size = new System.Drawing.Size(57, 22);
+            this.shapesDropDownButton.Text = "Shapes";
             // 
-            // removeShapeButton
+            // addRectangleToolStripMenuItem
             // 
-            this.removeShapeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.removeShapeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.removeShapeButton.Name = "removeShapeButton";
-            this.removeShapeButton.Size = new System.Drawing.Size(88, 22);
-            this.removeShapeButton.Text = "Remove shape";
-            this.removeShapeButton.Click += new System.EventHandler(this.removeShapeButton_Click);
+            this.addRectangleToolStripMenuItem.Name = "addRectangleToolStripMenuItem";
+            this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addRectangleToolStripMenuItem.Text = "Add rectangle";
+            this.addRectangleToolStripMenuItem.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
-            // addCircleButton
+            // addTriangleToolStripMenuItem
             // 
-            this.addCircleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.addCircleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addCircleButton.Name = "addCircleButton";
-            this.addCircleButton.Size = new System.Drawing.Size(64, 22);
-            this.addCircleButton.Text = "Add circle";
-            this.addCircleButton.Click += new System.EventHandler(this.addCircleButton_Click);
+            this.addTriangleToolStripMenuItem.Name = "addTriangleToolStripMenuItem";
+            this.addTriangleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addTriangleToolStripMenuItem.Text = "Add triangle";
+            this.addTriangleToolStripMenuItem.Click += new System.EventHandler(this.addTriangleToolStripMenuItem_Click);
+            // 
+            // addCircleToolStripMenuItem
+            // 
+            this.addCircleToolStripMenuItem.Name = "addCircleToolStripMenuItem";
+            this.addCircleToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addCircleToolStripMenuItem.Text = "Add circle";
+            this.addCircleToolStripMenuItem.Click += new System.EventHandler(this.addCircleToolStripMenuItem_Click);
+            // 
+            // removeShapeToolStripMenuItem
+            // 
+            this.removeShapeToolStripMenuItem.Name = "removeShapeToolStripMenuItem";
+            this.removeShapeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.removeShapeToolStripMenuItem.Text = "Remove shape";
+            this.removeShapeToolStripMenuItem.Click += new System.EventHandler(this.removeShapeToolStripMenuItem_Click);
             // 
             // undoButton
             // 
             this.undoButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.undoButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.undoButton.Name = "undoButton";
-            this.undoButton.Size = new System.Drawing.Size(36, 22);
+            this.undoButton.Size = new System.Drawing.Size(40, 22);
             this.undoButton.Text = "Undo";
             this.undoButton.Click += new System.EventHandler(this.undoButton_Click);
             // 
@@ -103,7 +106,7 @@
             this.redoButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.redoButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.redoButton.Name = "redoButton";
-            this.redoButton.Size = new System.Drawing.Size(34, 22);
+            this.redoButton.Size = new System.Drawing.Size(38, 22);
             this.redoButton.Text = "Redo";
             this.redoButton.Click += new System.EventHandler(this.redoButton_Click);
             // 
@@ -129,14 +132,14 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ToolStripButton addRectangleButton;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton removeShapeButton;
-        private System.Windows.Forms.ToolStripButton addTriangleButton;
-        private System.Windows.Forms.ToolStripButton addCircleButton;
         private System.Windows.Forms.ToolStripButton undoButton;
         private System.Windows.Forms.ToolStripButton redoButton;
+        private System.Windows.Forms.ToolStripDropDownButton shapesDropDownButton;
+        private System.Windows.Forms.ToolStripMenuItem addRectangleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addTriangleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addCircleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeShapeToolStripMenuItem;
     }
 }
 
