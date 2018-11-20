@@ -197,5 +197,13 @@ namespace Shapes
         {
             _canvasView.SaveAsDocumentEvent();
         }
+
+        private void Shapes_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_canvasView.FormClosingEvent())
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

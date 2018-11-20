@@ -91,5 +91,8 @@ namespace Shapes
 
         public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
         public RequestUnsavedDocumentClosingDelegate ShowUnsavedDocumentClosePrompt;
+
+        public delegate bool BoolDelegate();
+        public BoolDelegate FormClosingEvent;
     }
 }

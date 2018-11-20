@@ -194,9 +194,9 @@ namespace Shapes.DomainModel
             }
         }
 
-        public void New()
+        public bool New()
         {
-            _dlc.New();
+            return _dlc.New();
         }
 
         public void Open()

@@ -105,7 +105,9 @@ namespace Shapes
             _view.AddCircleEvent += new CanvasView.VoidDelegate(_appModel.AddCircle);
             _view.RemoveShapeEvent += new CanvasView.VoidDelegate(_appModel.RemoveSelectedShape);
 
-            _view.CreateNewDocumentEvent += new CanvasView.VoidDelegate(_document.New);
+            _view.CreateNewDocumentEvent += new CanvasView.VoidDelegate(() => {
+                _document.New();
+            });
             _view.OpenDocumentEvent += new CanvasView.VoidDelegate(_document.Open);
             _view.SaveDocumentEvent += new CanvasView.VoidDelegate(_document.Save);
             _view.SaveAsDocumentEvent += new CanvasView.VoidDelegate(_document.SaveAs);
@@ -118,6 +120,8 @@ namespace Shapes
             _view.MouseDownEvent += new CanvasView.MouseDelegate(_appModel.BeginMove);
             _view.MouseMoveEvent += new CanvasView.MouseDelegate(_appModel.Move);
             _view.MouseUpEvent += new CanvasView.MouseDelegate(_appModel.EndMove);
+
+            _view.FormClosingEvent += new CanvasView.BoolDelegate(_document.New);
         }
     }
 }
