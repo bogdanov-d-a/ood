@@ -10,12 +10,16 @@ namespace Shapes.DomainModel
     {
         public interface IShape
         {
+            Common.ShapeType GetShapeType();
             Common.Rectangle GetBoundingRect();
             void SetBoundingRect(Common.Rectangle rect);
         }
 
         public interface IDelegate
         {
+            void OnOpenDocument(string path);
+            void OnSaveDocument(string path);
+
             Option<string> RequestDocumentOpenPath();
             DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosing();
             Option<string> RequestDocumentSavePath();
@@ -34,7 +38,7 @@ namespace Shapes.DomainModel
                     _index = index;
                 }
 
-                private Canvas.IShape GetShape()
+                public Canvas.IShape GetShape()
                 {
                     return _canvas.GetShape(_index);
                 }
@@ -57,6 +61,11 @@ namespace Shapes.DomainModel
             {
                 _movable = new Movable(canvas, index);
                 _parent = parent;
+            }
+
+            public Common.ShapeType GetShapeType()
+            {
+                return _movable.GetShape().GetShapeType();
             }
 
             public Common.Rectangle GetBoundingRect()
@@ -114,12 +123,12 @@ namespace Shapes.DomainModel
 
             public void OnOpenDocument(string path)
             {
-                System.Windows.Forms.MessageBox.Show("OnOpenDocument " + path);
+                _parent._delegate.OnOpenDocument(path);
             }
 
             public void OnSaveDocument(string path)
             {
-                System.Windows.Forms.MessageBox.Show("OnSaveDocument " + path);
+                _parent._delegate.OnSaveDocument(path);
             }
 
             public Option<string> RequestDocumentOpenPath()
@@ -225,6 +234,19 @@ namespace Shapes.DomainModel
         {
             _history.Redo();
             _dlc.Modify();
+            LayoutUpdatedEvent();
+        }
+
+        public delegate void AddShapeDelegate(Common.ShapeType type, Common.Rectangle boundingRect);
+        public delegate void AddShapesDelegate(AddShapeDelegate delegate_);
+
+        public void ReplaceCanvasData(AddShapesDelegate delegate_)
+        {
+            ExecuteWithLayoutUpdatedEventSuspended(() => {
+                delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
+                    _canvas.AddShape(type, boundingRect);
+                });
+            });
             LayoutUpdatedEvent();
         }
 

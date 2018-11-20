@@ -11,6 +11,16 @@ namespace Shapes
     {
         public class DocumentDelegateProxy : DomainModel.Document.IDelegate
         {
+            void DomainModel.Document.IDelegate.OnOpenDocument(string path)
+            {
+                OpenFileEvent(path);
+            }
+
+            void DomainModel.Document.IDelegate.OnSaveDocument(string path)
+            {
+                SaveFileEvent(path);
+            }
+
             public Option<string> RequestDocumentOpenPath()
             {
                 return RequestDocumentOpenPathEvent();
@@ -26,9 +36,12 @@ namespace Shapes
                 return RequestUnsavedDocumentClosingEvent();
             }
 
+            public delegate void OpenSaveFileDelegate(string path);
             public delegate Option<string> RequestDocumentPathDelegate();
             public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
 
+            public OpenSaveFileDelegate OpenFileEvent;
+            public OpenSaveFileDelegate SaveFileEvent;
             public RequestDocumentPathDelegate RequestDocumentOpenPathEvent;
             public RequestDocumentPathDelegate RequestDocumentSavePathEvent;
             public RequestUnsavedDocumentClosingDelegate RequestUnsavedDocumentClosingEvent;
@@ -85,6 +98,24 @@ namespace Shapes
                 }
 
                 _view.UpdateLayout(drawables, selRect);
+            });
+
+            _documentDelegateProxy.OpenFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
+                _document.ReplaceCanvasData((DomainModel.Document.AddShapeDelegate delegate_) => {
+                    CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
+                        delegate_(type, boundingRect);
+                    });
+                });
+            });
+
+            _documentDelegateProxy.SaveFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
+                CanvasReaderWriter.Write((CanvasReaderWriter.WriteShapeDelegate delegate_) => {
+                    for (int i = 0; i < _document.ShapeCount; ++i)
+                    {
+                        var shape = _document.GetShape(i);
+                        delegate_(shape.GetShapeType(), shape.GetBoundingRect());
+                    }
+                }, path);
             });
 
             _documentDelegateProxy.RequestDocumentOpenPathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {

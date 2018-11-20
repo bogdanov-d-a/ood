@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AppModel\CursorHandler.cs" />
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
+    <Compile Include="CanvasReaderWriter.cs" />
     <Compile Include="CanvasView.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
