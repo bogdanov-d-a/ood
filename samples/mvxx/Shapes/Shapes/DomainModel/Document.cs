@@ -51,12 +51,12 @@ namespace Shapes.DomainModel
             }
 
             private readonly Movable _movable;
-            private readonly History _history;
+            private readonly Document _parent;
 
-            public Shape(Canvas canvas, int index, History history)
+            public Shape(Canvas canvas, int index, Document parent)
             {
                 _movable = new Movable(canvas, index);
-                _history = history;
+                _parent = parent;
             }
 
             public Common.Rectangle GetBoundingRect()
@@ -68,7 +68,8 @@ namespace Shapes.DomainModel
             {
                 if (!GetBoundingRect().Equals(rect))
                 {
-                    _history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+                    _parent._history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+                    _parent._dlc.Modify();
                 }
             }
         }
@@ -151,6 +152,7 @@ namespace Shapes.DomainModel
             _history = new History();
             _historyCanvas = new HistoryCanvas(_canvas, (ICommand command) => {
                 _history.AddAndExecuteCommand(command);
+                _dlc.Modify();
             });
             _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
                 if (!_suspendLayoutUpdatedEvent)
@@ -168,7 +170,7 @@ namespace Shapes.DomainModel
 
         public IShape GetShape(int index)
         {
-            return new Shape(_canvas, index, _history);
+            return new Shape(_canvas, index, this);
         }
 
         public void RemoveShape(int index)
@@ -215,12 +217,14 @@ namespace Shapes.DomainModel
         public void Undo()
         {
             _history.Undo();
+            _dlc.Modify();
             LayoutUpdatedEvent();
         }
 
         public void Redo()
         {
             _history.Redo();
+            _dlc.Modify();
             LayoutUpdatedEvent();
         }
 
