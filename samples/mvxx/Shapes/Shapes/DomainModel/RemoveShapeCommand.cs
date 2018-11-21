@@ -54,7 +54,8 @@ namespace Shapes.DomainModel
 
         protected override void UnexecuteImpl()
         {
-            _canvas.Insert(_index, _info.ValueOrFailure().type, _info.ValueOrFailure().rect);
+            var info = _info.ValueOrFailure();
+            _canvas.Insert(_index, info.type, info.rect);
             _info = Option.None<ShapeInfo>();
         }
     }

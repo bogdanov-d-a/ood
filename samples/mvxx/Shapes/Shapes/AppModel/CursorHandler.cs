@@ -33,6 +33,13 @@ namespace Shapes.AppModel
             public Common.Position startPos;
             public Common.Position curPos;
             public Option<CursorHandlerUtils.RectEdges> resize;
+
+            public MovingData(Common.Position startPos, Common.Position curPos, Option<CursorHandlerUtils.RectEdges> resize)
+            {
+                this.startPos = startPos;
+                this.curPos = curPos;
+                this.resize = resize;
+            }
         }
 
         private readonly IModel _model;
@@ -71,10 +78,8 @@ namespace Shapes.AppModel
                 throw new Exception();
             }
 
-            _movingData = Option.Some(new MovingData());
-            _movingData.ValueOrFailure().startPos = pos;
-            _movingData.ValueOrFailure().curPos = pos;
-            _movingData.ValueOrFailure().resize = Option.None<CursorHandlerUtils.RectEdges>();
+            var movingData = new MovingData(pos, pos, Option.None<CursorHandlerUtils.RectEdges>());
+            _movingData = Option.Some(movingData);
 
             if (_model.GetSelectionIndex() != -1)
             {
@@ -83,11 +88,11 @@ namespace Shapes.AppModel
 
                 if (edges.hor != CursorHandlerUtils.RectEdgeHor.None || edges.vert != CursorHandlerUtils.RectEdgeVert.None)
                 {
-                    _movingData.ValueOrFailure().resize = Option.Some(edges);
+                    movingData.resize = Option.Some(edges);
                 }
             }
 
-            if (!_movingData.ValueOrFailure().resize.HasValue)
+            if (!movingData.resize.HasValue)
             {
                 _model.SelectShape(-1);
                 SelectShapeAtPos(pos);
