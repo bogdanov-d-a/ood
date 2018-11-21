@@ -27,9 +27,10 @@ namespace Shapes
                 });
 
             CanvasView canvasView = new CanvasView();
-            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, shapeList, canvasView);
+            CanvasViewData canvasViewData = new CanvasViewData();
+            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, shapeList, canvasView, canvasViewData);
 
-            Application.Run(new Shapes(canvasView));
+            Application.Run(new Shapes(canvasView, canvasViewData));
         }
     }
 }

@@ -25,11 +25,6 @@ namespace Shapes
         private IList<IDrawable> _drawables = null;
         private Option<Common.Rectangle> _selectionRect = Option.None<Common.Rectangle>();
 
-        public Option<Common.Size> CanvasSize
-        {
-            get; set;
-        }
-
         public void Paint(IRenderTarget target)
         {
             if (_drawables == null)
@@ -64,35 +59,6 @@ namespace Shapes
         }
 
         public delegate void VoidDelegate();
-
-        public VoidDelegate CreateNewDocumentEvent;
-        public VoidDelegate OpenDocumentEvent;
-        public VoidDelegate SaveDocumentEvent;
-        public VoidDelegate SaveAsDocumentEvent;
-
-        public VoidDelegate AddRectangleEvent;
-        public VoidDelegate AddTriangleEvent;
-        public VoidDelegate AddCircleEvent;
-        public VoidDelegate RemoveShapeEvent;
-
-        public VoidDelegate UndoEvent;
-        public VoidDelegate RedoEvent;
-
         public event VoidDelegate LayoutUpdatedEvent;
-
-        public delegate void MouseDelegate(Common.Position pos);
-        public MouseDelegate MouseDownEvent;
-        public MouseDelegate MouseUpEvent;
-        public MouseDelegate MouseMoveEvent;
-
-        public delegate Option<string> RequestDocumentPathDelegate();
-        public RequestDocumentPathDelegate ShowOpenFileDialogEvent;
-        public RequestDocumentPathDelegate ShowSaveFileDialogEvent;
-
-        public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
-        public RequestUnsavedDocumentClosingDelegate ShowUnsavedDocumentClosePrompt;
-
-        public delegate bool BoolDelegate();
-        public BoolDelegate FormClosingEvent;
     }
 }

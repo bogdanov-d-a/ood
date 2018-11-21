@@ -69,14 +69,16 @@ namespace Shapes
         private readonly AppModel.AppModel _appModel;
         private readonly ShapeTypes.AbstractShapeList _shapeList;
         private readonly CanvasView _view;
+        private readonly CanvasViewData _viewData;
 
-        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, ShapeTypes.AbstractShapeList shapeList, CanvasView view)
+        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, ShapeTypes.AbstractShapeList shapeList, CanvasView view, CanvasViewData viewData)
         {
             _document = document;
             _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
             _shapeList = shapeList;
             _view = view;
+            _viewData = viewData;
 
             Initialize();
         }
@@ -119,40 +121,40 @@ namespace Shapes
             });
 
             _documentDelegateProxy.RequestDocumentOpenPathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _view.ShowOpenFileDialogEvent();
+                return _viewData.ShowOpenFileDialogEvent();
             });
 
             _documentDelegateProxy.RequestDocumentSavePathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _view.ShowSaveFileDialogEvent();
+                return _viewData.ShowSaveFileDialogEvent();
             });
 
             _documentDelegateProxy.RequestUnsavedDocumentClosingEvent += new DocumentDelegateProxy.RequestUnsavedDocumentClosingDelegate(() => {
-                return _view.ShowUnsavedDocumentClosePrompt();
+                return _viewData.ShowUnsavedDocumentClosePrompt();
             });
 
-            _view.CanvasSize = Option.Some(_appModel.CanvasSize);
-            _view.AddRectangleEvent += new CanvasView.VoidDelegate(_appModel.AddRectangle);
-            _view.AddTriangleEvent += new CanvasView.VoidDelegate(_appModel.AddTriangle);
-            _view.AddCircleEvent += new CanvasView.VoidDelegate(_appModel.AddCircle);
-            _view.RemoveShapeEvent += new CanvasView.VoidDelegate(_appModel.RemoveSelectedShape);
+            _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
+            _viewData.AddRectangleEvent += new CanvasViewData.VoidDelegate(_appModel.AddRectangle);
+            _viewData.AddTriangleEvent += new CanvasViewData.VoidDelegate(_appModel.AddTriangle);
+            _viewData.AddCircleEvent += new CanvasViewData.VoidDelegate(_appModel.AddCircle);
+            _viewData.RemoveShapeEvent += new CanvasViewData.VoidDelegate(_appModel.RemoveSelectedShape);
 
-            _view.CreateNewDocumentEvent += new CanvasView.VoidDelegate(() => {
+            _viewData.CreateNewDocumentEvent += new CanvasViewData.VoidDelegate(() => {
                 _document.New();
             });
-            _view.OpenDocumentEvent += new CanvasView.VoidDelegate(_document.Open);
-            _view.SaveDocumentEvent += new CanvasView.VoidDelegate(_document.Save);
-            _view.SaveAsDocumentEvent += new CanvasView.VoidDelegate(_document.SaveAs);
+            _viewData.OpenDocumentEvent += new CanvasViewData.VoidDelegate(_document.Open);
+            _viewData.SaveDocumentEvent += new CanvasViewData.VoidDelegate(_document.Save);
+            _viewData.SaveAsDocumentEvent += new CanvasViewData.VoidDelegate(_document.SaveAs);
 
-            _view.UndoEvent += new CanvasView.VoidDelegate(_appModel.ResetSelection);
-            _view.UndoEvent += new CanvasView.VoidDelegate(() => { _document.Undo(); });
-            _view.RedoEvent += new CanvasView.VoidDelegate(_appModel.ResetSelection);
-            _view.RedoEvent += new CanvasView.VoidDelegate(() => { _document.Redo(); });
+            _viewData.UndoEvent += new CanvasViewData.VoidDelegate(_appModel.ResetSelection);
+            _viewData.UndoEvent += new CanvasViewData.VoidDelegate(() => { _document.Undo(); });
+            _viewData.RedoEvent += new CanvasViewData.VoidDelegate(_appModel.ResetSelection);
+            _viewData.RedoEvent += new CanvasViewData.VoidDelegate(() => { _document.Redo(); });
 
-            _view.MouseDownEvent += new CanvasView.MouseDelegate(_appModel.BeginMove);
-            _view.MouseMoveEvent += new CanvasView.MouseDelegate(_appModel.Move);
-            _view.MouseUpEvent += new CanvasView.MouseDelegate(_appModel.EndMove);
+            _viewData.MouseDownEvent += new CanvasViewData.MouseDelegate(_appModel.BeginMove);
+            _viewData.MouseMoveEvent += new CanvasViewData.MouseDelegate(_appModel.Move);
+            _viewData.MouseUpEvent += new CanvasViewData.MouseDelegate(_appModel.EndMove);
 
-            _view.FormClosingEvent += new CanvasView.BoolDelegate(_document.New);
+            _viewData.FormClosingEvent += new CanvasViewData.BoolDelegate(_document.New);
         }
     }
 }

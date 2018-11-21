@@ -15,6 +15,7 @@ namespace Shapes
     {
         private const int DrawOffset = 50;
         private readonly CanvasView _canvasView;
+        private readonly CanvasViewData _canvasViewData;
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
@@ -66,7 +67,7 @@ namespace Shapes
             }
         }
 
-        public Shapes(CanvasView canvasView)
+        public Shapes(CanvasView canvasView, CanvasViewData canvasViewData)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -77,7 +78,9 @@ namespace Shapes
                 Invalidate();
             });
 
-            _canvasView.ShowOpenFileDialogEvent += new CanvasView.RequestDocumentPathDelegate(() => {
+            _canvasViewData = canvasViewData;
+
+            _canvasViewData.ShowOpenFileDialogEvent += new CanvasViewData.RequestDocumentPathDelegate(() => {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return Option.Some(openFileDialog.FileName);
@@ -85,7 +88,7 @@ namespace Shapes
                 return Option.None<string>();
             });
 
-            _canvasView.ShowSaveFileDialogEvent += new CanvasView.RequestDocumentPathDelegate(() => {
+            _canvasViewData.ShowSaveFileDialogEvent += new CanvasViewData.RequestDocumentPathDelegate(() => {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return Option.Some(saveFileDialog.FileName);
@@ -93,7 +96,7 @@ namespace Shapes
                 return Option.None<string>();
             });
 
-            _canvasView.ShowUnsavedDocumentClosePrompt += new CanvasView.RequestUnsavedDocumentClosingDelegate(() => {
+            _canvasViewData.ShowUnsavedDocumentClosePrompt += new CanvasViewData.RequestUnsavedDocumentClosingDelegate(() => {
                 DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
@@ -112,11 +115,11 @@ namespace Shapes
         {
             Graphics g = e.Graphics;
 
-            if (!_canvasView.CanvasSize.HasValue)
+            if (!_canvasViewData.CanvasSize.HasValue)
             {
                 return;
             }
-            Common.Size canvasSize = _canvasView.CanvasSize.ValueOrFailure();
+            Common.Size canvasSize = _canvasViewData.CanvasSize.ValueOrFailure();
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,
@@ -135,72 +138,72 @@ namespace Shapes
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            _canvasView.MouseDownEvent(GetMousePosition());
+            _canvasViewData.MouseDownEvent(GetMousePosition());
         }
 
         private void Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            _canvasView.MouseUpEvent(GetMousePosition());
+            _canvasViewData.MouseUpEvent(GetMousePosition());
         }
 
         private void Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            _canvasView.MouseMoveEvent(GetMousePosition());
+            _canvasViewData.MouseMoveEvent(GetMousePosition());
         }
 
         private void undoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.UndoEvent();
+            _canvasViewData.UndoEvent();
         }
 
         private void redoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.RedoEvent();
+            _canvasViewData.RedoEvent();
         }
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.AddRectangleEvent();
+            _canvasViewData.AddRectangleEvent();
         }
 
         private void addTriangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.AddTriangleEvent();
+            _canvasViewData.AddTriangleEvent();
         }
 
         private void addCircleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.AddCircleEvent();
+            _canvasViewData.AddCircleEvent();
         }
 
         private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.RemoveShapeEvent();
+            _canvasViewData.RemoveShapeEvent();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.CreateNewDocumentEvent();
+            _canvasViewData.CreateNewDocumentEvent();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.OpenDocumentEvent();
+            _canvasViewData.OpenDocumentEvent();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.SaveDocumentEvent();
+            _canvasViewData.SaveDocumentEvent();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.SaveAsDocumentEvent();
+            _canvasViewData.SaveAsDocumentEvent();
         }
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_canvasView.FormClosingEvent())
+            if (!_canvasViewData.FormClosingEvent())
             {
                 e.Cancel = true;
             }
