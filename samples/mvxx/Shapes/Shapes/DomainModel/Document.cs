@@ -244,7 +244,7 @@ namespace Shapes.DomainModel
         {
             ExecuteWithLayoutUpdatedEventSuspended(() => {
                 delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _canvas.AddShape(type, boundingRect);
+                    _canvas.InsertShape(_canvas.ShapeCount, type, boundingRect);
                 });
             });
             LayoutUpdatedEvent();

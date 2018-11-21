@@ -9,54 +9,34 @@ namespace Shapes.DomainModel
 {
     public class RemoveShapeCommand : AbstractCommand
     {
-        public interface IShape
-        {
-            Common.ShapeType GetShapeType();
-            Common.Rectangle GetBoundingRect();
-        }
-
         public interface ICanvas
         {
-            IShape GetAt(int index);
-            void Insert(int index, Common.ShapeType type, Common.Rectangle rect);
+            Canvas.IShape GetAt(int index);
+            void ReInsert(int index, Canvas.IShape shape);
             void RemoveAt(int index);
-        }
-
-        private struct ShapeInfo
-        {
-            public Common.ShapeType type;
-            public Common.Rectangle rect;
-
-            public ShapeInfo(Common.ShapeType type, Common.Rectangle rect)
-            {
-                this.type = type;
-                this.rect = rect;
-            }
         }
 
         private readonly ICanvas _canvas;
         private readonly int _index;
-        private Option<ShapeInfo> _info;
+        private Option<Canvas.IShape> _shape;
 
         public RemoveShapeCommand(ICanvas canvas, int index)
         {
             _canvas = canvas;
             _index = index;
-            _info = Option.None<ShapeInfo>();
+            _shape = Option.None<Canvas.IShape>();
         }
 
         protected override void ExecuteImpl()
         {
-            var shape = _canvas.GetAt(_index);
-            _info = Option.Some(new ShapeInfo(shape.GetShapeType(), shape.GetBoundingRect()));
+            _shape = Option.Some(_canvas.GetAt(_index));
             _canvas.RemoveAt(_index);
         }
 
         protected override void UnexecuteImpl()
         {
-            var info = _info.ValueOrFailure();
-            _canvas.Insert(_index, info.type, info.rect);
-            _info = Option.None<ShapeInfo>();
+            _canvas.ReInsert(_index, _shape.ValueOrFailure());
+            _shape = Option.None<Canvas.IShape>();
         }
     }
 }

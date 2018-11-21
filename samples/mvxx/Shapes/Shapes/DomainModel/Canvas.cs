@@ -17,6 +17,7 @@ namespace Shapes.DomainModel
         public interface IShapeList
         {
             void Insert(int index, Common.ShapeType type, Common.Rectangle rect);
+            void ReInsert(int index, IShape shape);
             IShape GetAt(int index);
             void RemoveAt(int index);
             int GetCount();
@@ -39,11 +40,6 @@ namespace Shapes.DomainModel
                 rectangle.Bottom < _canvasSize.height;
         }
 
-        public void AddShape(Common.ShapeType type, Common.Rectangle rect)
-        {
-            InsertShape(ShapeCount, type, rect);
-        }
-
         public void InsertShape(int index, Common.ShapeType type, Common.Rectangle rect)
         {
             if (!IsShapeInsideCanvas(rect))
@@ -51,6 +47,16 @@ namespace Shapes.DomainModel
                 throw new Exception();
             }
             _shapeList.Insert(index, type, rect);
+            LayoutUpdatedEvent();
+        }
+
+        public void ReInsertShape(int index, IShape shape)
+        {
+            if (!IsShapeInsideCanvas(shape.GetBoundingRect()))
+            {
+                throw new Exception();
+            }
+            _shapeList.ReInsert(index, shape);
             LayoutUpdatedEvent();
         }
 

@@ -15,6 +15,11 @@ namespace Shapes.ShapeTypes
             _shapeList.Insert(index, _factory.CreateShape(type, rect));
         }
 
+        public void ReInsertShape(int index, AbstractShape shape)
+        {
+            _shapeList.Insert(index, shape);
+        }
+
         public void RemoveAt(int index)
         {
             _shapeList.RemoveAt(index);

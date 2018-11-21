@@ -30,6 +30,11 @@ namespace Shapes.ShapeTypes
             {
                 _shape.SetBoundingRect(rect);
             }
+
+            public AbstractShape GetAbstractShape()
+            {
+                return _shape;
+            }
         }
 
         private readonly AbstractShapeList _list;
@@ -52,6 +57,11 @@ namespace Shapes.ShapeTypes
         public void Insert(int index, Common.ShapeType type, Common.Rectangle rect)
         {
             _list.InsertShape(index, type, rect);
+        }
+
+        public void ReInsert(int index, DomainModel.Canvas.IShape shape)
+        {
+            _list.ReInsertShape(index, ((Shape)shape).GetAbstractShape());
         }
 
         public void RemoveAt(int index)
