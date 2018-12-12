@@ -48,22 +48,23 @@
   <ItemGroup>
     <Compile Include="AppModel\CursorHandler.cs" />
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
-    <Compile Include="CanvasReaderWriter.cs" />
-    <Compile Include="CanvasView.cs" />
-    <Compile Include="CanvasViewData.cs" />
+    <Compile Include="Common\CanvasReaderWriter.cs" />
+    <Compile Include="View\CanvasView.cs" />
+    <Compile Include="View\CanvasViewData.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />
-    <Compile Include="DomainModel\AbstractCommand.cs" />
+    <Compile Include="DomainModel\Command\AbstractCommand.cs" />
     <Compile Include="DomainModel\Document.cs" />
     <Compile Include="DomainModel\DocumentLifecycleController.cs" />
     <Compile Include="DomainModel\History.cs" />
     <Compile Include="DomainModel\HistoryCanvas.cs" />
-    <Compile Include="DomainModel\ICommand.cs" />
-    <Compile Include="DomainModel\InsertShapeCommand.cs" />
-    <Compile Include="DomainModel\MoveShapeCommand.cs" />
-    <Compile Include="DomainModel\RemoveShapeCommand.cs" />
+    <Compile Include="DomainModel\Command\ICommand.cs" />
+    <Compile Include="DomainModel\Command\InsertShapeCommand.cs" />
+    <Compile Include="DomainModel\Command\MoveShapeCommand.cs" />
+    <Compile Include="DomainModel\Command\RemoveShapeCommand.cs" />
     <Compile Include="Presenter.cs" />
+    <Compile Include="Common\ShapeBoundsChecker.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,13 +75,6 @@
     <Compile Include="DomainModel\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShapeTypes\AbstractShape.cs" />
-    <Compile Include="ShapeTypes\CanvasShapeList.cs" />
-    <Compile Include="ShapeTypes\Circle.cs" />
-    <Compile Include="ShapeTypes\Rectangle.cs" />
-    <Compile Include="ShapeTypes\AbstractShapeFactory.cs" />
-    <Compile Include="ShapeTypes\AbstractShapeList.cs" />
-    <Compile Include="ShapeTypes\Triangle.cs" />
     <Compile Include="Common\ShapeType.cs" />
     <EmbeddedResource Include="Shapes.resx">
       <DependentUpon>Shapes.cs</DependentUpon>

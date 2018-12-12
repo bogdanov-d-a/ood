@@ -9,14 +9,11 @@ namespace Shapes.AppModel
 {
     public class AppModel
     {
-        public delegate bool HasPointInsideDelegate(int index, Common.Position pos);
-
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Document _document;
         private readonly CursorHandler _cursorHandler;
         private readonly CursorHandlerModel _cursorHandlerModel;
-        HasPointInsideDelegate _hasPointInside;
         private int _selectedIndex = -1;
 
         private class CursorHandlerModel : CursorHandler.IModel
@@ -34,14 +31,19 @@ namespace Shapes.AppModel
                     _index = index;
                 }
 
+                public DomainModel.Document.IShape GetShape()
+                {
+                    return _parent._document.GetShape(_index);
+                }
+
                 public Common.Rectangle GetBoundingRect()
                 {
-                    return _parent._document.GetShape(_index).GetBoundingRect();
+                    return GetShape().GetBoundingRect();
                 }
 
                 public bool HasPointInside(Common.Position pos)
                 {
-                    return _parent._hasPointInside(_index, pos);
+                    return ShapeBoundsChecker.IsInsideShape(new DomainModel.Canvas.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
                 }
 
                 public void SetBoundingRect(Common.Rectangle rect)
@@ -86,7 +88,7 @@ namespace Shapes.AppModel
             }
         }
 
-        public AppModel(DomainModel.Document document, HasPointInsideDelegate hasPointInside)
+        public AppModel(DomainModel.Document document)
         {
             _document = document;
             _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
@@ -96,7 +98,6 @@ namespace Shapes.AppModel
                 }
                 LayoutUpdatedEvent();
             });
-            _hasPointInside = hasPointInside;
             _cursorHandlerModel = new CursorHandlerModel(this);
             _cursorHandler = new CursorHandler(_cursorHandlerModel);
         }
@@ -122,7 +123,12 @@ namespace Shapes.AppModel
             AddShape(Common.ShapeType.Circle);
         }
 
-        public Common.Rectangle GetShapeBoundingRect(int index)
+        public DomainModel.Canvas.Shape GetShape(int index)
+        {
+            return new DomainModel.Canvas.Shape(_document.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
+        }
+
+        private Common.Rectangle GetShapeBoundingRect(int index)
         {
             if (index == _selectedIndex)
             {

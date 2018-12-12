@@ -18,17 +18,12 @@ namespace Shapes.DomainModel
                 _canvas = canvas;
             }
 
-            public void Add(Common.ShapeType type, Common.Rectangle rect)
+            public void Add(Canvas.Shape shape)
             {
-                _canvas.InsertShape(_canvas.ShapeCount, type, rect);
+                _canvas.InsertShape(_canvas.ShapeCount, shape);
             }
 
-            public void ReAdd(Canvas.IShape shape)
-            {
-                _canvas.ReInsertShape(_canvas.ShapeCount, shape);
-            }
-
-            public Canvas.IShape Get()
+            public Canvas.Shape Get()
             {
                 return _canvas.GetShape(_canvas.ShapeCount - 1);
             }
@@ -48,14 +43,14 @@ namespace Shapes.DomainModel
                 _canvas = canvas;
             }
 
-            public Canvas.IShape GetAt(int index)
+            public Canvas.Shape GetAt(int index)
             {
                 return _canvas.GetShape(index);
             }
 
-            public void ReInsert(int index, Canvas.IShape shape)
+            public void Insert(int index, Canvas.Shape shape)
             {
-                _canvas.ReInsertShape(index, shape);
+                _canvas.InsertShape(index, shape);
             }
 
             public void RemoveAt(int index)

@@ -16,19 +16,14 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ShapeTypes.AbstractShapeList shapeList = new ShapeTypes.AbstractShapeList();
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480), new ShapeTypes.CanvasShapeList(shapeList));
+            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
             Presenter.DocumentDelegateProxy documentDelegateProxy = new Presenter.DocumentDelegateProxy();
             DomainModel.Document document = new DomainModel.Document(documentDelegateProxy, canvas);
-            AppModel.AppModel appModel = new AppModel.AppModel(
-                document,
-                (int index, Common.Position pos) => {
-                    return shapeList.GetAt(index).HasPointInside(pos);
-                });
+            AppModel.AppModel appModel = new AppModel.AppModel(document);
 
             CanvasView canvasView = new CanvasView();
             CanvasViewData canvasViewData = new CanvasViewData();
-            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, shapeList, canvasView, canvasViewData);
+            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, canvasView, canvasViewData);
 
             Application.Run(new Shapes(canvasView, canvasViewData));
         }

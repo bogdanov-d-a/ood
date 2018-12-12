@@ -11,20 +11,20 @@ namespace Shapes.DomainModel
     {
         public interface ICanvas
         {
-            Canvas.IShape GetAt(int index);
-            void ReInsert(int index, Canvas.IShape shape);
+            Canvas.Shape GetAt(int index);
+            void Insert(int index, Canvas.Shape shape);
             void RemoveAt(int index);
         }
 
         private readonly ICanvas _canvas;
         private readonly int _index;
-        private Option<Canvas.IShape> _shape;
+        private Option<Canvas.Shape> _shape;
 
         public RemoveShapeCommand(ICanvas canvas, int index)
         {
             _canvas = canvas;
             _index = index;
-            _shape = Option.None<Canvas.IShape>();
+            _shape = Option.None<Canvas.Shape>();
         }
 
         protected override void ExecuteImpl()
@@ -35,8 +35,8 @@ namespace Shapes.DomainModel
 
         protected override void UnexecuteImpl()
         {
-            _canvas.ReInsert(_index, _shape.ValueOrFailure());
-            _shape = Option.None<Canvas.IShape>();
+            _canvas.Insert(_index, _shape.ValueOrFailure());
+            _shape = Option.None<Canvas.Shape>();
         }
     }
 }

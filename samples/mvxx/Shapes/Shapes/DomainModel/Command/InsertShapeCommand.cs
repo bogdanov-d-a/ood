@@ -9,9 +9,8 @@ namespace Shapes.DomainModel
     {
         public interface ICanvas
         {
-            void Add(Common.ShapeType type, Common.Rectangle rect);
-            void ReAdd(Canvas.IShape shape);
-            Canvas.IShape Get();
+            void Add(Canvas.Shape shape);
+            Canvas.Shape Get();
             void Remove();
         }
 
@@ -33,22 +32,22 @@ namespace Shapes.DomainModel
 
             void IShapeAdder.Add(ICanvas canvas)
             {
-                canvas.Add(_type, _rect);
+                canvas.Add(new Canvas.Shape(_type, _rect));
             }
         }
 
         private class ShapeReAdder : IShapeAdder
         {
-            private readonly Canvas.IShape _shape;
+            private readonly Canvas.Shape _shape;
 
-            public ShapeReAdder(Canvas.IShape shape)
+            public ShapeReAdder(Canvas.Shape shape)
             {
                 _shape = shape;
             }
 
             void IShapeAdder.Add(ICanvas canvas)
             {
-                canvas.ReAdd(_shape);
+                canvas.Add(_shape);
             }
         }
 

@@ -47,36 +47,17 @@ namespace Shapes
             public RequestUnsavedDocumentClosingDelegate RequestUnsavedDocumentClosingEvent;
         }
 
-        private class Drawable : CanvasView.IDrawable
-        {
-            private readonly ShapeTypes.AbstractShape _shape;
-            private readonly Common.Rectangle _rect;
-
-            public Drawable(ShapeTypes.AbstractShape shape, Common.Rectangle rect)
-            {
-                _shape = shape;
-                _rect = rect;
-            }
-
-            public void Draw(CanvasView.IRenderTarget target)
-            {
-                _shape.Draw(target, _rect);
-            }
-        }
-
         private readonly DomainModel.Document _document;
         private readonly DocumentDelegateProxy _documentDelegateProxy;
         private readonly AppModel.AppModel _appModel;
-        private readonly ShapeTypes.AbstractShapeList _shapeList;
         private readonly CanvasView _view;
         private readonly CanvasViewData _viewData;
 
-        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, ShapeTypes.AbstractShapeList shapeList, CanvasView view, CanvasViewData viewData)
+        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, CanvasView view, CanvasViewData viewData)
         {
             _document = document;
             _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
-            _shapeList = shapeList;
             _view = view;
             _viewData = viewData;
 
@@ -86,20 +67,21 @@ namespace Shapes
         private void Initialize()
         {
             _appModel.LayoutUpdatedEvent += new AppModel.AppModel.LayoutUpdatedDelegate(() => {
-                List<CanvasView.IDrawable> drawables = new List<CanvasView.IDrawable>();
+                _view.SetSelectionIndex(-1);
+
+                while (_view.ShapeCount > 0)
+                {
+                    _view.RemoveShape(0);
+                }
+
                 for (int i = 0; i < _appModel.ShapeCount; ++i)
                 {
-                    drawables.Add(new Drawable(_shapeList.GetAt(i), _appModel.GetShapeBoundingRect(i)));
+                    _view.AddShape(i, _appModel.GetShape(i));
                 }
 
-                Option<Common.Rectangle> selRect = Option.None<Common.Rectangle>();
-                int selIndex = _appModel.GetSelectedIndex();
-                if (selIndex != -1)
-                {
-                    selRect = Option.Some(_appModel.GetShapeBoundingRect(selIndex));
-                }
+                _view.SetSelectionIndex(_appModel.GetSelectedIndex());
 
-                _view.UpdateLayout(drawables, selRect);
+                _view.LayoutUpdatedEvent();
             });
 
             _documentDelegateProxy.OpenFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {

@@ -38,19 +38,19 @@ namespace Shapes.DomainModel
                     _index = index;
                 }
 
-                public Canvas.IShape GetShape()
+                public Canvas.Shape GetShape()
                 {
                     return _canvas.GetShape(_index);
                 }
 
                 public Common.Rectangle GetRect()
                 {
-                    return GetShape().GetBoundingRect();
+                    return GetShape().boundingRect;
                 }
 
                 public void SetRect(Common.Rectangle rect)
                 {
-                    GetShape().SetBoundingRect(rect);
+                    GetShape().boundingRect = rect;
                 }
             }
 
@@ -65,7 +65,7 @@ namespace Shapes.DomainModel
 
             public Common.ShapeType GetShapeType()
             {
-                return _movable.GetShape().GetShapeType();
+                return _movable.GetShape().type;
             }
 
             public Common.Rectangle GetBoundingRect()
@@ -244,7 +244,7 @@ namespace Shapes.DomainModel
         {
             ExecuteWithLayoutUpdatedEventSuspended(() => {
                 delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _canvas.InsertShape(_canvas.ShapeCount, type, boundingRect);
+                    _canvas.InsertShape(_canvas.ShapeCount, new Canvas.Shape(type, boundingRect));
                 });
             });
             LayoutUpdatedEvent();
