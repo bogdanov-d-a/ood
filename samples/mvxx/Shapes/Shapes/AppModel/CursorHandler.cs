@@ -25,7 +25,7 @@ namespace Shapes.AppModel
             int GetSelectionIndex();
 
             Common.Size GetCanvasSize();
-            void OnLayoutUpdated();
+            void OnShapeTransform();
         }
 
         private class MovingData
@@ -106,7 +106,7 @@ namespace Shapes.AppModel
                 return;
             }
             _movingData.ValueOrFailure().curPos = pos;
-            _model.OnLayoutUpdated();
+            _model.OnShapeTransform();
         }
 
         public Option<Common.Rectangle> GetTransformingRect()
@@ -171,7 +171,6 @@ namespace Shapes.AppModel
             }
 
             _movingData = Option.None<MovingData>();
-            _model.OnLayoutUpdated();
         }
     }
 }

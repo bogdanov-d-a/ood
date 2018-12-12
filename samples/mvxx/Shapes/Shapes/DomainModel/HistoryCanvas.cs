@@ -7,20 +7,30 @@ namespace Shapes.DomainModel
 {
     public class HistoryCanvas
     {
-        public delegate void AddCommandHandler(Command.ICommand command);
+        public interface IDelegate
+        {
+            void AddCommand(Command.ICommand command);
+
+            void OnInsertShape(int index);
+            void OnRemoveShape(int index);
+        }
 
         private class InsertionCanvas : Command.InsertShapeCommand.ICanvas
         {
             private readonly Canvas _canvas;
+            private readonly IDelegate _delegate;
 
-            public InsertionCanvas(Canvas canvas)
+            public InsertionCanvas(Canvas canvas, IDelegate delegate_)
             {
                 _canvas = canvas;
+                _delegate = delegate_;
             }
 
             public void Add(Common.Shape shape)
             {
-                _canvas.InsertShape(_canvas.ShapeCount, shape);
+                int index = _canvas.ShapeCount;
+                _canvas.InsertShape(index, shape);
+                _delegate.OnInsertShape(index);
             }
 
             public Common.Shape Get()
@@ -30,17 +40,21 @@ namespace Shapes.DomainModel
 
             public void Remove()
             {
-                _canvas.RemoveShape(_canvas.ShapeCount - 1);
+                int index = _canvas.ShapeCount - 1;
+                _canvas.RemoveShape(index);
+                _delegate.OnRemoveShape(index);
             }
         }
 
         private class DeletionCanvas : Command.RemoveShapeCommand.ICanvas
         {
             private readonly Canvas _canvas;
+            private readonly IDelegate _delegate;
 
-            public DeletionCanvas(Canvas canvas)
+            public DeletionCanvas(Canvas canvas, IDelegate delegate_)
             {
                 _canvas = canvas;
+                _delegate = delegate_;
             }
 
             public Common.Shape GetAt(int index)
@@ -51,33 +65,35 @@ namespace Shapes.DomainModel
             public void Insert(int index, Common.Shape shape)
             {
                 _canvas.InsertShape(index, shape);
+                _delegate.OnInsertShape(index);
             }
 
             public void RemoveAt(int index)
             {
                 _canvas.RemoveShape(index);
+                _delegate.OnRemoveShape(index);
             }
         }
 
-        private readonly AddCommandHandler _addCommandHandler;
+        private readonly IDelegate _delegate;
         private readonly InsertionCanvas _insertionCanvas;
         private readonly DeletionCanvas _deletionCanvas;
 
-        public HistoryCanvas(Canvas canvas, AddCommandHandler addCommandHandler)
+        public HistoryCanvas(Canvas canvas, IDelegate delegate_)
         {
-            _addCommandHandler = addCommandHandler;
-            _insertionCanvas = new InsertionCanvas(canvas);
-            _deletionCanvas = new DeletionCanvas(canvas);
+            _delegate = delegate_;
+            _insertionCanvas = new InsertionCanvas(canvas, _delegate);
+            _deletionCanvas = new DeletionCanvas(canvas, _delegate);
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
         {
-            _addCommandHandler(new Command.InsertShapeCommand(_insertionCanvas, type, rect));
+            _delegate.AddCommand(new Command.InsertShapeCommand(_insertionCanvas, type, rect));
         }
 
         public void RemoveShape(int index)
         {
-            _addCommandHandler(new Command.RemoveShapeCommand(_deletionCanvas, index));
+            _delegate.AddCommand(new Command.RemoveShapeCommand(_deletionCanvas, index));
         }
     }
 }

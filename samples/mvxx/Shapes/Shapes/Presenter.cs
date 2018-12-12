@@ -66,7 +66,7 @@ namespace Shapes
 
         private void Initialize()
         {
-            _appModel.LayoutUpdatedEvent += new AppModel.AppModel.LayoutUpdatedDelegate(() => {
+            _appModel.CompleteLayoutUpdateEvent += new AppModel.AppModel.VoidDelegate(() => {
                 _view.SetSelectionIndex(-1);
 
                 while (_view.ShapeCount > 0)
@@ -81,6 +81,27 @@ namespace Shapes
 
                 _view.SetSelectionIndex(_appModel.GetSelectedIndex());
 
+                _view.LayoutUpdatedEvent();
+            });
+
+            _appModel.ShapeInsertEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+                var shape = _document.GetShape(index);
+                _view.AddShape(index, new Common.Shape(shape.GetShapeType(), shape.GetBoundingRect()));
+                _view.LayoutUpdatedEvent();
+            });
+
+            _appModel.ShapeModifyEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+                _view.GetShape(index).boundingRect = _appModel.GetShape(index).boundingRect;
+                _view.LayoutUpdatedEvent();
+            });
+
+            _appModel.ShapeRemoveEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+                _view.RemoveShape(index);
+                _view.LayoutUpdatedEvent();
+            });
+
+            _appModel.SelectionChangeEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+                _view.SetSelectionIndex(index);
                 _view.LayoutUpdatedEvent();
             });
 

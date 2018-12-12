@@ -31,11 +31,13 @@ namespace Shapes.DomainModel
             {
                 private readonly Canvas _canvas;
                 private readonly int _index;
+                private readonly Document _document;
 
-                public Movable(Canvas canvas, int index)
+                public Movable(Canvas canvas, int index, Document document)
                 {
                     _canvas = canvas;
                     _index = index;
+                    _document = document;
                 }
 
                 public Common.Shape GetShape()
@@ -51,6 +53,8 @@ namespace Shapes.DomainModel
                 public void SetRect(Common.Rectangle rect)
                 {
                     GetShape().boundingRect = rect;
+                    _document._dlc.Modify();
+                    _document.ShapeModifyEvent(_index);
                 }
             }
 
@@ -59,7 +63,7 @@ namespace Shapes.DomainModel
 
             public Shape(Canvas canvas, int index, Document parent)
             {
-                _movable = new Movable(canvas, index);
+                _movable = new Movable(canvas, index, parent);
                 _parent = parent;
             }
 
@@ -78,7 +82,6 @@ namespace Shapes.DomainModel
                 if (!GetBoundingRect().Equals(rect))
                 {
                     _parent._history.AddAndExecuteCommand(new Command.MoveShapeCommand(_movable, rect));
-                    _parent._dlc.Modify();
                 }
             }
         }
@@ -96,7 +99,7 @@ namespace Shapes.DomainModel
             {
                 _parent._canvas.RemoveAllShapes();
                 _parent._history.Clear();
-                _parent.LayoutUpdatedEvent();
+                _parent.CompleteLayoutUpdateEvent();
             }
 
             public void OnOpenDocument(string path)
@@ -125,6 +128,33 @@ namespace Shapes.DomainModel
             }
         }
 
+        private class HistoryCanvasDelegate : HistoryCanvas.IDelegate
+        {
+            private readonly Document _parent;
+
+            public HistoryCanvasDelegate(Document parent)
+            {
+                _parent = parent;
+            }
+
+            void HistoryCanvas.IDelegate.AddCommand(Command.ICommand command)
+            {
+                _parent._history.AddAndExecuteCommand(command);
+            }
+
+            void HistoryCanvas.IDelegate.OnInsertShape(int index)
+            {
+                _parent._dlc.Modify();
+                _parent.ShapeInsertEvent(index);
+            }
+
+            void HistoryCanvas.IDelegate.OnRemoveShape(int index)
+            {
+                _parent._dlc.Modify();
+                _parent.ShapeRemoveEvent(index);
+            }
+        }
+
         private readonly IDelegate _delegate;
         private readonly Canvas _canvas;
         private readonly History _history;
@@ -136,10 +166,7 @@ namespace Shapes.DomainModel
             _delegate = delegate_;
             _canvas = canvas;
             _history = new History();
-            _historyCanvas = new HistoryCanvas(_canvas, (Command.ICommand command) => {
-                _history.AddAndExecuteCommand(command);
-                _dlc.Modify();
-            });
+            _historyCanvas = new HistoryCanvas(_canvas, new HistoryCanvasDelegate(this));
             _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerDelegate(this));
         }
 
@@ -197,15 +224,11 @@ namespace Shapes.DomainModel
         public void Undo()
         {
             _history.Undo();
-            _dlc.Modify();
-            LayoutUpdatedEvent();
         }
 
         public void Redo()
         {
             _history.Redo();
-            _dlc.Modify();
-            LayoutUpdatedEvent();
         }
 
         public delegate void AddShapeDelegate(Common.ShapeType type, Common.Rectangle boundingRect);
@@ -216,10 +239,15 @@ namespace Shapes.DomainModel
             delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
                 _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
             });
-            LayoutUpdatedEvent();
+            CompleteLayoutUpdateEvent();
         }
 
-        public delegate void LayoutUpdatedDelegate();
-        public event LayoutUpdatedDelegate LayoutUpdatedEvent;
+        public delegate void VoidDelegate();
+        public event VoidDelegate CompleteLayoutUpdateEvent;
+
+        public delegate void IndexDelegate(int index);
+        public event IndexDelegate ShapeInsertEvent;
+        public event IndexDelegate ShapeModifyEvent;
+        public event IndexDelegate ShapeRemoveEvent;
     }
 }

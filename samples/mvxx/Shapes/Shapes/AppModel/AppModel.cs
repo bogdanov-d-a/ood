@@ -77,9 +77,13 @@ namespace Shapes.AppModel
                 return _parent.ShapeCount;
             }
 
-            public void OnLayoutUpdated()
+            public void OnShapeTransform()
             {
-                _parent.LayoutUpdatedEvent();
+                int index = _parent.GetSelectedIndex();
+                if (index != -1)
+                {
+                    _parent.ShapeModifyEvent(index);
+                }
             }
 
             public void SelectShape(int index)
@@ -91,12 +95,22 @@ namespace Shapes.AppModel
         public AppModel(DomainModel.Document document)
         {
             _document = document;
-            _document.LayoutUpdatedEvent += new DomainModel.Document.LayoutUpdatedDelegate(() => {
+            _document.CompleteLayoutUpdateEvent += new DomainModel.Document.VoidDelegate(() => {
+                _selectedIndex = -1;
+                CompleteLayoutUpdateEvent();
+            });
+            _document.ShapeInsertEvent += new DomainModel.Document.IndexDelegate((int index) => {
+                ShapeInsertEvent(index);
+            });
+            _document.ShapeModifyEvent += new DomainModel.Document.IndexDelegate((int index) => {
+                ShapeModifyEvent(index);
+            });
+            _document.ShapeRemoveEvent += new DomainModel.Document.IndexDelegate((int index) => {
                 if (_selectedIndex >= _document.ShapeCount)
                 {
                     _selectedIndex = -1;
                 }
-                LayoutUpdatedEvent();
+                ShapeRemoveEvent(index);
             });
             _cursorHandlerModel = new CursorHandlerModel(this);
             _cursorHandler = new CursorHandler(_cursorHandlerModel);
@@ -105,7 +119,6 @@ namespace Shapes.AppModel
         private void AddShape(Common.ShapeType type)
         {
             _document.AddShape(type, defRect);
-            LayoutUpdatedEvent();
         }
 
         public void AddRectangle()
@@ -149,7 +162,7 @@ namespace Shapes.AppModel
         private void SelectShape(int index)
         {
             _selectedIndex = index;
-            LayoutUpdatedEvent();
+            SelectionChangeEvent(_selectedIndex);
         }
 
         public void RemoveSelectedShape()
@@ -158,8 +171,8 @@ namespace Shapes.AppModel
             {
                 int tmpSelectedIndex = _selectedIndex;
                 _selectedIndex = -1;
+                SelectionChangeEvent(_selectedIndex);
                 _document.RemoveShape(tmpSelectedIndex);
-                LayoutUpdatedEvent();
             }
         }
 
@@ -197,7 +210,13 @@ namespace Shapes.AppModel
             }
         }
 
-        public delegate void LayoutUpdatedDelegate();
-        public event LayoutUpdatedDelegate LayoutUpdatedEvent;
+        public delegate void VoidDelegate();
+        public event VoidDelegate CompleteLayoutUpdateEvent;
+
+        public delegate void IndexDelegate(int index);
+        public event IndexDelegate ShapeInsertEvent;
+        public event IndexDelegate ShapeModifyEvent;
+        public event IndexDelegate ShapeRemoveEvent;
+        public event IndexDelegate SelectionChangeEvent;
     }
 }
