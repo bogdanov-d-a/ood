@@ -38,7 +38,7 @@ namespace Shapes.DomainModel
                     _index = index;
                 }
 
-                public Canvas.Shape GetShape()
+                public Common.Shape GetShape()
                 {
                     return _canvas.GetShape(_index);
                 }
@@ -244,7 +244,7 @@ namespace Shapes.DomainModel
         {
             ExecuteWithLayoutUpdatedEventSuspended(() => {
                 delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _canvas.InsertShape(_canvas.ShapeCount, new Canvas.Shape(type, boundingRect));
+                    _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
                 });
             });
             LayoutUpdatedEvent();

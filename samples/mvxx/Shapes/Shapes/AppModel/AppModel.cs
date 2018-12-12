@@ -43,7 +43,7 @@ namespace Shapes.AppModel
 
                 public bool HasPointInside(Common.Position pos)
                 {
-                    return ShapeBoundsChecker.IsInsideShape(new DomainModel.Canvas.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
+                    return ShapeBoundsChecker.IsInsideShape(new Common.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
                 }
 
                 public void SetBoundingRect(Common.Rectangle rect)
@@ -123,9 +123,9 @@ namespace Shapes.AppModel
             AddShape(Common.ShapeType.Circle);
         }
 
-        public DomainModel.Canvas.Shape GetShape(int index)
+        public Common.Shape GetShape(int index)
         {
-            return new DomainModel.Canvas.Shape(_document.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
+            return new Common.Shape(_document.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
         }
 
         private Common.Rectangle GetShapeBoundingRect(int index)

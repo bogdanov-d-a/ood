@@ -17,7 +17,7 @@ namespace Shapes
             void DrawSelectionRectangle(Common.Rectangle rect);
         }
 
-        private List<DomainModel.Canvas.Shape> _shapes = new List<DomainModel.Canvas.Shape>();
+        private List<Common.Shape> _shapes = new List<Common.Shape>();
         private int _selectionIndex = -1;
 
         public void Paint(IRenderTarget target)
@@ -54,12 +54,12 @@ namespace Shapes
             }
         }
 
-        public void AddShape(int index, DomainModel.Canvas.Shape shape)
+        public void AddShape(int index, Common.Shape shape)
         {
             _shapes.Insert(index, shape);
         }
 
-        public DomainModel.Canvas.Shape GetShape(int index)
+        public Common.Shape GetShape(int index)
         {
             return _shapes.ElementAt(index);
         }

@@ -18,12 +18,12 @@ namespace Shapes.DomainModel
                 _canvas = canvas;
             }
 
-            public void Add(Canvas.Shape shape)
+            public void Add(Common.Shape shape)
             {
                 _canvas.InsertShape(_canvas.ShapeCount, shape);
             }
 
-            public Canvas.Shape Get()
+            public Common.Shape Get()
             {
                 return _canvas.GetShape(_canvas.ShapeCount - 1);
             }
@@ -43,12 +43,12 @@ namespace Shapes.DomainModel
                 _canvas = canvas;
             }
 
-            public Canvas.Shape GetAt(int index)
+            public Common.Shape GetAt(int index)
             {
                 return _canvas.GetShape(index);
             }
 
-            public void Insert(int index, Canvas.Shape shape)
+            public void Insert(int index, Common.Shape shape)
             {
                 _canvas.InsertShape(index, shape);
             }

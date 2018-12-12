@@ -7,20 +7,8 @@ namespace Shapes.DomainModel
 {
     public class Canvas
     {
-        public class Shape
-        {
-            public Common.ShapeType type;
-            public Common.Rectangle boundingRect;
-
-            public Shape(Common.ShapeType type, Common.Rectangle boundingRect)
-            {
-                this.type = type;
-                this.boundingRect = boundingRect;
-            }
-        }
-
         private readonly Common.Size _canvasSize;
-        private readonly List<Shape> _shapeList = new List<Shape>();
+        private readonly List<Common.Shape> _shapeList = new List<Common.Shape>();
 
         public Canvas(Common.Size canvasSize)
         {
@@ -35,7 +23,7 @@ namespace Shapes.DomainModel
                 rectangle.Bottom < _canvasSize.height;
         }
 
-        public void InsertShape(int index, Shape shape)
+        public void InsertShape(int index, Common.Shape shape)
         {
             if (!IsShapeInsideCanvas(shape.boundingRect))
             {
@@ -45,7 +33,7 @@ namespace Shapes.DomainModel
             LayoutUpdatedEvent();
         }
 
-        public Shape GetShape(int index)
+        public Common.Shape GetShape(int index)
         {
             return _shapeList.ElementAt(index);
         }

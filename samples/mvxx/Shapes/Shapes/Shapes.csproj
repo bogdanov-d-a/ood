@@ -49,6 +49,7 @@
     <Compile Include="AppModel\CursorHandler.cs" />
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
     <Compile Include="Common\CanvasReaderWriter.cs" />
+    <Compile Include="Common\Shape.cs" />
     <Compile Include="View\CanvasView.cs" />
     <Compile Include="View\CanvasViewData.cs" />
     <Compile Include="Common\Position.cs" />

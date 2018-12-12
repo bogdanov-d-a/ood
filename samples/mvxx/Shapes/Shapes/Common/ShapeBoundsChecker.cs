@@ -77,7 +77,7 @@ namespace Shapes
                 (1.0 * Sqr(pos.y - origin.y) / Sqr(radius.height)) < 1;
         }
 
-        public static bool IsInsideShape(DomainModel.Canvas.Shape shape, Common.Position pos)
+        public static bool IsInsideShape(Common.Shape shape, Common.Position pos)
         {
             switch (shape.type)
             {
