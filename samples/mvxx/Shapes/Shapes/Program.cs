@@ -21,8 +21,8 @@ namespace Shapes
             DomainModel.Document document = new DomainModel.Document(documentDelegateProxy, canvas);
             AppModel.AppModel appModel = new AppModel.AppModel(document);
 
-            CanvasView canvasView = new CanvasView();
-            CanvasViewData canvasViewData = new CanvasViewData();
+            View.CanvasView canvasView = new View.CanvasView();
+            View.CanvasViewData canvasViewData = new View.CanvasViewData();
             Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, canvasView, canvasViewData);
 
             Application.Run(new Shapes(canvasView, canvasViewData));

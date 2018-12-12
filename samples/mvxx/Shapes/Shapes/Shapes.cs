@@ -14,8 +14,8 @@ namespace Shapes
     public partial class Shapes : Form
     {
         private const int DrawOffset = 50;
-        private readonly CanvasView _canvasView;
-        private readonly CanvasViewData _canvasViewData;
+        private readonly View.CanvasView _canvasView;
+        private readonly View.CanvasViewData _canvasViewData;
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
@@ -25,7 +25,7 @@ namespace Shapes
                 rect.Height);
         }
 
-        private class RenderTarget : CanvasView.IRenderTarget
+        private class RenderTarget : View.CanvasView.IRenderTarget
         {
             private Graphics g;
 
@@ -67,20 +67,20 @@ namespace Shapes
             }
         }
 
-        public Shapes(CanvasView canvasView, CanvasViewData canvasViewData)
+        public Shapes(View.CanvasView canvasView, View.CanvasViewData canvasViewData)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             _canvasView = canvasView;
 
-            _canvasView.LayoutUpdatedEvent += new CanvasView.VoidDelegate(() => {
+            _canvasView.LayoutUpdatedEvent += new View.CanvasView.VoidDelegate(() => {
                 Invalidate();
             });
 
             _canvasViewData = canvasViewData;
 
-            _canvasViewData.ShowOpenFileDialogEvent += new CanvasViewData.RequestDocumentPathDelegate(() => {
+            _canvasViewData.ShowOpenFileDialogEvent += new View.CanvasViewData.RequestDocumentPathDelegate(() => {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return Option.Some(openFileDialog.FileName);
@@ -88,7 +88,7 @@ namespace Shapes
                 return Option.None<string>();
             });
 
-            _canvasViewData.ShowSaveFileDialogEvent += new CanvasViewData.RequestDocumentPathDelegate(() => {
+            _canvasViewData.ShowSaveFileDialogEvent += new View.CanvasViewData.RequestDocumentPathDelegate(() => {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return Option.Some(saveFileDialog.FileName);
@@ -96,7 +96,7 @@ namespace Shapes
                 return Option.None<string>();
             });
 
-            _canvasViewData.ShowUnsavedDocumentClosePrompt += new CanvasViewData.RequestUnsavedDocumentClosingDelegate(() => {
+            _canvasViewData.ShowUnsavedDocumentClosePrompt += new View.CanvasViewData.RequestUnsavedDocumentClosingDelegate(() => {
                 DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
