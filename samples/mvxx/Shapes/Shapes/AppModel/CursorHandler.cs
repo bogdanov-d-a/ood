@@ -167,6 +167,7 @@ namespace Shapes.AppModel
             var rectOpt = GetTransformingRect();
             if (rectOpt.HasValue)
             {
+                _movingData = Option.None<MovingData>();
                 _model.GetShape(_model.GetSelectionIndex()).SetBoundingRect(rectOpt.ValueOrFailure());
             }
 
