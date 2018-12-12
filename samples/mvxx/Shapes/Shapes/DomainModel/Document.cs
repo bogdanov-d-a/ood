@@ -83,26 +83,6 @@ namespace Shapes.DomainModel
             }
         }
 
-        private delegate void VoidDelegate();
-
-        private void ExecuteWithLayoutUpdatedEventSuspended(VoidDelegate delegate_)
-        {
-            if (_suspendLayoutUpdatedEvent)
-            {
-                throw new Exception();
-            }
-            _suspendLayoutUpdatedEvent = true;
-
-            try
-            {
-                delegate_();
-            }
-            finally
-            {
-                _suspendLayoutUpdatedEvent = false;
-            }
-        }
-
         private class DocumentLifecycleControllerDelegate : DocumentLifecycleController.IDelegate
         {
             private readonly Document _parent;
@@ -114,10 +94,8 @@ namespace Shapes.DomainModel
 
             public void OnEraseMemoryDocument()
             {
-                _parent.ExecuteWithLayoutUpdatedEventSuspended(() => {
-                    _parent._canvas.RemoveAllShapes();
-                    _parent._history.Clear();
-                });
+                _parent._canvas.RemoveAllShapes();
+                _parent._history.Clear();
                 _parent.LayoutUpdatedEvent();
             }
 
@@ -152,7 +130,6 @@ namespace Shapes.DomainModel
         private readonly History _history;
         private readonly HistoryCanvas _historyCanvas;
         private readonly DocumentLifecycleController _dlc;
-        private bool _suspendLayoutUpdatedEvent = false;
 
         public Document(IDelegate delegate_, Canvas canvas)
         {
@@ -162,12 +139,6 @@ namespace Shapes.DomainModel
             _historyCanvas = new HistoryCanvas(_canvas, (ICommand command) => {
                 _history.AddAndExecuteCommand(command);
                 _dlc.Modify();
-            });
-            _canvas.LayoutUpdatedEvent += new Canvas.LayoutUpdatedDelegate(() => {
-                if (!_suspendLayoutUpdatedEvent)
-                {
-                    LayoutUpdatedEvent();
-                }
             });
             _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerDelegate(this));
         }
@@ -242,10 +213,8 @@ namespace Shapes.DomainModel
 
         public void ReplaceCanvasData(AddShapesDelegate delegate_)
         {
-            ExecuteWithLayoutUpdatedEventSuspended(() => {
-                delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
-                });
+            delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
+                _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
             });
             LayoutUpdatedEvent();
         }

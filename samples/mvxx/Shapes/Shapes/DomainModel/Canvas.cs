@@ -30,7 +30,6 @@ namespace Shapes.DomainModel
                 throw new Exception();
             }
             _shapeList.Insert(index, shape);
-            LayoutUpdatedEvent();
         }
 
         public Common.Shape GetShape(int index)
@@ -41,13 +40,11 @@ namespace Shapes.DomainModel
         public void RemoveShape(int index)
         {
             _shapeList.RemoveAt(index);
-            LayoutUpdatedEvent();
         }
 
         public void RemoveAllShapes()
         {
             _shapeList.Clear();
-            LayoutUpdatedEvent();
         }
 
         public Common.Size CanvasSize
@@ -63,8 +60,5 @@ namespace Shapes.DomainModel
                 return _shapeList.Count;
             }
         }
-
-        public delegate void LayoutUpdatedDelegate();
-        public event LayoutUpdatedDelegate LayoutUpdatedEvent;
     }
 }
