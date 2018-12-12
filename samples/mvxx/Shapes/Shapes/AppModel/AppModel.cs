@@ -43,7 +43,7 @@ namespace Shapes.AppModel
 
                 public bool HasPointInside(Common.Position pos)
                 {
-                    return ShapeBoundsChecker.IsInsideShape(new Common.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
+                    return Utils.ShapeBoundsChecker.IsInsideShape(new Common.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
                 }
 
                 public void SetBoundingRect(Common.Rectangle rect)

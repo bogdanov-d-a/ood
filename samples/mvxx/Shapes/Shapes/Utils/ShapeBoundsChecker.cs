@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Shapes
+namespace Shapes.Utils
 {
     public class ShapeBoundsChecker
     {

@@ -86,14 +86,14 @@ namespace Shapes
 
             _documentDelegateProxy.OpenFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
                 _document.ReplaceCanvasData((DomainModel.Document.AddShapeDelegate delegate_) => {
-                    CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
+                    Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
                         delegate_(type, boundingRect);
                     });
                 });
             });
 
             _documentDelegateProxy.SaveFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
-                CanvasReaderWriter.Write((CanvasReaderWriter.WriteShapeDelegate delegate_) => {
+                Utils.CanvasReaderWriter.Write((Utils.CanvasReaderWriter.WriteShapeDelegate delegate_) => {
                     for (int i = 0; i < _document.ShapeCount; ++i)
                     {
                         var shape = _document.GetShape(i);
