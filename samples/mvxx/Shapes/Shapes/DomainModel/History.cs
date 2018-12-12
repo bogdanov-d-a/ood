@@ -7,8 +7,8 @@ namespace Shapes.DomainModel
 {
     public class History
     {
-        private readonly LinkedList<ICommand> _list = new LinkedList<ICommand>();
-        private LinkedListNode<ICommand> _lastExecuted = null;
+        private readonly LinkedList<Command.ICommand> _list = new LinkedList<Command.ICommand>();
+        private LinkedListNode<Command.ICommand> _lastExecuted = null;
 
         private void RemoveTail()
         {
@@ -23,7 +23,7 @@ namespace Shapes.DomainModel
             }
         }
 
-        public void AddAndExecuteCommand(ICommand command)
+        public void AddAndExecuteCommand(Command.ICommand command)
         {
             command.Execute();
             RemoveTail();

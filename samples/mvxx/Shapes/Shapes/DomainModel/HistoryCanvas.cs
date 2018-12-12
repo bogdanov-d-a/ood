@@ -7,9 +7,9 @@ namespace Shapes.DomainModel
 {
     public class HistoryCanvas
     {
-        public delegate void AddCommandHandler(ICommand command);
+        public delegate void AddCommandHandler(Command.ICommand command);
 
-        private class InsertionCanvas : InsertShapeCommand.ICanvas
+        private class InsertionCanvas : Command.InsertShapeCommand.ICanvas
         {
             private readonly Canvas _canvas;
 
@@ -34,7 +34,7 @@ namespace Shapes.DomainModel
             }
         }
 
-        private class DeletionCanvas : RemoveShapeCommand.ICanvas
+        private class DeletionCanvas : Command.RemoveShapeCommand.ICanvas
         {
             private readonly Canvas _canvas;
 
@@ -72,12 +72,12 @@ namespace Shapes.DomainModel
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
         {
-            _addCommandHandler(new InsertShapeCommand(_insertionCanvas, type, rect));
+            _addCommandHandler(new Command.InsertShapeCommand(_insertionCanvas, type, rect));
         }
 
         public void RemoveShape(int index)
         {
-            _addCommandHandler(new RemoveShapeCommand(_deletionCanvas, index));
+            _addCommandHandler(new Command.RemoveShapeCommand(_deletionCanvas, index));
         }
     }
 }

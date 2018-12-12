@@ -27,7 +27,7 @@ namespace Shapes.DomainModel
 
         private class Shape : IShape
         {
-            private class Movable : MoveShapeCommand.IMovable
+            private class Movable : Command.MoveShapeCommand.IMovable
             {
                 private readonly Canvas _canvas;
                 private readonly int _index;
@@ -77,7 +77,7 @@ namespace Shapes.DomainModel
             {
                 if (!GetBoundingRect().Equals(rect))
                 {
-                    _parent._history.AddAndExecuteCommand(new MoveShapeCommand(_movable, rect));
+                    _parent._history.AddAndExecuteCommand(new Command.MoveShapeCommand(_movable, rect));
                     _parent._dlc.Modify();
                 }
             }
@@ -136,7 +136,7 @@ namespace Shapes.DomainModel
             _delegate = delegate_;
             _canvas = canvas;
             _history = new History();
-            _historyCanvas = new HistoryCanvas(_canvas, (ICommand command) => {
+            _historyCanvas = new HistoryCanvas(_canvas, (Command.ICommand command) => {
                 _history.AddAndExecuteCommand(command);
                 _dlc.Modify();
             });

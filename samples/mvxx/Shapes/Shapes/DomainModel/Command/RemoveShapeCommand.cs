@@ -5,7 +5,7 @@ using System.Text;
 using Optional;
 using Optional.Unsafe;
 
-namespace Shapes.DomainModel
+namespace Shapes.DomainModel.Command
 {
     public class RemoveShapeCommand : AbstractCommand
     {
