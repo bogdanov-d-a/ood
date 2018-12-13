@@ -203,7 +203,7 @@ namespace Shapes
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_canvasViewData.FormClosingEvent())
+            if (!_canvasView.ViewCommands.FormClosing())
             {
                 e.Cancel = true;
             }

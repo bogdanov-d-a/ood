@@ -100,6 +100,8 @@ namespace Shapes.View
             void MouseDown(Common.Position pos);
             void MouseUp(Common.Position pos);
             void MouseMove(Common.Position pos);
+
+            bool FormClosing();
         }
 
         public IViewCommands ViewCommands = null;

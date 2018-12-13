@@ -76,6 +76,11 @@ namespace Shapes
                 _parent._document.New();
             }
 
+            public bool FormClosing()
+            {
+                return _parent._document.New();
+            }
+
             public void MouseDown(Common.Position pos)
             {
                 _parent._appModel.BeginMove(pos);
@@ -214,8 +219,6 @@ namespace Shapes
             });
 
             _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
-
-            _viewData.FormClosingEvent += new View.CanvasViewData.BoolDelegate(_document.New);
         }
     }
 }
