@@ -88,6 +88,11 @@ namespace Shapes.View
             void OpenDocument();
             void SaveDocument();
             void SaveAsDocument();
+
+            void AddRectangle();
+            void AddTriangle();
+            void AddCircle();
+            void RemoveShape();
         }
 
         public IViewCommands ViewCommands = null;

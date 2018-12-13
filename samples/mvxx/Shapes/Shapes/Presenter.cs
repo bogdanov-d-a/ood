@@ -49,31 +49,51 @@ namespace Shapes
 
         private class ViewCommands : View.CanvasView.IViewCommands
         {
-            private readonly DomainModel.Document _document;
+            private readonly Presenter _parent;
 
-            public ViewCommands(DomainModel.Document document)
+            public ViewCommands(Presenter parent)
             {
-                _document = document;
+                _parent = parent;
+            }
+
+            public void AddCircle()
+            {
+                _parent._appModel.AddCircle();
+            }
+
+            public void AddRectangle()
+            {
+                _parent._appModel.AddRectangle();
+            }
+
+            public void AddTriangle()
+            {
+                _parent._appModel.AddTriangle();
             }
 
             public void CreateNewDocument()
             {
-                _document.New();
+                _parent._document.New();
             }
 
             public void OpenDocument()
             {
-                _document.Open();
+                _parent._document.Open();
+            }
+
+            public void RemoveShape()
+            {
+                _parent._appModel.RemoveSelectedShape();
             }
 
             public void SaveAsDocument()
             {
-                _document.SaveAs();
+                _parent._document.SaveAs();
             }
 
             public void SaveDocument()
             {
-                _document.Save();
+                _parent._document.Save();
             }
         }
 
@@ -89,7 +109,7 @@ namespace Shapes
             _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
             _view = view;
-            _view.ViewCommands = new ViewCommands(_document);
+            _view.ViewCommands = new ViewCommands(this);
             _viewData = viewData;
 
             Initialize();
@@ -167,10 +187,6 @@ namespace Shapes
             });
 
             _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
-            _viewData.AddRectangleEvent += new View.CanvasViewData.VoidDelegate(_appModel.AddRectangle);
-            _viewData.AddTriangleEvent += new View.CanvasViewData.VoidDelegate(_appModel.AddTriangle);
-            _viewData.AddCircleEvent += new View.CanvasViewData.VoidDelegate(_appModel.AddCircle);
-            _viewData.RemoveShapeEvent += new View.CanvasViewData.VoidDelegate(_appModel.RemoveSelectedShape);
 
             _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(_appModel.ResetSelection);
             _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(() => { _document.Undo(); });

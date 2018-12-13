@@ -16,11 +16,6 @@ namespace Shapes.View
 
         public delegate void VoidDelegate();
 
-        public VoidDelegate AddRectangleEvent;
-        public VoidDelegate AddTriangleEvent;
-        public VoidDelegate AddCircleEvent;
-        public VoidDelegate RemoveShapeEvent;
-
         public VoidDelegate UndoEvent;
         public VoidDelegate RedoEvent;
 

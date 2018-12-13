@@ -163,22 +163,22 @@ namespace Shapes
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.AddRectangleEvent();
+            _canvasView.ViewCommands.AddRectangle();
         }
 
         private void addTriangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.AddTriangleEvent();
+            _canvasView.ViewCommands.AddTriangle();
         }
 
         private void addCircleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.AddCircleEvent();
+            _canvasView.ViewCommands.AddCircle();
         }
 
         private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.RemoveShapeEvent();
+            _canvasView.ViewCommands.RemoveShape();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
