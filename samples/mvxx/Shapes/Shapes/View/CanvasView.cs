@@ -96,6 +96,10 @@ namespace Shapes.View
 
             void Undo();
             void Redo();
+
+            void MouseDown(Common.Position pos);
+            void MouseUp(Common.Position pos);
+            void MouseMove(Common.Position pos);
         }
 
         public IViewCommands ViewCommands = null;

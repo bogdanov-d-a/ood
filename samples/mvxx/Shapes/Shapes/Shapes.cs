@@ -138,17 +138,17 @@ namespace Shapes
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            _canvasViewData.MouseDownEvent(GetMousePosition());
+            _canvasView.ViewCommands.MouseDown(GetMousePosition());
         }
 
         private void Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            _canvasViewData.MouseUpEvent(GetMousePosition());
+            _canvasView.ViewCommands.MouseUp(GetMousePosition());
         }
 
         private void Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            _canvasViewData.MouseMoveEvent(GetMousePosition());
+            _canvasView.ViewCommands.MouseMove(GetMousePosition());
         }
 
         private void undoButton_Click(object sender, EventArgs e)

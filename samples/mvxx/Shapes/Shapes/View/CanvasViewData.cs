@@ -16,11 +16,6 @@ namespace Shapes.View
 
         public delegate void VoidDelegate();
 
-        public delegate void MouseDelegate(Common.Position pos);
-        public MouseDelegate MouseDownEvent;
-        public MouseDelegate MouseUpEvent;
-        public MouseDelegate MouseMoveEvent;
-
         public delegate Option<string> RequestDocumentPathDelegate();
         public RequestDocumentPathDelegate ShowOpenFileDialogEvent;
         public RequestDocumentPathDelegate ShowSaveFileDialogEvent;

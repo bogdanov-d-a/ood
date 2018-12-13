@@ -76,6 +76,21 @@ namespace Shapes
                 _parent._document.New();
             }
 
+            public void MouseDown(Common.Position pos)
+            {
+                _parent._appModel.BeginMove(pos);
+            }
+
+            public void MouseMove(Common.Position pos)
+            {
+                _parent._appModel.Move(pos);
+            }
+
+            public void MouseUp(Common.Position pos)
+            {
+                _parent._appModel.EndMove(pos);
+            }
+
             public void OpenDocument()
             {
                 _parent._document.Open();
@@ -199,10 +214,6 @@ namespace Shapes
             });
 
             _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
-
-            _viewData.MouseDownEvent += new View.CanvasViewData.MouseDelegate(_appModel.BeginMove);
-            _viewData.MouseMoveEvent += new View.CanvasViewData.MouseDelegate(_appModel.Move);
-            _viewData.MouseUpEvent += new View.CanvasViewData.MouseDelegate(_appModel.EndMove);
 
             _viewData.FormClosingEvent += new View.CanvasViewData.BoolDelegate(_document.New);
         }
