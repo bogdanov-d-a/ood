@@ -183,22 +183,22 @@ namespace Shapes
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.CreateNewDocumentEvent();
+            _canvasView.ViewCommands.CreateNewDocument();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.OpenDocumentEvent();
+            _canvasView.ViewCommands.OpenDocument();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.SaveDocumentEvent();
+            _canvasView.ViewCommands.SaveDocument();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasViewData.SaveAsDocumentEvent();
+            _canvasView.ViewCommands.SaveAsDocument();
         }
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)

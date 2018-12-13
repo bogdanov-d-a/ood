@@ -82,6 +82,16 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
+        public interface IViewCommands
+        {
+            void CreateNewDocument();
+            void OpenDocument();
+            void SaveDocument();
+            void SaveAsDocument();
+        }
+
+        public IViewCommands ViewCommands = null;
+
         public delegate void VoidDelegate();
         public VoidDelegate LayoutUpdatedEvent;
     }

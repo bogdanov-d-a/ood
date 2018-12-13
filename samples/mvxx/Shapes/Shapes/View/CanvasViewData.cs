@@ -16,11 +16,6 @@ namespace Shapes.View
 
         public delegate void VoidDelegate();
 
-        public VoidDelegate CreateNewDocumentEvent;
-        public VoidDelegate OpenDocumentEvent;
-        public VoidDelegate SaveDocumentEvent;
-        public VoidDelegate SaveAsDocumentEvent;
-
         public VoidDelegate AddRectangleEvent;
         public VoidDelegate AddTriangleEvent;
         public VoidDelegate AddCircleEvent;

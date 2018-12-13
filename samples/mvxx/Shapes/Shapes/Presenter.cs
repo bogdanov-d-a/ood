@@ -47,6 +47,36 @@ namespace Shapes
             public RequestUnsavedDocumentClosingDelegate RequestUnsavedDocumentClosingEvent;
         }
 
+        private class ViewCommands : View.CanvasView.IViewCommands
+        {
+            private readonly DomainModel.Document _document;
+
+            public ViewCommands(DomainModel.Document document)
+            {
+                _document = document;
+            }
+
+            public void CreateNewDocument()
+            {
+                _document.New();
+            }
+
+            public void OpenDocument()
+            {
+                _document.Open();
+            }
+
+            public void SaveAsDocument()
+            {
+                _document.SaveAs();
+            }
+
+            public void SaveDocument()
+            {
+                _document.Save();
+            }
+        }
+
         private readonly DomainModel.Document _document;
         private readonly DocumentDelegateProxy _documentDelegateProxy;
         private readonly AppModel.AppModel _appModel;
@@ -59,6 +89,7 @@ namespace Shapes
             _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
             _view = view;
+            _view.ViewCommands = new ViewCommands(_document);
             _viewData = viewData;
 
             Initialize();
@@ -140,13 +171,6 @@ namespace Shapes
             _viewData.AddTriangleEvent += new View.CanvasViewData.VoidDelegate(_appModel.AddTriangle);
             _viewData.AddCircleEvent += new View.CanvasViewData.VoidDelegate(_appModel.AddCircle);
             _viewData.RemoveShapeEvent += new View.CanvasViewData.VoidDelegate(_appModel.RemoveSelectedShape);
-
-            _viewData.CreateNewDocumentEvent += new View.CanvasViewData.VoidDelegate(() => {
-                _document.New();
-            });
-            _viewData.OpenDocumentEvent += new View.CanvasViewData.VoidDelegate(_document.Open);
-            _viewData.SaveDocumentEvent += new View.CanvasViewData.VoidDelegate(_document.Save);
-            _viewData.SaveAsDocumentEvent += new View.CanvasViewData.VoidDelegate(_document.SaveAs);
 
             _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(_appModel.ResetSelection);
             _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(() => { _document.Undo(); });
