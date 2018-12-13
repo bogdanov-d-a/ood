@@ -51,7 +51,6 @@
     <Compile Include="Utils\CanvasReaderWriter.cs" />
     <Compile Include="Common\Shape.cs" />
     <Compile Include="View\CanvasView.cs" />
-    <Compile Include="View\CanvasViewData.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="AppModel\AppModel.cs" />

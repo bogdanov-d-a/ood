@@ -15,7 +15,54 @@ namespace Shapes
     {
         private const int DrawOffset = 50;
         private readonly View.CanvasView _canvasView;
-        private readonly View.CanvasViewData _canvasViewData;
+
+        private class ViewHandlers : View.CanvasView.IViewHandlers
+        {
+            private readonly Shapes _parent;
+
+            public ViewHandlers(Shapes parent)
+            {
+                _parent = parent;
+            }
+
+            public void InvalidateLayout()
+            {
+                _parent.Invalidate();
+            }
+
+            public Option<string> ShowOpenFileDialog()
+            {
+                if (_parent.openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(_parent.openFileDialog.FileName);
+                }
+                return Option.None<string>();
+            }
+
+            public Option<string> ShowSaveFileDialog()
+            {
+                if (_parent.saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(_parent.saveFileDialog.FileName);
+                }
+                return Option.None<string>();
+            }
+
+            public DomainModel.DocumentLifecycleController.ClosingAction ShowUnsavedDocumentClosePrompt()
+            {
+                DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    return DomainModel.DocumentLifecycleController.ClosingAction.Save;
+                }
+                else if (result == DialogResult.No)
+                {
+                    return DomainModel.DocumentLifecycleController.ClosingAction.DontSave;
+                }
+                return DomainModel.DocumentLifecycleController.ClosingAction.DontClose;
+            }
+        }
 
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
@@ -67,59 +114,19 @@ namespace Shapes
             }
         }
 
-        public Shapes(View.CanvasView canvasView, View.CanvasViewData canvasViewData)
+        public Shapes(View.CanvasView canvasView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             _canvasView = canvasView;
-
-            _canvasView.LayoutUpdatedEvent += new View.CanvasView.VoidDelegate(() => {
-                Invalidate();
-            });
-
-            _canvasViewData = canvasViewData;
-
-            _canvasViewData.ShowOpenFileDialogEvent += new View.CanvasViewData.RequestDocumentPathDelegate(() => {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    return Option.Some(openFileDialog.FileName);
-                }
-                return Option.None<string>();
-            });
-
-            _canvasViewData.ShowSaveFileDialogEvent += new View.CanvasViewData.RequestDocumentPathDelegate(() => {
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    return Option.Some(saveFileDialog.FileName);
-                }
-                return Option.None<string>();
-            });
-
-            _canvasViewData.ShowUnsavedDocumentClosePrompt += new View.CanvasViewData.RequestUnsavedDocumentClosingDelegate(() => {
-                DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes)
-                {
-                    return DomainModel.DocumentLifecycleController.ClosingAction.Save;
-                }
-                else if (result == DialogResult.No)
-                {
-                    return DomainModel.DocumentLifecycleController.ClosingAction.DontSave;
-                }
-                return DomainModel.DocumentLifecycleController.ClosingAction.DontClose;
-            });
+            _canvasView.ViewHandlers = new ViewHandlers(this);
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-
-            if (!_canvasViewData.CanvasSize.HasValue)
-            {
-                return;
-            }
-            Common.Size canvasSize = _canvasViewData.CanvasSize.ValueOrFailure();
+            Common.Size canvasSize = _canvasView.ViewCommands.GetCanvasSize();
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,

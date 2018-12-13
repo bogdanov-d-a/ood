@@ -22,10 +22,9 @@ namespace Shapes
             AppModel.AppModel appModel = new AppModel.AppModel(document);
 
             View.CanvasView canvasView = new View.CanvasView();
-            View.CanvasViewData canvasViewData = new View.CanvasViewData();
-            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, canvasView, canvasViewData);
+            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, canvasView);
 
-            Application.Run(new Shapes(canvasView, canvasViewData));
+            Application.Run(new Shapes(canvasView));
         }
     }
 }

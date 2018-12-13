@@ -81,6 +81,11 @@ namespace Shapes
                 return _parent._document.New();
             }
 
+            public Common.Size GetCanvasSize()
+            {
+                return _parent._appModel.CanvasSize;
+            }
+
             public void MouseDown(Common.Position pos)
             {
                 _parent._appModel.BeginMove(pos);
@@ -133,16 +138,14 @@ namespace Shapes
         private readonly DocumentDelegateProxy _documentDelegateProxy;
         private readonly AppModel.AppModel _appModel;
         private readonly View.CanvasView _view;
-        private readonly View.CanvasViewData _viewData;
 
-        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, View.CanvasView view, View.CanvasViewData viewData)
+        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, View.CanvasView view)
         {
             _document = document;
             _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
             _view = view;
             _view.ViewCommands = new ViewCommands(this);
-            _viewData = viewData;
 
             Initialize();
         }
@@ -164,28 +167,28 @@ namespace Shapes
 
                 _view.SetSelectionIndex(_appModel.GetSelectedIndex());
 
-                _view.LayoutUpdatedEvent();
+                _view.ViewHandlers.InvalidateLayout();
             });
 
             _appModel.ShapeInsertEvent += new AppModel.AppModel.IndexDelegate((int index) => {
                 var shape = _document.GetShape(index);
                 _view.AddShape(index, new Common.Shape(shape.GetShapeType(), shape.GetBoundingRect()));
-                _view.LayoutUpdatedEvent();
+                _view.ViewHandlers.InvalidateLayout();
             });
 
             _appModel.ShapeModifyEvent += new AppModel.AppModel.IndexDelegate((int index) => {
                 _view.GetShape(index).boundingRect = _appModel.GetShape(index).boundingRect;
-                _view.LayoutUpdatedEvent();
+                _view.ViewHandlers.InvalidateLayout();
             });
 
             _appModel.ShapeRemoveEvent += new AppModel.AppModel.IndexDelegate((int index) => {
                 _view.RemoveShape(index);
-                _view.LayoutUpdatedEvent();
+                _view.ViewHandlers.InvalidateLayout();
             });
 
             _appModel.SelectionChangeEvent += new AppModel.AppModel.IndexDelegate((int index) => {
                 _view.SetSelectionIndex(index);
-                _view.LayoutUpdatedEvent();
+                _view.ViewHandlers.InvalidateLayout();
             });
 
             _documentDelegateProxy.OpenFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
@@ -207,18 +210,16 @@ namespace Shapes
             });
 
             _documentDelegateProxy.RequestDocumentOpenPathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _viewData.ShowOpenFileDialogEvent();
+                return _view.ViewHandlers.ShowOpenFileDialog();
             });
 
             _documentDelegateProxy.RequestDocumentSavePathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _viewData.ShowSaveFileDialogEvent();
+                return _view.ViewHandlers.ShowSaveFileDialog();
             });
 
             _documentDelegateProxy.RequestUnsavedDocumentClosingEvent += new DocumentDelegateProxy.RequestUnsavedDocumentClosingDelegate(() => {
-                return _viewData.ShowUnsavedDocumentClosePrompt();
+                return _view.ViewHandlers.ShowUnsavedDocumentClosePrompt();
             });
-
-            _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
         }
     }
 }

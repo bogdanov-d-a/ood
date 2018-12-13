@@ -102,11 +102,21 @@ namespace Shapes.View
             void MouseMove(Common.Position pos);
 
             bool FormClosing();
+
+            Common.Size GetCanvasSize();
         }
 
         public IViewCommands ViewCommands = null;
 
-        public delegate void VoidDelegate();
-        public VoidDelegate LayoutUpdatedEvent;
+        public interface IViewHandlers
+        {
+            void InvalidateLayout();
+
+            Option<string> ShowOpenFileDialog();
+            Option<string> ShowSaveFileDialog();
+            DomainModel.DocumentLifecycleController.ClosingAction ShowUnsavedDocumentClosePrompt();
+        }
+
+        public IViewHandlers ViewHandlers = null;
     }
 }
