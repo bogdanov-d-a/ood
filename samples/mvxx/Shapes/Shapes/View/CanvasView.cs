@@ -93,6 +93,9 @@ namespace Shapes.View
             void AddTriangle();
             void AddCircle();
             void RemoveShape();
+
+            void Undo();
+            void Redo();
         }
 
         public IViewCommands ViewCommands = null;

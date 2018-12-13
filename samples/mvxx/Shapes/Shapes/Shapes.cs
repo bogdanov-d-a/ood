@@ -153,12 +153,12 @@ namespace Shapes
 
         private void undoButton_Click(object sender, EventArgs e)
         {
-            _canvasViewData.UndoEvent();
+            _canvasView.ViewCommands.Undo();
         }
 
         private void redoButton_Click(object sender, EventArgs e)
         {
-            _canvasViewData.RedoEvent();
+            _canvasView.ViewCommands.Redo();
         }
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)

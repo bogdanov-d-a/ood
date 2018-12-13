@@ -81,6 +81,12 @@ namespace Shapes
                 _parent._document.Open();
             }
 
+            public void Redo()
+            {
+                _parent._appModel.ResetSelection();
+                _parent._document.Redo();
+            }
+
             public void RemoveShape()
             {
                 _parent._appModel.RemoveSelectedShape();
@@ -94,6 +100,12 @@ namespace Shapes
             public void SaveDocument()
             {
                 _parent._document.Save();
+            }
+
+            public void Undo()
+            {
+                _parent._appModel.ResetSelection();
+                _parent._document.Undo();
             }
         }
 
@@ -187,11 +199,6 @@ namespace Shapes
             });
 
             _viewData.CanvasSize = Option.Some(_appModel.CanvasSize);
-
-            _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(_appModel.ResetSelection);
-            _viewData.UndoEvent += new View.CanvasViewData.VoidDelegate(() => { _document.Undo(); });
-            _viewData.RedoEvent += new View.CanvasViewData.VoidDelegate(_appModel.ResetSelection);
-            _viewData.RedoEvent += new View.CanvasViewData.VoidDelegate(() => { _document.Redo(); });
 
             _viewData.MouseDownEvent += new View.CanvasViewData.MouseDelegate(_appModel.BeginMove);
             _viewData.MouseMoveEvent += new View.CanvasViewData.MouseDelegate(_appModel.Move);

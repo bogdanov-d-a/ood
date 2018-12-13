@@ -16,9 +16,6 @@ namespace Shapes.View
 
         public delegate void VoidDelegate();
 
-        public VoidDelegate UndoEvent;
-        public VoidDelegate RedoEvent;
-
         public delegate void MouseDelegate(Common.Position pos);
         public MouseDelegate MouseDownEvent;
         public MouseDelegate MouseUpEvent;
