@@ -27,61 +27,35 @@ namespace Shapes.DomainModel
 
         private class Shape : IShape
         {
-            private class Movable : Command.MoveShapeCommand.IMovable
+            private readonly Document _parent;
+            private readonly int _index;
+
+            public Shape(Document parent, int index)
             {
-                private readonly Canvas _canvas;
-                private readonly int _index;
-                private readonly Document _document;
-
-                public Movable(Canvas canvas, int index, Document document)
-                {
-                    _canvas = canvas;
-                    _index = index;
-                    _document = document;
-                }
-
-                public Common.Shape GetShape()
-                {
-                    return _canvas.GetShape(_index);
-                }
-
-                public Common.Rectangle GetRect()
-                {
-                    return GetShape().boundingRect;
-                }
-
-                public void SetRect(Common.Rectangle rect)
-                {
-                    GetShape().boundingRect = rect;
-                    _document._dlc.Modify();
-                    _document.ShapeModifyEvent(_index);
-                }
+                _parent = parent;
+                _index = index;
             }
 
-            private readonly Movable _movable;
-            private readonly Document _parent;
-
-            public Shape(Canvas canvas, int index, Document parent)
+            private Common.Shape GetShape()
             {
-                _movable = new Movable(canvas, index, parent);
-                _parent = parent;
+                return _parent._canvas.GetShape(_index);
             }
 
             public Common.ShapeType GetShapeType()
             {
-                return _movable.GetShape().type;
+                return GetShape().type;
             }
 
             public Common.Rectangle GetBoundingRect()
             {
-                return _movable.GetRect();
+                return GetShape().boundingRect;
             }
 
             public void SetBoundingRect(Common.Rectangle rect)
             {
                 if (!GetBoundingRect().Equals(rect))
                 {
-                    _parent._history.AddAndExecuteCommand(new Command.MoveShapeCommand(_movable, rect));
+                    _parent._historyCanvas.MoveShape(_index, rect);
                 }
             }
         }
@@ -153,6 +127,12 @@ namespace Shapes.DomainModel
                 _parent._dlc.Modify();
                 _parent.ShapeRemoveEvent(index);
             }
+
+            void HistoryCanvas.IDelegate.OnMoveShape(int index)
+            {
+                _parent._dlc.Modify();
+                _parent.ShapeModifyEvent(index);
+            }
         }
 
         private readonly IDelegate _delegate;
@@ -177,7 +157,7 @@ namespace Shapes.DomainModel
 
         public IShape GetShape(int index)
         {
-            return new Shape(_canvas, index, this);
+            return new Shape(this, index);
         }
 
         public void RemoveShape(int index)
