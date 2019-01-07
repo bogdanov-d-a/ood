@@ -40,11 +40,10 @@ namespace Shapes.DomainModel
 
             public void OnOpenDocument(string path)
             {
-                _parent.ReplaceCanvasData((AddShapeDelegate delegate_) => {
-                    Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
-                        delegate_(type, boundingRect);
-                    });
+                Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
+                    _parent._canvas.InsertShape(_parent._canvas.ShapeCount, new Common.Shape(type, boundingRect));
                 });
+                _parent.CompleteLayoutUpdateEvent();
             }
 
             public void OnSaveDocument(string path)
@@ -163,17 +162,6 @@ namespace Shapes.DomainModel
         public void SaveAs()
         {
             _dlc.Save(true);
-        }
-
-        public delegate void AddShapeDelegate(Common.ShapeType type, Common.Rectangle boundingRect);
-        public delegate void AddShapesDelegate(AddShapeDelegate delegate_);
-
-        public void ReplaceCanvasData(AddShapesDelegate delegate_)
-        {
-            delegate_((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
-            });
-            CompleteLayoutUpdateEvent();
         }
 
         public delegate void VoidDelegate();
