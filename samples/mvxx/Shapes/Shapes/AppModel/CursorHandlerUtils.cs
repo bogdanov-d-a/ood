@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.AppModel
 {
-    public class CursorHandlerUtils
+    class CursorHandlerUtils
     {
         private CursorHandlerUtils()
         {

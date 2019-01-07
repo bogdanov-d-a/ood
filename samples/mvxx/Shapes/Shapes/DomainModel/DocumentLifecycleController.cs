@@ -7,18 +7,12 @@ using Optional.Unsafe;
 
 namespace Shapes.DomainModel
 {
-    public class DocumentLifecycleController
+    class DocumentLifecycleController
     {
-        public enum ClosingAction {
-            Save,
-            DontSave,
-            DontClose
-        };
-
         public interface IDelegate
         {
             Option<string> RequestDocumentOpenPath();
-            ClosingAction RequestUnsavedDocumentClosing();
+            Common.ClosingAction RequestUnsavedDocumentClosing();
             Option<string> RequestDocumentSavePath();
 
             void OnEraseMemoryDocument();
@@ -40,12 +34,12 @@ namespace Shapes.DomainModel
             if (IsModified())
             {
                 var closingAction = _delegate.RequestUnsavedDocumentClosing();
-                if (closingAction == ClosingAction.DontClose)
+                if (closingAction == Common.ClosingAction.DontClose)
                 {
                     return false;
                 }
 
-                if (closingAction == ClosingAction.Save)
+                if (closingAction == Common.ClosingAction.Save)
                 {
                     if (!Save(false))
                     {

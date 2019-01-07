@@ -7,11 +7,9 @@ using Optional.Unsafe;
 
 namespace Shapes.AppModel
 {
-    public class AppModel
+    class AppModel
     {
-        private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
-
-        private readonly DomainModel.Document _document;
+        private readonly DomainModel.Facade _domainModel;
         private readonly CursorHandler _cursorHandler;
         private readonly CursorHandlerModel _cursorHandlerModel;
         private int _selectedIndex = -1;
@@ -31,9 +29,9 @@ namespace Shapes.AppModel
                     _index = index;
                 }
 
-                public DomainModel.Document.IShape GetShape()
+                public DomainModel.Facade.IShape GetShape()
                 {
-                    return _parent._document.GetShape(_index);
+                    return _parent._domainModel.GetShape(_index);
                 }
 
                 public Common.Rectangle GetBoundingRect()
@@ -48,7 +46,7 @@ namespace Shapes.AppModel
 
                 public void SetBoundingRect(Common.Rectangle rect)
                 {
-                    _parent._document.GetShape(_index).SetBoundingRect(rect);
+                    _parent._domainModel.GetShape(_index).SetBoundingRect(rect);
                 }
             }
 
@@ -59,7 +57,7 @@ namespace Shapes.AppModel
 
             public Common.Size GetCanvasSize()
             {
-                return _parent.CanvasSize;
+                return _parent._domainModel.CanvasSize;
             }
 
             public int GetSelectionIndex()
@@ -74,7 +72,7 @@ namespace Shapes.AppModel
 
             public int GetShapeCount()
             {
-                return _parent.ShapeCount;
+                return _parent._domainModel.ShapeCount;
             }
 
             public void OnShapeTransform()
@@ -92,21 +90,18 @@ namespace Shapes.AppModel
             }
         }
 
-        public AppModel(DomainModel.Document document)
+        public AppModel(DomainModel.Facade domainModel)
         {
-            _document = document;
-            _document.CompleteLayoutUpdateEvent += new DomainModel.Document.VoidDelegate(() => {
+            _domainModel = domainModel;
+            _domainModel.CompleteLayoutUpdateEvent += new DomainModel.Facade.VoidDelegate(() => {
                 _selectedIndex = -1;
                 CompleteLayoutUpdateEvent();
             });
-            _document.ShapeInsertEvent += new DomainModel.Document.IndexDelegate((int index) => {
-                ShapeInsertEvent(index);
-            });
-            _document.ShapeModifyEvent += new DomainModel.Document.IndexDelegate((int index) => {
+            _domainModel.ShapeModifyEvent += new DomainModel.Facade.IndexDelegate((int index) => {
                 ShapeModifyEvent(index);
             });
-            _document.ShapeRemoveEvent += new DomainModel.Document.IndexDelegate((int index) => {
-                if (_selectedIndex >= _document.ShapeCount)
+            _domainModel.ShapeRemoveEvent += new DomainModel.Facade.IndexDelegate((int index) => {
+                if (_selectedIndex >= _domainModel.ShapeCount)
                 {
                     _selectedIndex = -1;
                 }
@@ -116,29 +111,9 @@ namespace Shapes.AppModel
             _cursorHandler = new CursorHandler(_cursorHandlerModel);
         }
 
-        private void AddShape(Common.ShapeType type)
-        {
-            _document.AddShape(type, defRect);
-        }
-
-        public void AddRectangle()
-        {
-            AddShape(Common.ShapeType.Rectangle);
-        }
-
-        public void AddTriangle()
-        {
-            AddShape(Common.ShapeType.Triangle);
-        }
-
-        public void AddCircle()
-        {
-            AddShape(Common.ShapeType.Circle);
-        }
-
         public Common.Shape GetShape(int index)
         {
-            return new Common.Shape(_document.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
+            return new Common.Shape(_domainModel.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
         }
 
         private Common.Rectangle GetShapeBoundingRect(int index)
@@ -151,7 +126,7 @@ namespace Shapes.AppModel
                     return rect.ValueOrFailure();
                 }
             }
-            return _document.GetShape(index).GetBoundingRect();
+            return _domainModel.GetShape(index).GetBoundingRect();
         }
 
         public int GetSelectedIndex()
@@ -172,7 +147,7 @@ namespace Shapes.AppModel
                 int tmpSelectedIndex = _selectedIndex;
                 _selectedIndex = -1;
                 SelectionChangeEvent(_selectedIndex);
-                _document.RemoveShape(tmpSelectedIndex);
+                _domainModel.RemoveShape(tmpSelectedIndex);
             }
         }
 
@@ -196,25 +171,10 @@ namespace Shapes.AppModel
             _cursorHandler.EndMove(pos);
         }
 
-        public int ShapeCount
-        {
-            get {
-                return _document.ShapeCount;
-            }
-        }
-
-        public Common.Size CanvasSize
-        {
-            get {
-                return _document.CanvasSize;
-            }
-        }
-
         public delegate void VoidDelegate();
         public event VoidDelegate CompleteLayoutUpdateEvent;
 
         public delegate void IndexDelegate(int index);
-        public event IndexDelegate ShapeInsertEvent;
         public event IndexDelegate ShapeModifyEvent;
         public event IndexDelegate ShapeRemoveEvent;
         public event IndexDelegate SelectionChangeEvent;

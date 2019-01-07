@@ -16,15 +16,11 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DomainModel.Canvas canvas = new DomainModel.Canvas(new Common.Size(640, 480));
-            Presenter.DocumentDelegateProxy documentDelegateProxy = new Presenter.DocumentDelegateProxy();
-            DomainModel.Document document = new DomainModel.Document(documentDelegateProxy, canvas);
-            AppModel.AppModel appModel = new AppModel.AppModel(document);
+            AppModel.Facade model = new AppModel.Facade();
+            View.CanvasView view = new View.CanvasView();
+            Presenter presenter = new Presenter(model, view);
 
-            View.CanvasView canvasView = new View.CanvasView();
-            Presenter presenter = new Presenter(document, documentDelegateProxy, appModel, canvasView);
-
-            Application.Run(new Shapes(canvasView));
+            Application.Run(new Shapes(view));
         }
     }
 }

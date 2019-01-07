@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    public class Canvas
+    class Canvas
     {
         private readonly Common.Size _canvasSize;
         private readonly List<Common.Shape> _shapeList = new List<Common.Shape>();

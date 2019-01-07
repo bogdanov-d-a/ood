@@ -9,42 +9,29 @@ namespace Shapes
 {
     public class Presenter
     {
-        public class DocumentDelegateProxy : DomainModel.Document.IDelegate
+        public class ModelDelegate : DomainModel.Facade.IDelegate
         {
-            void DomainModel.Document.IDelegate.OnOpenDocument(string path)
-            {
-                OpenFileEvent(path);
-            }
+            private readonly Presenter _parent;
 
-            void DomainModel.Document.IDelegate.OnSaveDocument(string path)
+            public ModelDelegate(Presenter parent)
             {
-                SaveFileEvent(path);
+                _parent = parent;
             }
 
             public Option<string> RequestDocumentOpenPath()
             {
-                return RequestDocumentOpenPathEvent();
+                return _parent._view.ViewHandlers.ShowOpenFileDialog();
             }
 
             public Option<string> RequestDocumentSavePath()
             {
-                return RequestDocumentSavePathEvent();
+                return _parent._view.ViewHandlers.ShowSaveFileDialog();
             }
 
-            public DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosing()
+            public Common.ClosingAction RequestUnsavedDocumentClosing()
             {
-                return RequestUnsavedDocumentClosingEvent();
+                return _parent._view.ViewHandlers.ShowUnsavedDocumentClosePrompt();
             }
-
-            public delegate void OpenSaveFileDelegate(string path);
-            public delegate Option<string> RequestDocumentPathDelegate();
-            public delegate DomainModel.DocumentLifecycleController.ClosingAction RequestUnsavedDocumentClosingDelegate();
-
-            public OpenSaveFileDelegate OpenFileEvent;
-            public OpenSaveFileDelegate SaveFileEvent;
-            public RequestDocumentPathDelegate RequestDocumentOpenPathEvent;
-            public RequestDocumentPathDelegate RequestDocumentSavePathEvent;
-            public RequestUnsavedDocumentClosingDelegate RequestUnsavedDocumentClosingEvent;
         }
 
         private class ViewCommands : View.CanvasView.IViewCommands
@@ -73,12 +60,12 @@ namespace Shapes
 
             public void CreateNewDocument()
             {
-                _parent._document.New();
+                _parent._appModel.New();
             }
 
             public bool FormClosing()
             {
-                return _parent._document.New();
+                return _parent._appModel.New();
             }
 
             public Common.Size GetCanvasSize()
@@ -103,13 +90,12 @@ namespace Shapes
 
             public void OpenDocument()
             {
-                _parent._document.Open();
+                _parent._appModel.Open();
             }
 
             public void Redo()
             {
-                _parent._appModel.ResetSelection();
-                _parent._document.Redo();
+                _parent._appModel.Redo();
             }
 
             public void RemoveShape()
@@ -119,31 +105,28 @@ namespace Shapes
 
             public void SaveAsDocument()
             {
-                _parent._document.SaveAs();
+                _parent._appModel.SaveAs();
             }
 
             public void SaveDocument()
             {
-                _parent._document.Save();
+                _parent._appModel.Save();
             }
 
             public void Undo()
             {
-                _parent._appModel.ResetSelection();
-                _parent._document.Undo();
+                _parent._appModel.Undo();
             }
         }
 
-        private readonly DomainModel.Document _document;
-        private readonly DocumentDelegateProxy _documentDelegateProxy;
-        private readonly AppModel.AppModel _appModel;
+        private readonly AppModel.Facade _appModel;
         private readonly View.CanvasView _view;
 
-        public Presenter(DomainModel.Document document, DocumentDelegateProxy documentDelegateProxy, AppModel.AppModel appModel, View.CanvasView view)
+        public Presenter(AppModel.Facade appModel, View.CanvasView view)
         {
-            _document = document;
-            _documentDelegateProxy = documentDelegateProxy;
             _appModel = appModel;
+            _appModel.SetDelegate(new ModelDelegate(this));
+
             _view = view;
             _view.ViewCommands = new ViewCommands(this);
 
@@ -152,7 +135,7 @@ namespace Shapes
 
         private void Initialize()
         {
-            _appModel.CompleteLayoutUpdateEvent += new AppModel.AppModel.VoidDelegate(() => {
+            _appModel.CompleteLayoutUpdateEvent += new AppModel.Facade.VoidDelegate(() => {
                 _view.SetSelectionIndex(-1);
 
                 while (_view.ShapeCount > 0)
@@ -170,55 +153,24 @@ namespace Shapes
                 _view.ViewHandlers.InvalidateLayout();
             });
 
-            _appModel.ShapeInsertEvent += new AppModel.AppModel.IndexDelegate((int index) => {
-                var shape = _document.GetShape(index);
-                _view.AddShape(index, new Common.Shape(shape.GetShapeType(), shape.GetBoundingRect()));
+            _appModel.ShapeInsertEvent += new AppModel.Facade.IndexDelegate((int index) => {
+                _view.AddShape(index, _appModel.GetShape(index));
                 _view.ViewHandlers.InvalidateLayout();
             });
 
-            _appModel.ShapeModifyEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+            _appModel.ShapeModifyEvent += new AppModel.Facade.IndexDelegate((int index) => {
                 _view.GetShape(index).boundingRect = _appModel.GetShape(index).boundingRect;
                 _view.ViewHandlers.InvalidateLayout();
             });
 
-            _appModel.ShapeRemoveEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+            _appModel.ShapeRemoveEvent += new AppModel.Facade.IndexDelegate((int index) => {
                 _view.RemoveShape(index);
                 _view.ViewHandlers.InvalidateLayout();
             });
 
-            _appModel.SelectionChangeEvent += new AppModel.AppModel.IndexDelegate((int index) => {
+            _appModel.SelectionChangeEvent += new AppModel.Facade.IndexDelegate((int index) => {
                 _view.SetSelectionIndex(index);
                 _view.ViewHandlers.InvalidateLayout();
-            });
-
-            _documentDelegateProxy.OpenFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
-                _document.ReplaceCanvasData((DomainModel.Document.AddShapeDelegate delegate_) => {
-                    Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
-                        delegate_(type, boundingRect);
-                    });
-                });
-            });
-
-            _documentDelegateProxy.SaveFileEvent += new DocumentDelegateProxy.OpenSaveFileDelegate((string path) => {
-                Utils.CanvasReaderWriter.Write((Utils.CanvasReaderWriter.WriteShapeDelegate delegate_) => {
-                    for (int i = 0; i < _document.ShapeCount; ++i)
-                    {
-                        var shape = _document.GetShape(i);
-                        delegate_(shape.GetShapeType(), shape.GetBoundingRect());
-                    }
-                }, path);
-            });
-
-            _documentDelegateProxy.RequestDocumentOpenPathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _view.ViewHandlers.ShowOpenFileDialog();
-            });
-
-            _documentDelegateProxy.RequestDocumentSavePathEvent += new DocumentDelegateProxy.RequestDocumentPathDelegate(() => {
-                return _view.ViewHandlers.ShowSaveFileDialog();
-            });
-
-            _documentDelegateProxy.RequestUnsavedDocumentClosingEvent += new DocumentDelegateProxy.RequestUnsavedDocumentClosingDelegate(() => {
-                return _view.ViewHandlers.ShowUnsavedDocumentClosePrompt();
             });
         }
     }

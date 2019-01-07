@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    public class HistoryCanvas
+    class HistoryCanvas
     {
         public interface IDelegate
         {

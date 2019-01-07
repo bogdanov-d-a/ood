@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel.Command
 {
-    public class MoveShapeCommand : AbstractCommand
+    class MoveShapeCommand : AbstractCommand
     {
         public interface IMovable
         {

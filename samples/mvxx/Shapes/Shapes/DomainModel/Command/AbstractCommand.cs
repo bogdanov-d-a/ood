@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel.Command
 {
-    public abstract class AbstractCommand : ICommand
+    abstract class AbstractCommand : ICommand
     {
         private bool _isExecuted = false;
 

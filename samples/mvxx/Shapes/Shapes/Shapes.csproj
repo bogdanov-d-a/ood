@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="AppModel\CursorHandler.cs" />
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
+    <Compile Include="AppModel\Facade.cs" />
+    <Compile Include="Common\ClosingAction.cs" />
+    <Compile Include="DomainModel\Facade.cs" />
     <Compile Include="Utils\CanvasReaderWriter.cs" />
     <Compile Include="Common\Shape.cs" />
     <Compile Include="View\CanvasView.cs" />

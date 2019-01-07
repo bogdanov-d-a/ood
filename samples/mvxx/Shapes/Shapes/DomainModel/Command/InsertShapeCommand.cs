@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel.Command
 {
-    public class InsertShapeCommand : AbstractCommand
+    class InsertShapeCommand : AbstractCommand
     {
         public interface ICanvas
         {

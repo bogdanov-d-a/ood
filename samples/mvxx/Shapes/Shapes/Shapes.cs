@@ -48,19 +48,19 @@ namespace Shapes
                 return Option.None<string>();
             }
 
-            public DomainModel.DocumentLifecycleController.ClosingAction ShowUnsavedDocumentClosePrompt()
+            public Common.ClosingAction ShowUnsavedDocumentClosePrompt()
             {
                 DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
                 {
-                    return DomainModel.DocumentLifecycleController.ClosingAction.Save;
+                    return Common.ClosingAction.Save;
                 }
                 else if (result == DialogResult.No)
                 {
-                    return DomainModel.DocumentLifecycleController.ClosingAction.DontSave;
+                    return Common.ClosingAction.DontSave;
                 }
-                return DomainModel.DocumentLifecycleController.ClosingAction.DontClose;
+                return Common.ClosingAction.DontClose;
             }
         }
 

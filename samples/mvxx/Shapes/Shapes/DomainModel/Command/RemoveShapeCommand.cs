@@ -7,7 +7,7 @@ using Optional.Unsafe;
 
 namespace Shapes.DomainModel.Command
 {
-    public class RemoveShapeCommand : AbstractCommand
+    class RemoveShapeCommand : AbstractCommand
     {
         public interface ICanvas
         {

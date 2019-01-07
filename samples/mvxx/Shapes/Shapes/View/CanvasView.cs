@@ -114,7 +114,7 @@ namespace Shapes.View
 
             Option<string> ShowOpenFileDialog();
             Option<string> ShowSaveFileDialog();
-            DomainModel.DocumentLifecycleController.ClosingAction ShowUnsavedDocumentClosePrompt();
+            Common.ClosingAction ShowUnsavedDocumentClosePrompt();
         }
 
         public IViewHandlers ViewHandlers = null;

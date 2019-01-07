@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Shapes.DomainModel.Command
+namespace Shapes.Common
 {
-    interface ICommand
+    public enum ClosingAction
     {
-        void Execute();
-        void Unexecute();
+        Save,
+        DontSave,
+        DontClose
     }
 }
