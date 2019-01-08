@@ -10,18 +10,18 @@ namespace Shapes.DomainModel
     {
         private class Shape : Facade.IShape
         {
-            private readonly Document _parent;
+            private readonly Document _document;
             private readonly int _index;
 
-            public Shape(Document parent, int index)
+            public Shape(Document document, int index)
             {
-                _parent = parent;
+                _document = document;
                 _index = index;
             }
 
             private Common.Shape GetShape()
             {
-                return _parent._canvas.GetShape(_index);
+                return _document._canvas.GetShape(_index);
             }
 
             public Common.ShapeType GetShapeType()
@@ -38,38 +38,38 @@ namespace Shapes.DomainModel
             {
                 if (!GetBoundingRect().Equals(rect))
                 {
-                    _parent._historyCanvas.MoveShape(_index, rect);
+                    _document._historyCanvas.MoveShape(_index, rect);
                 }
             }
         }
 
         private class HistoryCanvasDelegate : HistoryCanvas.IDelegate
         {
-            private readonly Document _parent;
+            private readonly Document _document;
 
-            public HistoryCanvasDelegate(Document parent)
+            public HistoryCanvasDelegate(Document document)
             {
-                _parent = parent;
+                _document = document;
             }
 
             void HistoryCanvas.IDelegate.AddCommand(Command.ICommand command)
             {
-                _parent._history.AddAndExecuteCommand(command);
+                _document._history.AddAndExecuteCommand(command);
             }
 
             void HistoryCanvas.IDelegate.OnInsertShape(int index)
             {
-                _parent.ShapeInsertEvent(index);
+                _document.ShapeInsertEvent(index);
             }
 
             void HistoryCanvas.IDelegate.OnRemoveShape(int index)
             {
-                _parent.ShapeRemoveEvent(index);
+                _document.ShapeRemoveEvent(index);
             }
 
             void HistoryCanvas.IDelegate.OnMoveShape(int index)
             {
-                _parent.ShapeModifyEvent(index);
+                _document.ShapeModifyEvent(index);
             }
         }
 

@@ -82,39 +82,58 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
-        public interface IViewCommands
+        public interface IDocumentLifecycleEvents
         {
-            void CreateNewDocument();
-            void OpenDocument();
-            void SaveDocument();
-            void SaveAsDocument();
+            void New();
+            void Open();
+            void Save();
+            void SaveAs();
+        }
 
+        public interface IShapeOperationEvents
+        {
             void AddRectangle();
             void AddTriangle();
             void AddCircle();
-            void RemoveShape();
+            void Remove();
+        }
 
+        public interface IHistoryEvents
+        {
             void Undo();
             void Redo();
+        }
 
-            void MouseDown(Common.Position pos);
-            void MouseUp(Common.Position pos);
-            void MouseMove(Common.Position pos);
+        public interface IMouseEvents
+        {
+            void Down(Common.Position pos);
+            void Up(Common.Position pos);
+            void Move(Common.Position pos);
+        }
 
+        public interface IViewEvents
+        {
+            IDocumentLifecycleEvents GetDocumentLifecycleEvents();
+            IShapeOperationEvents GetShapeOperationEvents();
+            IHistoryEvents GetHistoryEvents();
+            IMouseEvents GetMouseEvents();
             bool FormClosing();
-
             Common.Size GetCanvasSize();
         }
 
-        public IViewCommands ViewCommands = null;
+        public IViewEvents ViewEvents = null;
+
+        public interface IDialogHandlers
+        {
+            Option<string> ShowOpenFileDialog();
+            Option<string> ShowSaveFileDialog();
+            Common.ClosingAction ShowUnsavedDocumentClosePrompt();
+        }
 
         public interface IViewHandlers
         {
             void InvalidateLayout();
-
-            Option<string> ShowOpenFileDialog();
-            Option<string> ShowSaveFileDialog();
-            Common.ClosingAction ShowUnsavedDocumentClosePrompt();
+            IDialogHandlers GetDialogHandlers();
         }
 
         public IViewHandlers ViewHandlers = null;

@@ -11,111 +11,184 @@ namespace Shapes
     {
         public class ModelDelegate : DomainModel.Facade.IDelegate
         {
-            private readonly Presenter _parent;
+            private readonly View.CanvasView _view;
 
-            public ModelDelegate(Presenter parent)
+            public ModelDelegate(View.CanvasView view)
             {
-                _parent = parent;
+                _view = view;
+            }
+
+            private View.CanvasView.IDialogHandlers GetDialogHandlers()
+            {
+                return _view.ViewHandlers.GetDialogHandlers();
             }
 
             public Option<string> RequestDocumentOpenPath()
             {
-                return _parent._view.ViewHandlers.ShowOpenFileDialog();
+                return GetDialogHandlers().ShowOpenFileDialog();
             }
 
             public Option<string> RequestDocumentSavePath()
             {
-                return _parent._view.ViewHandlers.ShowSaveFileDialog();
+                return GetDialogHandlers().ShowSaveFileDialog();
             }
 
             public Common.ClosingAction RequestUnsavedDocumentClosing()
             {
-                return _parent._view.ViewHandlers.ShowUnsavedDocumentClosePrompt();
+                return GetDialogHandlers().ShowUnsavedDocumentClosePrompt();
             }
         }
 
-        private class ViewCommands : View.CanvasView.IViewCommands
+        private class ViewEvents : View.CanvasView.IViewEvents
         {
-            private readonly Presenter _parent;
-
-            public ViewCommands(Presenter parent)
+            private class DocumentLifecycleEvents : View.CanvasView.IDocumentLifecycleEvents
             {
-                _parent = parent;
+                private readonly AppModel.Facade _appModel;
+
+                public DocumentLifecycleEvents(AppModel.Facade appModel)
+                {
+                    _appModel = appModel;
+                }
+
+                public void New()
+                {
+                    _appModel.New();
+                }
+
+                public void Open()
+                {
+                    _appModel.Open();
+                }
+
+                public void Save()
+                {
+                    _appModel.Save();
+                }
+
+                public void SaveAs()
+                {
+                    _appModel.SaveAs();
+                }
             }
 
-            public void AddCircle()
+            private class ShapeOperationEvents : View.CanvasView.IShapeOperationEvents
             {
-                _parent._appModel.AddCircle();
+                private readonly AppModel.Facade _appModel;
+
+                public ShapeOperationEvents(AppModel.Facade appModel)
+                {
+                    _appModel = appModel;
+                }
+
+                public void AddCircle()
+                {
+                    _appModel.AddCircle();
+                }
+
+                public void AddRectangle()
+                {
+                    _appModel.AddRectangle();
+                }
+
+                public void AddTriangle()
+                {
+                    _appModel.AddTriangle();
+                }
+
+                public void Remove()
+                {
+                    _appModel.RemoveSelectedShape();
+                }
             }
 
-            public void AddRectangle()
+            private class HistoryEvents : View.CanvasView.IHistoryEvents
             {
-                _parent._appModel.AddRectangle();
+                private readonly AppModel.Facade _appModel;
+
+                public HistoryEvents(AppModel.Facade appModel)
+                {
+                    _appModel = appModel;
+                }
+
+                public void Undo()
+                {
+                    _appModel.Undo();
+                }
+
+                public void Redo()
+                {
+                    _appModel.Redo();
+                }
             }
 
-            public void AddTriangle()
+            private class MouseEvents : View.CanvasView.IMouseEvents
             {
-                _parent._appModel.AddTriangle();
+                private readonly AppModel.Facade _appModel;
+
+                public MouseEvents(AppModel.Facade appModel)
+                {
+                    _appModel = appModel;
+                }
+
+                public void Down(Common.Position pos)
+                {
+                    _appModel.BeginMove(pos);
+                }
+
+                public void Move(Common.Position pos)
+                {
+                    _appModel.Move(pos);
+                }
+
+                public void Up(Common.Position pos)
+                {
+                    _appModel.EndMove(pos);
+                }
             }
 
-            public void CreateNewDocument()
+            private readonly AppModel.Facade _appModel;
+            private readonly DocumentLifecycleEvents _documentLifecycleEvents;
+            private readonly ShapeOperationEvents _shapeOperationEvents;
+            private readonly HistoryEvents _historyEvents;
+            private readonly MouseEvents _mouseEvents;
+
+            public ViewEvents(AppModel.Facade appModel)
             {
-                _parent._appModel.New();
+                _appModel = appModel;
+                _documentLifecycleEvents = new DocumentLifecycleEvents(_appModel);
+                _shapeOperationEvents = new ShapeOperationEvents(_appModel);
+                _historyEvents = new HistoryEvents(_appModel);
+                _mouseEvents = new MouseEvents(_appModel);
+            }
+
+            public View.CanvasView.IDocumentLifecycleEvents GetDocumentLifecycleEvents()
+            {
+                return _documentLifecycleEvents;
+            }
+
+            public View.CanvasView.IShapeOperationEvents GetShapeOperationEvents()
+            {
+                return _shapeOperationEvents;
+            }
+
+            public View.CanvasView.IHistoryEvents GetHistoryEvents()
+            {
+                return _historyEvents;
+            }
+
+            public View.CanvasView.IMouseEvents GetMouseEvents()
+            {
+                return _mouseEvents;
             }
 
             public bool FormClosing()
             {
-                return _parent._appModel.New();
+                return _appModel.New();
             }
 
             public Common.Size GetCanvasSize()
             {
-                return _parent._appModel.CanvasSize;
-            }
-
-            public void MouseDown(Common.Position pos)
-            {
-                _parent._appModel.BeginMove(pos);
-            }
-
-            public void MouseMove(Common.Position pos)
-            {
-                _parent._appModel.Move(pos);
-            }
-
-            public void MouseUp(Common.Position pos)
-            {
-                _parent._appModel.EndMove(pos);
-            }
-
-            public void OpenDocument()
-            {
-                _parent._appModel.Open();
-            }
-
-            public void Redo()
-            {
-                _parent._appModel.Redo();
-            }
-
-            public void RemoveShape()
-            {
-                _parent._appModel.RemoveSelectedShape();
-            }
-
-            public void SaveAsDocument()
-            {
-                _parent._appModel.SaveAs();
-            }
-
-            public void SaveDocument()
-            {
-                _parent._appModel.Save();
-            }
-
-            public void Undo()
-            {
-                _parent._appModel.Undo();
+                return _appModel.CanvasSize;
             }
         }
 
@@ -125,10 +198,10 @@ namespace Shapes
         public Presenter(AppModel.Facade appModel, View.CanvasView view)
         {
             _appModel = appModel;
-            _appModel.SetDelegate(new ModelDelegate(this));
-
             _view = view;
-            _view.ViewCommands = new ViewCommands(this);
+
+            _appModel.SetDelegate(new ModelDelegate(_view));
+            _view.ViewEvents = new ViewEvents(_appModel);
 
             Initialize();
         }

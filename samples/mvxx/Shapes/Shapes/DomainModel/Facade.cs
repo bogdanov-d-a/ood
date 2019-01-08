@@ -24,34 +24,34 @@ namespace Shapes.DomainModel
 
         private class DocumentLifecycleControllerDelegate : DocumentLifecycleController.IDelegate
         {
-            private readonly Facade _parent;
+            private readonly Facade _facade;
 
-            public DocumentLifecycleControllerDelegate(Facade parent)
+            public DocumentLifecycleControllerDelegate(Facade facade)
             {
-                _parent = parent;
+                _facade = facade;
             }
 
             public void OnEraseMemoryDocument()
             {
-                _parent._canvas.RemoveAllShapes();
-                _parent._document.ClearHistory();
-                _parent.CompleteLayoutUpdateEvent();
+                _facade._canvas.RemoveAllShapes();
+                _facade._document.ClearHistory();
+                _facade.CompleteLayoutUpdateEvent();
             }
 
             public void OnOpenDocument(string path)
             {
                 Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _parent._canvas.InsertShape(_parent._canvas.ShapeCount, new Common.Shape(type, boundingRect));
+                    _facade._canvas.InsertShape(_facade._canvas.ShapeCount, new Common.Shape(type, boundingRect));
                 });
-                _parent.CompleteLayoutUpdateEvent();
+                _facade.CompleteLayoutUpdateEvent();
             }
 
             public void OnSaveDocument(string path)
             {
                 Utils.CanvasReaderWriter.Write((Utils.CanvasReaderWriter.WriteShapeDelegate delegate_) => {
-                    for (int i = 0; i < _parent.ShapeCount; ++i)
+                    for (int i = 0; i < _facade.ShapeCount; ++i)
                     {
-                        var shape = _parent.GetShape(i);
+                        var shape = _facade.GetShape(i);
                         delegate_(shape.GetShapeType(), shape.GetBoundingRect());
                     }
                 }, path);
@@ -59,17 +59,17 @@ namespace Shapes.DomainModel
 
             public Option<string> RequestDocumentOpenPath()
             {
-                return _parent._delegate.RequestDocumentOpenPath();
+                return _facade._delegate.RequestDocumentOpenPath();
             }
 
             public Option<string> RequestDocumentSavePath()
             {
-                return _parent._delegate.RequestDocumentSavePath();
+                return _facade._delegate.RequestDocumentSavePath();
             }
 
             public Common.ClosingAction RequestUnsavedDocumentClosing()
             {
-                return _parent._delegate.RequestUnsavedDocumentClosing();
+                return _facade._delegate.RequestUnsavedDocumentClosing();
             }
         }
 

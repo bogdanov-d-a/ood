@@ -15,22 +15,22 @@ namespace Shapes.AppModel
 
         private class CursorHandlerModel : CursorHandler.IModel
         {
-            private readonly AppModel _parent;
+            private readonly AppModel _appModel;
 
             private class Shape : CursorHandler.IShape
             {
-                private readonly AppModel _parent;
+                private readonly DomainModel.Facade _domainModel;
                 private readonly int _index;
 
-                public Shape(AppModel parent, int index)
+                public Shape(DomainModel.Facade domainModel, int index)
                 {
-                    _parent = parent;
+                    _domainModel = domainModel;
                     _index = index;
                 }
 
                 public DomainModel.Facade.IShape GetShape()
                 {
-                    return _parent._domainModel.GetShape(_index);
+                    return _domainModel.GetShape(_index);
                 }
 
                 public Common.Rectangle GetBoundingRect()
@@ -45,47 +45,47 @@ namespace Shapes.AppModel
 
                 public void SetBoundingRect(Common.Rectangle rect)
                 {
-                    _parent._domainModel.GetShape(_index).SetBoundingRect(rect);
+                    _domainModel.GetShape(_index).SetBoundingRect(rect);
                 }
             }
 
-            public CursorHandlerModel(AppModel parent)
+            public CursorHandlerModel(AppModel appModel)
             {
-                _parent = parent;
+                _appModel = appModel;
             }
 
             public Common.Size GetCanvasSize()
             {
-                return _parent._domainModel.CanvasSize;
+                return _appModel._domainModel.CanvasSize;
             }
 
             public int GetSelectionIndex()
             {
-                return _parent.GetSelectedIndex();
+                return _appModel.GetSelectedIndex();
             }
 
             public CursorHandler.IShape GetShape(int index)
             {
-                return new Shape(_parent, index);
+                return new Shape(_appModel._domainModel, index);
             }
 
             public int GetShapeCount()
             {
-                return _parent._domainModel.ShapeCount;
+                return _appModel._domainModel.ShapeCount;
             }
 
             public void OnShapeTransform()
             {
-                int index = _parent.GetSelectedIndex();
+                int index = _appModel.GetSelectedIndex();
                 if (index != -1)
                 {
-                    _parent.ShapeModifyEvent(index);
+                    _appModel.ShapeModifyEvent(index);
                 }
             }
 
             public void SelectShape(int index)
             {
-                _parent.SelectShape(index);
+                _appModel.SelectShape(index);
             }
         }
 
