@@ -11,7 +11,6 @@ namespace Shapes.AppModel
     {
         private readonly DomainModel.Facade _domainModel;
         private readonly CursorHandler _cursorHandler;
-        private readonly CursorHandlerModel _cursorHandlerModel;
         private int _selectedIndex = -1;
 
         private class CursorHandlerModel : CursorHandler.IModel
@@ -107,8 +106,7 @@ namespace Shapes.AppModel
                 }
                 ShapeRemoveEvent(index);
             });
-            _cursorHandlerModel = new CursorHandlerModel(this);
-            _cursorHandler = new CursorHandler(_cursorHandlerModel);
+            _cursorHandler = new CursorHandler(new CursorHandlerModel(this));
         }
 
         public Common.Shape GetShape(int index)
