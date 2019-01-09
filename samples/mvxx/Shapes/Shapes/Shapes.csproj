@@ -51,8 +51,12 @@
     <Compile Include="AppModel\Facade.cs" />
     <Compile Include="Common\ClosingAction.cs" />
     <Compile Include="DomainModel\Facade.cs" />
-    <Compile Include="Utils\CanvasReaderWriter.cs" />
+    <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
+    <Compile Include="Utils\ICanvasLoader.cs" />
+    <Compile Include="Utils\IShapeSerializer.cs" />
+    <Compile Include="Utils\ShapeToFileSerializer.cs" />
+    <Compile Include="Utils\ShapeTypeUtils.cs" />
     <Compile Include="View\CanvasView.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Size.cs" />

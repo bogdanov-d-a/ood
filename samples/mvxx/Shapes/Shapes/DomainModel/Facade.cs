@@ -40,7 +40,8 @@ namespace Shapes.DomainModel
 
             public void OnOpenDocument(string path)
             {
-                Utils.CanvasReaderWriter.Read(path, (Common.ShapeType type, Common.Rectangle boundingRect) => {
+                Utils.ICanvasLoader loader = new Utils.CanvasLoaderFromFile(path);
+                loader.LoadShapes((Common.ShapeType type, Common.Rectangle boundingRect) => {
                     _facade._canvas.InsertShape(_facade._canvas.ShapeCount, new Common.Shape(type, boundingRect));
                 });
                 _facade.CompleteLayoutUpdateEvent();
@@ -48,13 +49,14 @@ namespace Shapes.DomainModel
 
             public void OnSaveDocument(string path)
             {
-                Utils.CanvasReaderWriter.Write((Utils.CanvasReaderWriter.WriteShapeDelegate delegate_) => {
+                Utils.IShapeSerializer serializer = new Utils.ShapeToFileSerializer(path);
+                serializer.SerializeShapes((Utils.ShapeInfoDelegate shapeInfoDelegate) => {
                     for (int i = 0; i < _facade.ShapeCount; ++i)
                     {
                         var shape = _facade.GetShape(i);
-                        delegate_(shape.GetShapeType(), shape.GetBoundingRect());
+                        shapeInfoDelegate(shape.GetShapeType(), shape.GetBoundingRect());
                     }
-                }, path);
+                });
             }
 
             public Option<string> RequestDocumentOpenPath()
