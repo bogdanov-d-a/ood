@@ -114,6 +114,11 @@ namespace Shapes.DomainModel
             _history.Clear();
         }
 
+        public Command.ICommand GetLastExecutedCommand()
+        {
+            return _history.GetLastExecuted();
+        }
+
         public delegate void IndexDelegate(int index);
         public event IndexDelegate ShapeInsertEvent;
         public event IndexDelegate ShapeModifyEvent;

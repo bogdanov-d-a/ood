@@ -75,5 +75,12 @@ namespace Shapes.DomainModel
             _list.Clear();
             _lastExecuted = null;
         }
+
+        public Command.ICommand GetLastExecuted()
+        {
+            return _lastExecuted == null
+                ? null
+                : _lastExecuted.Value;
+        }
     }
 }

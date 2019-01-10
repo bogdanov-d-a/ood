@@ -62,11 +62,22 @@ namespace Shapes.DomainModel
             {
                 return _facade._delegate.RequestUnsavedDocumentClosing();
             }
+
+            public bool IsDocumentSynced()
+            {
+                return _facade._savedCommand == _facade._document.GetLastExecutedCommand();
+            }
+
+            public void OnSyncDocument()
+            {
+                _facade._savedCommand = _facade._document.GetLastExecutedCommand();
+            }
         }
 
         private readonly Canvas _canvas;
         private readonly Document _document;
         private readonly DocumentLifecycleController _dlc;
+        private Command.ICommand _savedCommand = null;
         private IDelegate _delegate = null;
 
         public Facade()
@@ -76,15 +87,12 @@ namespace Shapes.DomainModel
             _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerDelegate(this));
 
             _document.ShapeInsertEvent += new Document.IndexDelegate((int index) => {
-                _dlc.Modify();
                 ShapeInsertEvent(index);
             });
             _document.ShapeModifyEvent += new Document.IndexDelegate((int index) => {
-                _dlc.Modify();
                 ShapeModifyEvent(index);
             });
             _document.ShapeRemoveEvent += new Document.IndexDelegate((int index) => {
-                _dlc.Modify();
                 ShapeRemoveEvent(index);
             });
         }

@@ -18,9 +18,11 @@ namespace Shapes.DomainModel
             void OnEraseMemoryDocument();
             void OnOpenDocument(string path);
             void OnSaveDocument(string path);
+
+            bool IsDocumentSynced();
+            void OnSyncDocument();
         }
 
-        private bool _modified = false;
         private Option<string> _path = Option.None<string>();
         private readonly IDelegate _delegate;
 
@@ -31,7 +33,7 @@ namespace Shapes.DomainModel
 
         public bool New()
         {
-            if (IsModified())
+            if (!_delegate.IsDocumentSynced())
             {
                 var closingAction = _delegate.RequestUnsavedDocumentClosing();
                 if (closingAction == Common.ClosingAction.DontClose)
@@ -49,7 +51,7 @@ namespace Shapes.DomainModel
             }
 
             _delegate.OnEraseMemoryDocument();
-            _modified = false;
+            _delegate.OnSyncDocument();
             _path = Option.None<string>();
             return true;
         }
@@ -85,18 +87,8 @@ namespace Shapes.DomainModel
             }
 
             _delegate.OnSaveDocument(_path.ValueOrFailure());
-            _modified = false;
+            _delegate.OnSyncDocument();
             return true;
-        }
-
-        public void Modify()
-        {
-            _modified = true;
-        }
-
-        public bool IsModified()
-        {
-            return _modified;
         }
     }
 }
