@@ -40,23 +40,12 @@ namespace Shapes.DomainModel
 
             public void OnOpenDocument(string path)
             {
-                Utils.ICanvasLoader loader = new Utils.CanvasLoaderFromFile(path);
-                loader.LoadShapes((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                    _facade._canvas.InsertShape(_facade._canvas.ShapeCount, new Common.Shape(type, boundingRect));
-                });
-                _facade.CompleteLayoutUpdateEvent();
+                _facade.LoadCanvas(new Utils.CanvasLoaderFromFile(path));
             }
 
             public void OnSaveDocument(string path)
             {
-                Utils.IShapeSerializer serializer = new Utils.ShapeToFileSerializer(path);
-                serializer.SerializeShapes((Utils.ShapeInfoDelegate shapeInfoDelegate) => {
-                    for (int i = 0; i < _facade.ShapeCount; ++i)
-                    {
-                        var shape = _facade.GetShape(i);
-                        shapeInfoDelegate(shape.GetShapeType(), shape.GetBoundingRect());
-                    }
-                });
+                _facade.SerializeShapes(new Utils.ShapeToFileSerializer(path));
             }
 
             public Option<string> RequestDocumentOpenPath()
@@ -164,6 +153,25 @@ namespace Shapes.DomainModel
         public void SaveAs()
         {
             _dlc.Save(true);
+        }
+
+        private void LoadCanvas(Utils.ICanvasLoader loader)
+        {
+            loader.LoadShapes((Common.ShapeType type, Common.Rectangle boundingRect) => {
+                _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
+            });
+            CompleteLayoutUpdateEvent();
+        }
+
+        private void SerializeShapes(Utils.IShapeSerializer serializer)
+        {
+            serializer.SerializeShapes((Utils.ShapeInfoDelegate shapeInfoDelegate) => {
+                for (int i = 0; i < ShapeCount; ++i)
+                {
+                    var shape = GetShape(i);
+                    shapeInfoDelegate(shape.GetShapeType(), shape.GetBoundingRect());
+                }
+            });
         }
 
         public delegate void VoidDelegate();
