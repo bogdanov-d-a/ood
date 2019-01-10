@@ -9,8 +9,7 @@ namespace Shapes.DomainModel.Command
     {
         public interface IMovable
         {
-            Common.Rectangle GetRect();
-            void SetRect(Common.Rectangle rect);
+            Common.Rectangle Rect { get; set; }
         }
 
         private readonly IMovable _movable;
@@ -24,8 +23,8 @@ namespace Shapes.DomainModel.Command
 
         private void SwapRectangles()
         {
-            Common.Rectangle oldRect = _movable.GetRect();
-            _movable.SetRect(_rect);
+            Common.Rectangle oldRect = _movable.Rect;
+            _movable.Rect = _rect;
             _rect = oldRect;
         }
 

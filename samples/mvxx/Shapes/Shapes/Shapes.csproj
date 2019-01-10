@@ -50,6 +50,7 @@
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
     <Compile Include="AppModel\Facade.cs" />
     <Compile Include="Common\ClosingAction.cs" />
+    <Compile Include="DomainModel\Command\IShapes.cs" />
     <Compile Include="DomainModel\Facade.cs" />
     <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
