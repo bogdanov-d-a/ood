@@ -8,8 +8,7 @@ namespace Shapes.DomainModel.Command
     interface IShapes
     {
         void InsertShape(int index, Common.Shape shape);
-        void RemoveShapeAt(int index);
-        Common.Shape GetShapeAt(int index);
+        Common.Shape RemoveShapeAt(int index);
         int ShapeCount { get; }
     }
 }

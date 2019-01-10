@@ -35,15 +35,12 @@ namespace Shapes.DomainModel
                 _delegate.OnInsertShape(index);
             }
 
-            public void RemoveShapeAt(int index)
+            public Common.Shape RemoveShapeAt(int index)
             {
+                Common.Shape result = _canvas.GetShape(index);
                 _canvas.RemoveShape(index);
                 _delegate.OnRemoveShape(index);
-            }
-
-            public Common.Shape GetShapeAt(int index)
-            {
-                return _canvas.GetShape(index);
+                return result;
             }
         }
 

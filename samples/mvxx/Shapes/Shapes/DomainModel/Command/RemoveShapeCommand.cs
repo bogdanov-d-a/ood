@@ -22,8 +22,7 @@ namespace Shapes.DomainModel.Command
 
         protected override void ExecuteImpl()
         {
-            _shape = Option.Some(_shapes.GetShapeAt(_index));
-            _shapes.RemoveShapeAt(_index);
+            _shape = Option.Some(_shapes.RemoveShapeAt(_index));
         }
 
         protected override void UnexecuteImpl()
