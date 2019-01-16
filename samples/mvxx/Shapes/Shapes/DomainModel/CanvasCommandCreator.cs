@@ -17,7 +17,7 @@ namespace Shapes.DomainModel
         public interface IEvents
         {
             void AddCommand(Command.ICommand command);
-            IShapeEvents GetShapeEvents();
+            IShapeEvents ShapeEvents { get; }
         }
 
         private class CommandShapes : Command.IShapes
@@ -84,7 +84,7 @@ namespace Shapes.DomainModel
         {
             _canvas = canvas;
             _events = events;
-            _commandShapes = new CommandShapes(_canvas, _events.GetShapeEvents());
+            _commandShapes = new CommandShapes(_canvas, _events.ShapeEvents);
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
@@ -99,7 +99,7 @@ namespace Shapes.DomainModel
 
         public void MoveShape(int index, Common.Rectangle newRect)
         {
-            _events.AddCommand(new Command.MoveShapeCommand(new Movable(_canvas, _events.GetShapeEvents(), index), newRect));
+            _events.AddCommand(new Command.MoveShapeCommand(new Movable(_canvas, _events.ShapeEvents, index), newRect));
         }
     }
 }

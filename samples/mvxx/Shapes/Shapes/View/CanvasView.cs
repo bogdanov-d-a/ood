@@ -110,12 +110,12 @@ namespace Shapes.View
 
         public interface IViewEvents
         {
-            IDocumentLifecycleEvents GetDocumentLifecycleEvents();
-            IShapeOperationEvents GetShapeOperationEvents();
-            IHistoryEvents GetHistoryEvents();
-            IMouseEvents GetMouseEvents();
+            IDocumentLifecycleEvents DocumentLifecycleEvents { get; }
+            IShapeOperationEvents ShapeOperationEvents { get; }
+            IHistoryEvents HistoryEvents { get; }
+            IMouseEvents MouseEvents { get; }
             bool FormClosing();
-            Common.Size GetCanvasSize();
+            Common.Size CanvasSize { get; }
         }
 
         public IViewEvents ViewEvents = null;
@@ -130,7 +130,7 @@ namespace Shapes.View
         public interface IViewHandlers
         {
             void InvalidateLayout();
-            IDialogHandlers GetDialogHandlers();
+            IDialogHandlers DialogHandlers { get; }
         }
 
         public IViewHandlers ViewHandlers = null;

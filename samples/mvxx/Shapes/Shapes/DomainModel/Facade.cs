@@ -10,11 +10,11 @@ namespace Shapes.DomainModel
     {
         private class DocumentLifecycleControllerEvents : DocumentLifecycleController.IEvents
         {
-            private class LifecycleActionEvents : DocumentLifecycleController.ILifecycleActionEvents
+            private class LifecycleActionEventsHandler : DocumentLifecycleController.ILifecycleActionEvents
             {
                 private readonly Facade _facade;
 
-                public LifecycleActionEvents(Facade facade)
+                public LifecycleActionEventsHandler(Facade facade)
                 {
                     _facade = facade;
                 }
@@ -37,11 +37,11 @@ namespace Shapes.DomainModel
                 }
             }
 
-            private class SynchronizationEvents : DocumentLifecycleController.ISynchronizationEvents
+            private class SynchronizationEventsHandler : DocumentLifecycleController.ISynchronizationEvents
             {
                 private readonly Facade _facade;
 
-                public SynchronizationEvents(Facade facade)
+                public SynchronizationEventsHandler(Facade facade)
                 {
                     _facade = facade;
                 }
@@ -58,29 +58,29 @@ namespace Shapes.DomainModel
             }
 
             private readonly Facade _facade;
-            private readonly LifecycleActionEvents _lifecycleActionEvents;
-            private readonly SynchronizationEvents _synchronizationEvents;
+            private readonly LifecycleActionEventsHandler _lifecycleActionEvents;
+            private readonly SynchronizationEventsHandler _synchronizationEvents;
 
             public DocumentLifecycleControllerEvents(Facade facade)
             {
                 _facade = facade;
-                _lifecycleActionEvents = new LifecycleActionEvents(facade);
-                _synchronizationEvents = new SynchronizationEvents(facade);
+                _lifecycleActionEvents = new LifecycleActionEventsHandler(facade);
+                _synchronizationEvents = new SynchronizationEventsHandler(facade);
             }
 
-            public Common.ILifecycleDecisionEvents GetLifecycleDecisionEvents()
+            public Common.ILifecycleDecisionEvents LifecycleDecisionEvents
             {
-                return _facade._lifecycleDecisionEvents;
+                get => _facade._lifecycleDecisionEvents;
             }
 
-            public DocumentLifecycleController.ILifecycleActionEvents GetLifecycleActionEvents()
+            public DocumentLifecycleController.ILifecycleActionEvents LifecycleActionEvents
             {
-                return _lifecycleActionEvents;
+                get => _lifecycleActionEvents;
             }
 
-            public DocumentLifecycleController.ISynchronizationEvents GetSynchronizationEvents()
+            public DocumentLifecycleController.ISynchronizationEvents SynchronizationEvents
             {
-                return _synchronizationEvents;
+                get => _synchronizationEvents;
             }
         }
 

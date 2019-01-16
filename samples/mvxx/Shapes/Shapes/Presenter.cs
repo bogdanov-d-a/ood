@@ -20,7 +20,7 @@ namespace Shapes
 
             private View.CanvasView.IDialogHandlers GetDialogHandlers()
             {
-                return _view.ViewHandlers.GetDialogHandlers();
+                return _view.ViewHandlers.DialogHandlers;
             }
 
             public Option<string> RequestOpenPath()
@@ -41,11 +41,11 @@ namespace Shapes
 
         private class ViewEvents : View.CanvasView.IViewEvents
         {
-            private class DocumentLifecycleEvents : View.CanvasView.IDocumentLifecycleEvents
+            private class DocumentLifecycleEventsHandler : View.CanvasView.IDocumentLifecycleEvents
             {
                 private readonly AppModel.Facade _appModel;
 
-                public DocumentLifecycleEvents(AppModel.Facade appModel)
+                public DocumentLifecycleEventsHandler(AppModel.Facade appModel)
                 {
                     _appModel = appModel;
                 }
@@ -71,11 +71,11 @@ namespace Shapes
                 }
             }
 
-            private class ShapeOperationEvents : View.CanvasView.IShapeOperationEvents
+            private class ShapeOperationEventsHandler : View.CanvasView.IShapeOperationEvents
             {
                 private readonly AppModel.Facade _appModel;
 
-                public ShapeOperationEvents(AppModel.Facade appModel)
+                public ShapeOperationEventsHandler(AppModel.Facade appModel)
                 {
                     _appModel = appModel;
                 }
@@ -101,11 +101,11 @@ namespace Shapes
                 }
             }
 
-            private class HistoryEvents : View.CanvasView.IHistoryEvents
+            private class HistoryEventsHandler : View.CanvasView.IHistoryEvents
             {
                 private readonly AppModel.Facade _appModel;
 
-                public HistoryEvents(AppModel.Facade appModel)
+                public HistoryEventsHandler(AppModel.Facade appModel)
                 {
                     _appModel = appModel;
                 }
@@ -121,11 +121,11 @@ namespace Shapes
                 }
             }
 
-            private class MouseEvents : View.CanvasView.IMouseEvents
+            private class MouseEventsHandler : View.CanvasView.IMouseEvents
             {
                 private readonly AppModel.Facade _appModel;
 
-                public MouseEvents(AppModel.Facade appModel)
+                public MouseEventsHandler(AppModel.Facade appModel)
                 {
                     _appModel = appModel;
                 }
@@ -147,38 +147,38 @@ namespace Shapes
             }
 
             private readonly AppModel.Facade _appModel;
-            private readonly DocumentLifecycleEvents _documentLifecycleEvents;
-            private readonly ShapeOperationEvents _shapeOperationEvents;
-            private readonly HistoryEvents _historyEvents;
-            private readonly MouseEvents _mouseEvents;
+            private readonly DocumentLifecycleEventsHandler _documentLifecycleEvents;
+            private readonly ShapeOperationEventsHandler _shapeOperationEvents;
+            private readonly HistoryEventsHandler _historyEvents;
+            private readonly MouseEventsHandler _mouseEvents;
 
             public ViewEvents(AppModel.Facade appModel)
             {
                 _appModel = appModel;
-                _documentLifecycleEvents = new DocumentLifecycleEvents(_appModel);
-                _shapeOperationEvents = new ShapeOperationEvents(_appModel);
-                _historyEvents = new HistoryEvents(_appModel);
-                _mouseEvents = new MouseEvents(_appModel);
+                _documentLifecycleEvents = new DocumentLifecycleEventsHandler(_appModel);
+                _shapeOperationEvents = new ShapeOperationEventsHandler(_appModel);
+                _historyEvents = new HistoryEventsHandler(_appModel);
+                _mouseEvents = new MouseEventsHandler(_appModel);
             }
 
-            public View.CanvasView.IDocumentLifecycleEvents GetDocumentLifecycleEvents()
+            public View.CanvasView.IDocumentLifecycleEvents DocumentLifecycleEvents
             {
-                return _documentLifecycleEvents;
+                get => _documentLifecycleEvents;
             }
 
-            public View.CanvasView.IShapeOperationEvents GetShapeOperationEvents()
+            public View.CanvasView.IShapeOperationEvents ShapeOperationEvents
             {
-                return _shapeOperationEvents;
+                get => _shapeOperationEvents;
             }
 
-            public View.CanvasView.IHistoryEvents GetHistoryEvents()
+            public View.CanvasView.IHistoryEvents HistoryEvents
             {
-                return _historyEvents;
+                get => _historyEvents;
             }
 
-            public View.CanvasView.IMouseEvents GetMouseEvents()
+            public View.CanvasView.IMouseEvents MouseEvents
             {
-                return _mouseEvents;
+                get => _mouseEvents;
             }
 
             public bool FormClosing()
@@ -186,9 +186,9 @@ namespace Shapes
                 return _appModel.New();
             }
 
-            public Common.Size GetCanvasSize()
+            public Common.Size CanvasSize
             {
-                return _appModel.CanvasSize;
+                get => _appModel.CanvasSize;
             }
         }
 

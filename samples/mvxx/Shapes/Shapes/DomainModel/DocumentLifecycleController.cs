@@ -24,9 +24,9 @@ namespace Shapes.DomainModel
 
         public interface IEvents
         {
-            Common.ILifecycleDecisionEvents GetLifecycleDecisionEvents();
-            ILifecycleActionEvents GetLifecycleActionEvents();
-            ISynchronizationEvents GetSynchronizationEvents();
+            Common.ILifecycleDecisionEvents LifecycleDecisionEvents { get; }
+            ILifecycleActionEvents LifecycleActionEvents { get; }
+            ISynchronizationEvents SynchronizationEvents { get; }
         }
 
         private Option<string> _path = Option.None<string>();
@@ -39,9 +39,9 @@ namespace Shapes.DomainModel
 
         public bool New()
         {
-            if (!_events.GetSynchronizationEvents().IsDocumentSynced())
+            if (!_events.SynchronizationEvents.IsDocumentSynced())
             {
-                var closingAction = _events.GetLifecycleDecisionEvents().RequestUnsavedClosing();
+                var closingAction = _events.LifecycleDecisionEvents.RequestUnsavedClosing();
                 if (closingAction == Common.ClosingAction.DontClose)
                 {
                     return false;
@@ -56,8 +56,8 @@ namespace Shapes.DomainModel
                 }
             }
 
-            _events.GetLifecycleActionEvents().OnEraseDocument();
-            _events.GetSynchronizationEvents().OnSyncDocument();
+            _events.LifecycleActionEvents.OnEraseDocument();
+            _events.SynchronizationEvents.OnSyncDocument();
             _path = Option.None<string>();
             return true;
         }
@@ -69,14 +69,14 @@ namespace Shapes.DomainModel
                 return false;
             }
 
-            var path = _events.GetLifecycleDecisionEvents().RequestOpenPath();
+            var path = _events.LifecycleDecisionEvents.RequestOpenPath();
             if (!path.HasValue)
             {
                 return false;
             }
 
             _path = path;
-            _events.GetLifecycleActionEvents().OnFillDocumentData(_path.ValueOrFailure());
+            _events.LifecycleActionEvents.OnFillDocumentData(_path.ValueOrFailure());
             return true;
         }
 
@@ -84,7 +84,7 @@ namespace Shapes.DomainModel
         {
             if (!_path.HasValue || forcePathRequest)
             {
-                var path = _events.GetLifecycleDecisionEvents().RequestSavePath();
+                var path = _events.LifecycleDecisionEvents.RequestSavePath();
                 if (!path.HasValue)
                 {
                     return false;
@@ -92,8 +92,8 @@ namespace Shapes.DomainModel
                 _path = path;
             }
 
-            _events.GetLifecycleActionEvents().OnExportDocumentData(_path.ValueOrFailure());
-            _events.GetSynchronizationEvents().OnSyncDocument();
+            _events.LifecycleActionEvents.OnExportDocumentData(_path.ValueOrFailure());
+            _events.SynchronizationEvents.OnSyncDocument();
             return true;
         }
     }

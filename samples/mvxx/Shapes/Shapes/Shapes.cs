@@ -18,11 +18,11 @@ namespace Shapes
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
-            private class DialogHandlers : View.CanvasView.IDialogHandlers
+            private class DialogHandlersImpl : View.CanvasView.IDialogHandlers
             {
                 private readonly Shapes _shapesForm;
 
-                public DialogHandlers(Shapes shapesForm)
+                public DialogHandlersImpl(Shapes shapesForm)
                 {
                     _shapesForm = shapesForm;
                 }
@@ -62,12 +62,12 @@ namespace Shapes
             }
 
             private readonly Shapes _shapesForm;
-            private readonly DialogHandlers _dialogHandlers;
+            private readonly DialogHandlersImpl _dialogHandlers;
 
             public ViewHandlers(Shapes shapesForm)
             {
                 _shapesForm = shapesForm;
-                _dialogHandlers = new DialogHandlers(_shapesForm);
+                _dialogHandlers = new DialogHandlersImpl(_shapesForm);
             }
 
             public void InvalidateLayout()
@@ -75,9 +75,9 @@ namespace Shapes
                 _shapesForm.Invalidate();
             }
 
-            public View.CanvasView.IDialogHandlers GetDialogHandlers()
+            public View.CanvasView.IDialogHandlers DialogHandlers
             {
-                return _dialogHandlers;
+                get => _dialogHandlers;
             }
         }
 
@@ -143,7 +143,7 @@ namespace Shapes
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Common.Size canvasSize = _canvasView.ViewEvents.GetCanvasSize();
+            Common.Size canvasSize = _canvasView.ViewEvents.CanvasSize;
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,
@@ -162,67 +162,67 @@ namespace Shapes
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.GetMouseEvents().Down(GetMousePosition());
+            _canvasView.ViewEvents.MouseEvents.Down(GetMousePosition());
         }
 
         private void Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.GetMouseEvents().Up(GetMousePosition());
+            _canvasView.ViewEvents.MouseEvents.Up(GetMousePosition());
         }
 
         private void Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.GetMouseEvents().Move(GetMousePosition());
+            _canvasView.ViewEvents.MouseEvents.Move(GetMousePosition());
         }
 
         private void undoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetHistoryEvents().Undo();
+            _canvasView.ViewEvents.HistoryEvents.Undo();
         }
 
         private void redoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetHistoryEvents().Redo();
+            _canvasView.ViewEvents.HistoryEvents.Redo();
         }
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetShapeOperationEvents().AddRectangle();
+            _canvasView.ViewEvents.ShapeOperationEvents.AddRectangle();
         }
 
         private void addTriangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetShapeOperationEvents().AddTriangle();
+            _canvasView.ViewEvents.ShapeOperationEvents.AddTriangle();
         }
 
         private void addCircleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetShapeOperationEvents().AddCircle();
+            _canvasView.ViewEvents.ShapeOperationEvents.AddCircle();
         }
 
         private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetShapeOperationEvents().Remove();
+            _canvasView.ViewEvents.ShapeOperationEvents.Remove();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetDocumentLifecycleEvents().New();
+            _canvasView.ViewEvents.DocumentLifecycleEvents.New();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetDocumentLifecycleEvents().Open();
+            _canvasView.ViewEvents.DocumentLifecycleEvents.Open();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetDocumentLifecycleEvents().Save();
+            _canvasView.ViewEvents.DocumentLifecycleEvents.Save();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.GetDocumentLifecycleEvents().SaveAs();
+            _canvasView.ViewEvents.DocumentLifecycleEvents.SaveAs();
         }
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)

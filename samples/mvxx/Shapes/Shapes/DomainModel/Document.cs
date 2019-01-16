@@ -43,11 +43,11 @@ namespace Shapes.DomainModel
 
         private class CanvasCommandCreatorEvents : CanvasCommandCreator.IEvents
         {
-            private class ShapeEvents : CanvasCommandCreator.IShapeEvents
+            private class ShapeEventsHandler : CanvasCommandCreator.IShapeEvents
             {
                 private readonly Document _document;
 
-                public ShapeEvents(Document document)
+                public ShapeEventsHandler(Document document)
                 {
                     _document = document;
                 }
@@ -69,12 +69,12 @@ namespace Shapes.DomainModel
             }
 
             private readonly Document _document;
-            private readonly ShapeEvents _shapeEvents;
+            private readonly ShapeEventsHandler _shapeEvents;
 
             public CanvasCommandCreatorEvents(Document document)
             {
                 _document = document;
-                _shapeEvents = new ShapeEvents(_document);
+                _shapeEvents = new ShapeEventsHandler(_document);
             }
 
             public void AddCommand(Command.ICommand command)
@@ -82,9 +82,9 @@ namespace Shapes.DomainModel
                 _document._history.AddAndExecuteCommand(command);
             }
 
-            public CanvasCommandCreator.IShapeEvents GetShapeEvents()
+            public CanvasCommandCreator.IShapeEvents ShapeEvents
             {
-                return _shapeEvents;
+                get => _shapeEvents;
             }
         }
 
