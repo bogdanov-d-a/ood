@@ -8,69 +8,79 @@ namespace Shapes.DomainModel
 {
     public class Facade
     {
-        public interface IShape
+        private class DocumentLifecycleControllerEvents : DocumentLifecycleController.IEvents
         {
-            Common.ShapeType GetShapeType();
-            Common.Rectangle GetBoundingRect();
-            void SetBoundingRect(Common.Rectangle rect);
-        }
+            private class LifecycleActionEvents : DocumentLifecycleController.ILifecycleActionEvents
+            {
+                private readonly Facade _facade;
 
-        public interface IDelegate
-        {
-            Option<string> RequestDocumentOpenPath();
-            Option<string> RequestDocumentSavePath();
-            Common.ClosingAction RequestUnsavedDocumentClosing();
-        }
+                public LifecycleActionEvents(Facade facade)
+                {
+                    _facade = facade;
+                }
 
-        private class DocumentLifecycleControllerDelegate : DocumentLifecycleController.IDelegate
-        {
+                public void OnEraseDocument()
+                {
+                    _facade._canvas.RemoveAllShapes();
+                    _facade._document.ClearHistory();
+                    _facade.CompleteLayoutUpdateEvent();
+                }
+
+                public void OnExportDocumentData(string path)
+                {
+                    _facade.SerializeShapes(new Utils.ShapeToFileSerializer(path));
+                }
+
+                public void OnFillDocumentData(string path)
+                {
+                    _facade.LoadCanvas(new Utils.CanvasLoaderFromFile(path));
+                }
+            }
+
+            private class SynchronizationEvents : DocumentLifecycleController.ISynchronizationEvents
+            {
+                private readonly Facade _facade;
+
+                public SynchronizationEvents(Facade facade)
+                {
+                    _facade = facade;
+                }
+
+                public bool IsDocumentSynced()
+                {
+                    return _facade._savedCommand == _facade._document.GetLastExecutedCommand();
+                }
+
+                public void OnSyncDocument()
+                {
+                    _facade._savedCommand = _facade._document.GetLastExecutedCommand();
+                }
+            }
+
             private readonly Facade _facade;
+            private readonly LifecycleActionEvents _lifecycleActionEvents;
+            private readonly SynchronizationEvents _synchronizationEvents;
 
-            public DocumentLifecycleControllerDelegate(Facade facade)
+            public DocumentLifecycleControllerEvents(Facade facade)
             {
                 _facade = facade;
+                _lifecycleActionEvents = new LifecycleActionEvents(facade);
+                _synchronizationEvents = new SynchronizationEvents(facade);
             }
 
-            public void OnEraseMemoryDocument()
+            public Common.ILifecycleDecisionEvents GetLifecycleDecisionEvents()
             {
-                _facade._canvas.RemoveAllShapes();
-                _facade._document.ClearHistory();
-                _facade.CompleteLayoutUpdateEvent();
+                return _facade._lifecycleDecisionEvents;
             }
 
-            public void OnOpenDocument(string path)
+            public DocumentLifecycleController.ILifecycleActionEvents GetLifecycleActionEvents()
             {
-                _facade.LoadCanvas(new Utils.CanvasLoaderFromFile(path));
+                return _lifecycleActionEvents;
             }
 
-            public void OnSaveDocument(string path)
+            public DocumentLifecycleController.ISynchronizationEvents GetSynchronizationEvents()
             {
-                _facade.SerializeShapes(new Utils.ShapeToFileSerializer(path));
-            }
-
-            public Option<string> RequestDocumentOpenPath()
-            {
-                return _facade._delegate.RequestDocumentOpenPath();
-            }
-
-            public Option<string> RequestDocumentSavePath()
-            {
-                return _facade._delegate.RequestDocumentSavePath();
-            }
-
-            public Common.ClosingAction RequestUnsavedDocumentClosing()
-            {
-                return _facade._delegate.RequestUnsavedDocumentClosing();
-            }
-
-            public bool IsDocumentSynced()
-            {
-                return _facade._savedCommand == _facade._document.GetLastExecutedCommand();
-            }
-
-            public void OnSyncDocument()
-            {
-                _facade._savedCommand = _facade._document.GetLastExecutedCommand();
+                return _synchronizationEvents;
             }
         }
 
@@ -78,13 +88,13 @@ namespace Shapes.DomainModel
         private readonly Document _document;
         private readonly DocumentLifecycleController _dlc;
         private Command.ICommand _savedCommand = null;
-        private IDelegate _delegate = null;
+        private Common.ILifecycleDecisionEvents _lifecycleDecisionEvents = null;
 
         public Facade()
         {
             _canvas = new Canvas(new Common.Size(640, 480));
             _document = new Document(_canvas);
-            _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerDelegate(this));
+            _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this));
 
             _document.ShapeInsertEvent += new Document.IndexDelegate((int index) => {
                 ShapeInsertEvent(index);
@@ -97,9 +107,9 @@ namespace Shapes.DomainModel
             });
         }
 
-        public void SetDelegate(IDelegate delegate_)
+        public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
         {
-            _delegate = delegate_;
+            _lifecycleDecisionEvents = lifecycleDecisionEvents;
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
@@ -119,18 +129,12 @@ namespace Shapes.DomainModel
 
         public Common.Size CanvasSize
         {
-            get
-            {
-                return _canvas.CanvasSize;
-            }
+            get => _canvas.CanvasSize;
         }
 
         public int ShapeCount
         {
-            get
-            {
-                return _canvas.ShapeCount;
-            }
+            get => _canvas.ShapeCount;
         }
 
         public void Undo()
@@ -177,7 +181,7 @@ namespace Shapes.DomainModel
                 for (int i = 0; i < ShapeCount; ++i)
                 {
                     var shape = GetShape(i);
-                    shapeInfoDelegate(shape.GetShapeType(), shape.GetBoundingRect());
+                    shapeInfoDelegate(shape.ShapeType, shape.BoundingRect);
                 }
             });
         }

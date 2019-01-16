@@ -5,26 +5,30 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    class HistoryCanvas
+    class CanvasCommandCreator
     {
-        public interface IDelegate
+        public interface IShapeEvents
+        {
+            void OnInsert(int index);
+            void OnRemove(int index);
+            void OnMove(int index);
+        }
+
+        public interface IEvents
         {
             void AddCommand(Command.ICommand command);
-
-            void OnInsertShape(int index);
-            void OnRemoveShape(int index);
-            void OnMoveShape(int index);
+            IShapeEvents GetShapeEvents();
         }
 
         private class CommandShapes : Command.IShapes
         {
             private readonly Canvas _canvas;
-            private readonly IDelegate _delegate;
+            private readonly IShapeEvents _shapeEvents;
 
-            public CommandShapes(Canvas canvas, IDelegate delegate_)
+            public CommandShapes(Canvas canvas, IShapeEvents shapeEvents)
             {
                 _canvas = canvas;
-                _delegate = delegate_;
+                _shapeEvents = shapeEvents;
             }
 
             public int ShapeCount => _canvas.ShapeCount;
@@ -32,14 +36,14 @@ namespace Shapes.DomainModel
             public void InsertShape(int index, Common.Shape shape)
             {
                 _canvas.InsertShape(index, shape);
-                _delegate.OnInsertShape(index);
+                _shapeEvents.OnInsert(index);
             }
 
             public Common.Shape RemoveShapeAt(int index)
             {
-                Common.Shape result = _canvas.GetShape(index);
-                _canvas.RemoveShape(index);
-                _delegate.OnRemoveShape(index);
+                Common.Shape result = _canvas.GetShapeAt(index);
+                _canvas.RemoveShapeAt(index);
+                _shapeEvents.OnRemove(index);
                 return result;
             }
         }
@@ -47,7 +51,7 @@ namespace Shapes.DomainModel
         private class Movable : Command.MoveShapeCommand.IMovable
         {
             private readonly Canvas _canvas;
-            private readonly IDelegate _delegate;
+            private readonly IShapeEvents _shapeEvents;
             private readonly int _index;
 
             public Common.Rectangle Rect
@@ -55,47 +59,47 @@ namespace Shapes.DomainModel
                 get => GetShape().boundingRect;
                 set {
                     GetShape().boundingRect = value;
-                    _delegate.OnMoveShape(_index);
+                    _shapeEvents.OnMove(_index);
                 }
             }
 
-            public Movable(Canvas canvas, IDelegate delegate_, int index)
+            public Movable(Canvas canvas, IShapeEvents shapeEvents, int index)
             {
                 _canvas = canvas;
-                _delegate = delegate_;
+                _shapeEvents = shapeEvents;
                 _index = index;
             }
 
             private Common.Shape GetShape()
             {
-                return _canvas.GetShape(_index);
+                return _canvas.GetShapeAt(_index);
             }
         }
 
         private readonly Canvas _canvas;
-        private readonly IDelegate _delegate;
+        private readonly IEvents _events;
         private readonly CommandShapes _commandShapes;
 
-        public HistoryCanvas(Canvas canvas, IDelegate delegate_)
+        public CanvasCommandCreator(Canvas canvas, IEvents events)
         {
             _canvas = canvas;
-            _delegate = delegate_;
-            _commandShapes = new CommandShapes(_canvas, _delegate);
+            _events = events;
+            _commandShapes = new CommandShapes(_canvas, _events.GetShapeEvents());
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
         {
-            _delegate.AddCommand(new Command.InsertShapeCommand(_commandShapes, new Common.Shape(type, rect)));
+            _events.AddCommand(new Command.InsertShapeCommand(_commandShapes, new Common.Shape(type, rect)));
         }
 
         public void RemoveShape(int index)
         {
-            _delegate.AddCommand(new Command.RemoveShapeCommand(_commandShapes, index));
+            _events.AddCommand(new Command.RemoveShapeCommand(_commandShapes, index));
         }
 
         public void MoveShape(int index, Common.Rectangle newRect)
         {
-            _delegate.AddCommand(new Command.MoveShapeCommand(new Movable(_canvas, _delegate, index), newRect));
+            _events.AddCommand(new Command.MoveShapeCommand(new Movable(_canvas, _events.GetShapeEvents(), index), newRect));
         }
     }
 }

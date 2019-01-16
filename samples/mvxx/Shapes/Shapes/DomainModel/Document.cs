@@ -8,7 +8,7 @@ namespace Shapes.DomainModel
 {
     class Document
     {
-        private class Shape : Facade.IShape
+        private class Shape : IShape
         {
             private readonly Document _document;
             private readonly int _index;
@@ -21,82 +21,97 @@ namespace Shapes.DomainModel
 
             private Common.Shape GetShape()
             {
-                return _document._canvas.GetShape(_index);
+                return _document._canvas.GetShapeAt(_index);
             }
 
-            public Common.ShapeType GetShapeType()
+            public Common.ShapeType ShapeType
             {
-                return GetShape().type;
+                get => GetShape().type;
             }
 
-            public Common.Rectangle GetBoundingRect()
+            public Common.Rectangle BoundingRect
             {
-                return GetShape().boundingRect;
-            }
-
-            public void SetBoundingRect(Common.Rectangle rect)
-            {
-                if (!GetBoundingRect().Equals(rect))
-                {
-                    _document._historyCanvas.MoveShape(_index, rect);
+                get => GetShape().boundingRect;
+                set {
+                    if (!BoundingRect.Equals(value))
+                    {
+                        _document._canvasCommandCreator.MoveShape(_index, value);
+                    }
                 }
             }
         }
 
-        private class HistoryCanvasDelegate : HistoryCanvas.IDelegate
+        private class CanvasCommandCreatorEvents : CanvasCommandCreator.IEvents
         {
-            private readonly Document _document;
-
-            public HistoryCanvasDelegate(Document document)
+            private class ShapeEvents : CanvasCommandCreator.IShapeEvents
             {
-                _document = document;
+                private readonly Document _document;
+
+                public ShapeEvents(Document document)
+                {
+                    _document = document;
+                }
+
+                public void OnInsert(int index)
+                {
+                    _document.ShapeInsertEvent(index);
+                }
+
+                public void OnMove(int index)
+                {
+                    _document.ShapeModifyEvent(index);
+                }
+
+                public void OnRemove(int index)
+                {
+                    _document.ShapeRemoveEvent(index);
+                }
             }
 
-            void HistoryCanvas.IDelegate.AddCommand(Command.ICommand command)
+            private readonly Document _document;
+            private readonly ShapeEvents _shapeEvents;
+
+            public CanvasCommandCreatorEvents(Document document)
+            {
+                _document = document;
+                _shapeEvents = new ShapeEvents(_document);
+            }
+
+            public void AddCommand(Command.ICommand command)
             {
                 _document._history.AddAndExecuteCommand(command);
             }
 
-            void HistoryCanvas.IDelegate.OnInsertShape(int index)
+            public CanvasCommandCreator.IShapeEvents GetShapeEvents()
             {
-                _document.ShapeInsertEvent(index);
-            }
-
-            void HistoryCanvas.IDelegate.OnRemoveShape(int index)
-            {
-                _document.ShapeRemoveEvent(index);
-            }
-
-            void HistoryCanvas.IDelegate.OnMoveShape(int index)
-            {
-                _document.ShapeModifyEvent(index);
+                return _shapeEvents;
             }
         }
 
         private readonly Canvas _canvas;
         private readonly History _history;
-        private readonly HistoryCanvas _historyCanvas;
+        private readonly CanvasCommandCreator _canvasCommandCreator;
 
         public Document(Canvas canvas)
         {
             _canvas = canvas;
             _history = new History();
-            _historyCanvas = new HistoryCanvas(_canvas, new HistoryCanvasDelegate(this));
+            _canvasCommandCreator = new CanvasCommandCreator(_canvas, new CanvasCommandCreatorEvents(this));
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
         {
-            _historyCanvas.AddShape(type, rect);
+            _canvasCommandCreator.AddShape(type, rect);
         }
 
-        public Facade.IShape GetShape(int index)
+        public IShape GetShape(int index)
         {
             return new Shape(this, index);
         }
 
         public void RemoveShape(int index)
         {
-            _historyCanvas.RemoveShape(index);
+            _canvasCommandCreator.RemoveShape(index);
         }
 
         public void Undo()

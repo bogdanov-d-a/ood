@@ -11,20 +11,17 @@ namespace Shapes.AppModel
     {
         public interface IShape
         {
-            Common.Rectangle GetBoundingRect();
-            void SetBoundingRect(Common.Rectangle rect);
+            Common.Rectangle BoundingRect { get; set; }
             bool HasPointInside(Common.Position pos);
         }
 
         public interface IModel
         {
-            int GetShapeCount();
+            int ShapeCount { get; }
             IShape GetShape(int index);
 
-            void SelectShape(int index);
-            int GetSelectionIndex();
-
-            Common.Size GetCanvasSize();
+            int SelectionIndex { get; set; }
+            Common.Size CanvasSize { get; }
             void OnShapeTransform();
         }
 
@@ -52,7 +49,7 @@ namespace Shapes.AppModel
 
         private int GetShapeAtPos(Common.Position pos)
         {
-            for (int i = _model.GetShapeCount() - 1; i >= 0; --i)
+            for (int i = _model.ShapeCount - 1; i >= 0; --i)
             {
                 if (_model.GetShape(i).HasPointInside(pos))
                 {
@@ -67,7 +64,7 @@ namespace Shapes.AppModel
             int i = GetShapeAtPos(pos);
             if (i != -1)
             {
-                _model.SelectShape(i);
+                _model.SelectionIndex = i;
             }
         }
 
@@ -81,9 +78,9 @@ namespace Shapes.AppModel
             var movingData = new MovingData(pos, pos, Option.None<CursorHandlerUtils.RectEdges>());
             _movingData = Option.Some(movingData);
 
-            if (_model.GetSelectionIndex() != -1)
+            if (_model.SelectionIndex != -1)
             {
-                var rect = _model.GetShape(_model.GetSelectionIndex()).GetBoundingRect();
+                var rect = _model.GetShape(_model.SelectionIndex).BoundingRect;
                 var edges = CursorHandlerUtils.FindRectEdges(rect, pos);
 
                 if (edges.hor != CursorHandlerUtils.RectEdgeHor.None || edges.vert != CursorHandlerUtils.RectEdgeVert.None)
@@ -94,7 +91,7 @@ namespace Shapes.AppModel
 
             if (!movingData.resize.HasValue)
             {
-                _model.SelectShape(-1);
+                _model.SelectionIndex = -1;
                 SelectShapeAtPos(pos);
             }
         }
@@ -111,13 +108,13 @@ namespace Shapes.AppModel
 
         public Option<Common.Rectangle> GetTransformingRect()
         {
-            if (!_movingData.HasValue || _model.GetSelectionIndex() == -1)
+            if (!_movingData.HasValue || _model.SelectionIndex == -1)
             {
                 return Option.None<Common.Rectangle>();
             }
 
             var md = _movingData.ValueOrFailure();
-            var rect = _model.GetShape(_model.GetSelectionIndex()).GetBoundingRect();
+            var rect = _model.GetShape(_model.SelectionIndex).BoundingRect;
             var offset = Common.Position.Sub(md.curPos, md.startPos);
 
             if (md.resize.HasValue)
@@ -149,12 +146,12 @@ namespace Shapes.AppModel
                     rect.Width += shift;
                 }
 
-                CursorHandlerUtils.ResizeClampBounds(ref rect, _model.GetCanvasSize());
+                CursorHandlerUtils.ResizeClampBounds(ref rect, _model.CanvasSize);
             }
             else
             {
                 rect.Offset(offset);
-                CursorHandlerUtils.OffsetClampBounds(ref rect, _model.GetCanvasSize());
+                CursorHandlerUtils.OffsetClampBounds(ref rect, _model.CanvasSize);
             }
 
             return Option.Some(rect);
@@ -168,7 +165,7 @@ namespace Shapes.AppModel
             if (rectOpt.HasValue)
             {
                 _movingData = Option.None<MovingData>();
-                _model.GetShape(_model.GetSelectionIndex()).SetBoundingRect(rectOpt.ValueOrFailure());
+                _model.GetShape(_model.SelectionIndex).BoundingRect = rectOpt.ValueOrFailure();
             }
 
             _movingData = Option.None<MovingData>();

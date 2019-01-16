@@ -28,24 +28,20 @@ namespace Shapes.AppModel
                     _index = index;
                 }
 
-                public DomainModel.Facade.IShape GetShape()
+                public DomainModel.IShape GetShape()
                 {
                     return _domainModel.GetShape(_index);
                 }
 
-                public Common.Rectangle GetBoundingRect()
+                public Common.Rectangle BoundingRect
                 {
-                    return GetShape().GetBoundingRect();
+                    get => GetShape().BoundingRect;
+                    set => _domainModel.GetShape(_index).BoundingRect = value;
                 }
 
                 public bool HasPointInside(Common.Position pos)
                 {
-                    return Utils.ShapeBoundsChecker.IsInsideShape(new Common.Shape(GetShape().GetShapeType(), GetBoundingRect()), pos);
-                }
-
-                public void SetBoundingRect(Common.Rectangle rect)
-                {
-                    _domainModel.GetShape(_index).SetBoundingRect(rect);
+                    return Utils.ShapeBoundsChecker.IsInsideShape(new Common.Shape(GetShape().ShapeType, BoundingRect), pos);
                 }
             }
 
@@ -54,14 +50,15 @@ namespace Shapes.AppModel
                 _appModel = appModel;
             }
 
-            public Common.Size GetCanvasSize()
+            public Common.Size CanvasSize
             {
-                return _appModel._domainModel.CanvasSize;
+                get => _appModel._domainModel.CanvasSize;
             }
 
-            public int GetSelectionIndex()
+            public int SelectionIndex
             {
-                return _appModel.GetSelectedIndex();
+                get => _appModel.SelectedIndex;
+                set => _appModel.SelectedIndex = value;
             }
 
             public CursorHandler.IShape GetShape(int index)
@@ -69,23 +66,18 @@ namespace Shapes.AppModel
                 return new Shape(_appModel._domainModel, index);
             }
 
-            public int GetShapeCount()
+            public int ShapeCount
             {
-                return _appModel._domainModel.ShapeCount;
+                get => _appModel._domainModel.ShapeCount;
             }
 
             public void OnShapeTransform()
             {
-                int index = _appModel.GetSelectedIndex();
+                int index = _appModel.SelectedIndex;
                 if (index != -1)
                 {
                     _appModel.ShapeModifyEvent(index);
                 }
-            }
-
-            public void SelectShape(int index)
-            {
-                _appModel.SelectShape(index);
             }
         }
 
@@ -111,7 +103,7 @@ namespace Shapes.AppModel
 
         public Common.Shape GetShape(int index)
         {
-            return new Common.Shape(_domainModel.GetShape(index).GetShapeType(), GetShapeBoundingRect(index));
+            return new Common.Shape(_domainModel.GetShape(index).ShapeType, GetShapeBoundingRect(index));
         }
 
         private Common.Rectangle GetShapeBoundingRect(int index)
@@ -124,18 +116,16 @@ namespace Shapes.AppModel
                     return rect.ValueOrFailure();
                 }
             }
-            return _domainModel.GetShape(index).GetBoundingRect();
+            return _domainModel.GetShape(index).BoundingRect;
         }
 
-        public int GetSelectedIndex()
+        public int SelectedIndex
         {
-            return _selectedIndex;
-        }
-
-        private void SelectShape(int index)
-        {
-            _selectedIndex = index;
-            SelectionChangeEvent(_selectedIndex);
+            get => _selectedIndex;
+            set {
+                _selectedIndex = value;
+                SelectionChangeEvent(_selectedIndex);
+            }
         }
 
         public void RemoveSelectedShape()
@@ -151,7 +141,7 @@ namespace Shapes.AppModel
 
         public void ResetSelection()
         {
-            SelectShape(-1);
+            SelectedIndex = -1;
         }
 
         public void BeginMove(Common.Position pos)

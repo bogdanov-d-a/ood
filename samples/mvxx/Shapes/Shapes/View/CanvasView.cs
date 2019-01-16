@@ -71,10 +71,7 @@ namespace Shapes.View
 
         public int ShapeCount
         {
-            get
-            {
-                return _shapes.Count;
-            }
+            get => _shapes.Count;
         }
 
         public void SetSelectionIndex(int index)

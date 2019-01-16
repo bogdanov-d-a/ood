@@ -36,9 +36,9 @@ namespace Shapes.AppModel
             });
         }
 
-        public void SetDelegate(DomainModel.Facade.IDelegate delegate_)
+        public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
         {
-            _domainModel.SetDelegate(delegate_);
+            _domainModel.SetLifecycleDecisionEvents(lifecycleDecisionEvents);
         }
 
         private void AddShape(Common.ShapeType type)
@@ -66,9 +66,9 @@ namespace Shapes.AppModel
             return _appModel.GetShape(index);
         }
 
-        public int GetSelectedIndex()
+        public int SelectedIndex
         {
-            return _appModel.GetSelectedIndex();
+            get => _appModel.SelectedIndex;
         }
 
         public void RemoveSelectedShape()
@@ -125,18 +125,12 @@ namespace Shapes.AppModel
 
         public Common.Size CanvasSize
         {
-            get
-            {
-                return _domainModel.CanvasSize;
-            }
+            get => _domainModel.CanvasSize;
         }
 
         public int ShapeCount
         {
-            get
-            {
-                return _domainModel.ShapeCount;
-            }
+            get => _domainModel.ShapeCount;
         }
 
         public delegate void VoidDelegate();

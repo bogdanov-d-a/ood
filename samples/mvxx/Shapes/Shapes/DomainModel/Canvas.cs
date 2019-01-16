@@ -32,12 +32,12 @@ namespace Shapes.DomainModel
             _shapeList.Insert(index, shape);
         }
 
-        public Common.Shape GetShape(int index)
+        public Common.Shape GetShapeAt(int index)
         {
             return _shapeList.ElementAt(index);
         }
 
-        public void RemoveShape(int index)
+        public void RemoveShapeAt(int index)
         {
             _shapeList.RemoveAt(index);
         }
@@ -49,16 +49,12 @@ namespace Shapes.DomainModel
 
         public Common.Size CanvasSize
         {
-            get {
-                return _canvasSize;
-            }
+            get => _canvasSize;
         }
 
         public int ShapeCount
         {
-            get {
-                return _shapeList.Count;
-            }
+            get => _shapeList.Count;
         }
     }
 }

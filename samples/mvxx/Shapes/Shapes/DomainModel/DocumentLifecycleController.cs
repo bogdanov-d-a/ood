@@ -9,33 +9,39 @@ namespace Shapes.DomainModel
 {
     class DocumentLifecycleController
     {
-        public interface IDelegate
+        public interface ILifecycleActionEvents
         {
-            Option<string> RequestDocumentOpenPath();
-            Common.ClosingAction RequestUnsavedDocumentClosing();
-            Option<string> RequestDocumentSavePath();
+            void OnEraseDocument();
+            void OnFillDocumentData(string path);
+            void OnExportDocumentData(string path);
+        }
 
-            void OnEraseMemoryDocument();
-            void OnOpenDocument(string path);
-            void OnSaveDocument(string path);
-
+        public interface ISynchronizationEvents
+        {
             bool IsDocumentSynced();
             void OnSyncDocument();
         }
 
-        private Option<string> _path = Option.None<string>();
-        private readonly IDelegate _delegate;
-
-        public DocumentLifecycleController(IDelegate delegate_)
+        public interface IEvents
         {
-            _delegate = delegate_;
+            Common.ILifecycleDecisionEvents GetLifecycleDecisionEvents();
+            ILifecycleActionEvents GetLifecycleActionEvents();
+            ISynchronizationEvents GetSynchronizationEvents();
+        }
+
+        private Option<string> _path = Option.None<string>();
+        private readonly IEvents _events;
+
+        public DocumentLifecycleController(IEvents events)
+        {
+            _events = events;
         }
 
         public bool New()
         {
-            if (!_delegate.IsDocumentSynced())
+            if (!_events.GetSynchronizationEvents().IsDocumentSynced())
             {
-                var closingAction = _delegate.RequestUnsavedDocumentClosing();
+                var closingAction = _events.GetLifecycleDecisionEvents().RequestUnsavedClosing();
                 if (closingAction == Common.ClosingAction.DontClose)
                 {
                     return false;
@@ -50,8 +56,8 @@ namespace Shapes.DomainModel
                 }
             }
 
-            _delegate.OnEraseMemoryDocument();
-            _delegate.OnSyncDocument();
+            _events.GetLifecycleActionEvents().OnEraseDocument();
+            _events.GetSynchronizationEvents().OnSyncDocument();
             _path = Option.None<string>();
             return true;
         }
@@ -63,14 +69,14 @@ namespace Shapes.DomainModel
                 return false;
             }
 
-            var path = _delegate.RequestDocumentOpenPath();
+            var path = _events.GetLifecycleDecisionEvents().RequestOpenPath();
             if (!path.HasValue)
             {
                 return false;
             }
 
             _path = path;
-            _delegate.OnOpenDocument(_path.ValueOrFailure());
+            _events.GetLifecycleActionEvents().OnFillDocumentData(_path.ValueOrFailure());
             return true;
         }
 
@@ -78,7 +84,7 @@ namespace Shapes.DomainModel
         {
             if (!_path.HasValue || forcePathRequest)
             {
-                var path = _delegate.RequestDocumentSavePath();
+                var path = _events.GetLifecycleDecisionEvents().RequestSavePath();
                 if (!path.HasValue)
                 {
                     return false;
@@ -86,8 +92,8 @@ namespace Shapes.DomainModel
                 _path = path;
             }
 
-            _delegate.OnSaveDocument(_path.ValueOrFailure());
-            _delegate.OnSyncDocument();
+            _events.GetLifecycleActionEvents().OnExportDocumentData(_path.ValueOrFailure());
+            _events.GetSynchronizationEvents().OnSyncDocument();
             return true;
         }
     }

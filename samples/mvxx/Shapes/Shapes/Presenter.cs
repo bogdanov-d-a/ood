@@ -9,11 +9,11 @@ namespace Shapes
 {
     public class Presenter
     {
-        public class ModelDelegate : DomainModel.Facade.IDelegate
+        private class LifecycleDecisionEvents : Common.ILifecycleDecisionEvents
         {
             private readonly View.CanvasView _view;
 
-            public ModelDelegate(View.CanvasView view)
+            public LifecycleDecisionEvents(View.CanvasView view)
             {
                 _view = view;
             }
@@ -23,17 +23,17 @@ namespace Shapes
                 return _view.ViewHandlers.GetDialogHandlers();
             }
 
-            public Option<string> RequestDocumentOpenPath()
+            public Option<string> RequestOpenPath()
             {
                 return GetDialogHandlers().ShowOpenFileDialog();
             }
 
-            public Option<string> RequestDocumentSavePath()
+            public Option<string> RequestSavePath()
             {
                 return GetDialogHandlers().ShowSaveFileDialog();
             }
 
-            public Common.ClosingAction RequestUnsavedDocumentClosing()
+            public Common.ClosingAction RequestUnsavedClosing()
             {
                 return GetDialogHandlers().ShowUnsavedDocumentClosePrompt();
             }
@@ -200,7 +200,7 @@ namespace Shapes
             _appModel = appModel;
             _view = view;
 
-            _appModel.SetDelegate(new ModelDelegate(_view));
+            _appModel.SetLifecycleDecisionEvents(new LifecycleDecisionEvents(_view));
             _view.ViewEvents = new ViewEvents(_appModel);
 
             Initialize();
@@ -221,7 +221,7 @@ namespace Shapes
                     _view.AddShape(i, _appModel.GetShape(i));
                 }
 
-                _view.SetSelectionIndex(_appModel.GetSelectedIndex());
+                _view.SetSelectionIndex(_appModel.SelectedIndex);
 
                 _view.ViewHandlers.InvalidateLayout();
             });

@@ -52,6 +52,8 @@
     <Compile Include="Common\ClosingAction.cs" />
     <Compile Include="DomainModel\Command\IShapes.cs" />
     <Compile Include="DomainModel\Facade.cs" />
+    <Compile Include="Common\ILifecycleDecisionEvents.cs" />
+    <Compile Include="DomainModel\IShape.cs" />
     <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
     <Compile Include="Utils\ICanvasLoader.cs" />
@@ -66,7 +68,7 @@
     <Compile Include="DomainModel\Document.cs" />
     <Compile Include="DomainModel\DocumentLifecycleController.cs" />
     <Compile Include="DomainModel\History.cs" />
-    <Compile Include="DomainModel\HistoryCanvas.cs" />
+    <Compile Include="DomainModel\CanvasCommandCreator.cs" />
     <Compile Include="DomainModel\Command\ICommand.cs" />
     <Compile Include="DomainModel\Command\InsertShapeCommand.cs" />
     <Compile Include="DomainModel\Command\MoveShapeCommand.cs" />
