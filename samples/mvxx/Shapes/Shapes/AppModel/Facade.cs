@@ -90,19 +90,9 @@ namespace Shapes.AppModel
             _appModel.RemoveSelectedShape();
         }
 
-        public void BeginMove(Common.Position pos)
+        public Common.IPointerDrag Pointer
         {
-            _appModel.BeginMove(pos);
-        }
-
-        public void Move(Common.Position pos)
-        {
-            _appModel.Move(pos);
-        }
-
-        public void EndMove(Common.Position pos)
-        {
-            _appModel.EndMove(pos);
+            get => _appModel.Pointer;
         }
 
         public Common.IUndoRedo History

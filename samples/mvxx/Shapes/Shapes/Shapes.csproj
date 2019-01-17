@@ -52,6 +52,7 @@
     <Compile Include="Common\ClosingAction.cs" />
     <Compile Include="Common\DelegateTypes.cs" />
     <Compile Include="Common\IDocumentLifecycle.cs" />
+    <Compile Include="Common\IPointerDrag.cs" />
     <Compile Include="Common\IUndoRedo.cs" />
     <Compile Include="DomainModel\Command\IShapes.cs" />
     <Compile Include="DomainModel\Facade.cs" />

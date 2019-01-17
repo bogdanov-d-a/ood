@@ -7,7 +7,7 @@ using Optional.Unsafe;
 
 namespace Shapes.AppModel
 {
-    class CursorHandler
+    class CursorHandler : Common.IPointerDrag
     {
         public interface IShape
         {

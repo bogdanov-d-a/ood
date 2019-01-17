@@ -142,19 +142,9 @@ namespace Shapes.AppModel
             SelectedIndex = -1;
         }
 
-        public void BeginMove(Common.Position pos)
+        public Common.IPointerDrag Pointer
         {
-            _cursorHandler.BeginMove(pos);
-        }
-
-        public void Move(Common.Position pos)
-        {
-            _cursorHandler.Move(pos);
-        }
-
-        public void EndMove(Common.Position pos)
-        {
-            _cursorHandler.EndMove(pos);
+            get => _cursorHandler;
         }
 
         public event Common.DelegateTypes.Void CompleteLayoutUpdateEvent;

@@ -73,26 +73,26 @@ namespace Shapes
 
             private class MouseEventsHandler : View.CanvasView.IMouseEvents
             {
-                private readonly AppModel.Facade _appModel;
+                private readonly Common.IPointerDrag _pointerDrag;
 
-                public MouseEventsHandler(AppModel.Facade appModel)
+                public MouseEventsHandler(Common.IPointerDrag pointerDrag)
                 {
-                    _appModel = appModel;
+                    _pointerDrag = pointerDrag;
                 }
 
                 public void Down(Common.Position pos)
                 {
-                    _appModel.BeginMove(pos);
+                    _pointerDrag.BeginMove(pos);
                 }
 
                 public void Move(Common.Position pos)
                 {
-                    _appModel.Move(pos);
+                    _pointerDrag.Move(pos);
                 }
 
                 public void Up(Common.Position pos)
                 {
-                    _appModel.EndMove(pos);
+                    _pointerDrag.EndMove(pos);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace Shapes
             {
                 _appModel = appModel;
                 _shapeOperationEvents = new ShapeOperationEventsHandler(_appModel);
-                _mouseEvents = new MouseEventsHandler(_appModel);
+                _mouseEvents = new MouseEventsHandler(_appModel.Pointer);
             }
 
             public Common.IDocumentLifecycle DocumentLifecycleEvents
