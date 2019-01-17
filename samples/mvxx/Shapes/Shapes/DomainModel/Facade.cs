@@ -96,15 +96,9 @@ namespace Shapes.DomainModel
             _document = new Document(_canvas);
             _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this));
 
-            _document.ShapeInsertEvent += new Document.IndexDelegate((int index) => {
-                ShapeInsertEvent(index);
-            });
-            _document.ShapeModifyEvent += new Document.IndexDelegate((int index) => {
-                ShapeModifyEvent(index);
-            });
-            _document.ShapeRemoveEvent += new Document.IndexDelegate((int index) => {
-                ShapeRemoveEvent(index);
-            });
+            _document.ShapeInsertEvent += ShapeInsertEvent;
+            _document.ShapeModifyEvent += ShapeModifyEvent;
+            _document.ShapeRemoveEvent += ShapeRemoveEvent;
         }
 
         public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
@@ -186,12 +180,10 @@ namespace Shapes.DomainModel
             });
         }
 
-        public delegate void VoidDelegate();
-        public event VoidDelegate CompleteLayoutUpdateEvent;
+        public event Common.DelegateTypes.Void CompleteLayoutUpdateEvent;
 
-        public delegate void IndexDelegate(int index);
-        public event IndexDelegate ShapeInsertEvent;
-        public event IndexDelegate ShapeModifyEvent;
-        public event IndexDelegate ShapeRemoveEvent;
+        public event Common.DelegateTypes.Int ShapeInsertEvent;
+        public event Common.DelegateTypes.Int ShapeModifyEvent;
+        public event Common.DelegateTypes.Int ShapeRemoveEvent;
     }
 }

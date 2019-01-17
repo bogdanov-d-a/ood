@@ -18,22 +18,12 @@ namespace Shapes.AppModel
             _domainModel = new DomainModel.Facade();
             _appModel = new AppModel(_domainModel);
 
-            _domainModel.ShapeInsertEvent += new DomainModel.Facade.IndexDelegate((int index) => {
-                ShapeInsertEvent(index);
-            });
+            _domainModel.ShapeInsertEvent += ShapeInsertEvent;
 
-            _appModel.CompleteLayoutUpdateEvent += new AppModel.VoidDelegate(() => {
-                CompleteLayoutUpdateEvent();
-            });
-            _appModel.ShapeModifyEvent += new AppModel.IndexDelegate((int index) => {
-                ShapeModifyEvent(index);
-            });
-            _appModel.ShapeRemoveEvent += new AppModel.IndexDelegate((int index) => {
-                ShapeRemoveEvent(index);
-            });
-            _appModel.SelectionChangeEvent += new AppModel.IndexDelegate((int index) => {
-                SelectionChangeEvent(index);
-            });
+            _appModel.CompleteLayoutUpdateEvent += CompleteLayoutUpdateEvent;
+            _appModel.ShapeModifyEvent += ShapeModifyEvent;
+            _appModel.ShapeRemoveEvent += ShapeRemoveEvent;
+            _appModel.SelectionChangeEvent += SelectionChangeEvent;
         }
 
         public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
@@ -133,13 +123,11 @@ namespace Shapes.AppModel
             get => _domainModel.ShapeCount;
         }
 
-        public delegate void VoidDelegate();
-        public event VoidDelegate CompleteLayoutUpdateEvent;
+        public event Common.DelegateTypes.Void CompleteLayoutUpdateEvent;
 
-        public delegate void IndexDelegate(int index);
-        public event IndexDelegate ShapeInsertEvent;
-        public event IndexDelegate ShapeModifyEvent;
-        public event IndexDelegate ShapeRemoveEvent;
-        public event IndexDelegate SelectionChangeEvent;
+        public event Common.DelegateTypes.Int ShapeInsertEvent;
+        public event Common.DelegateTypes.Int ShapeModifyEvent;
+        public event Common.DelegateTypes.Int ShapeRemoveEvent;
+        public event Common.DelegateTypes.Int SelectionChangeEvent;
     }
 }

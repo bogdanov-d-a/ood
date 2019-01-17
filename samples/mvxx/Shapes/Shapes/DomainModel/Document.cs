@@ -134,9 +134,8 @@ namespace Shapes.DomainModel
             return _history.GetLastExecuted();
         }
 
-        public delegate void IndexDelegate(int index);
-        public event IndexDelegate ShapeInsertEvent;
-        public event IndexDelegate ShapeModifyEvent;
-        public event IndexDelegate ShapeRemoveEvent;
+        public event Common.DelegateTypes.Int ShapeInsertEvent;
+        public event Common.DelegateTypes.Int ShapeModifyEvent;
+        public event Common.DelegateTypes.Int ShapeRemoveEvent;
     }
 }

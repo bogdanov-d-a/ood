@@ -208,7 +208,7 @@ namespace Shapes
 
         private void Initialize()
         {
-            _appModel.CompleteLayoutUpdateEvent += new AppModel.Facade.VoidDelegate(() => {
+            _appModel.CompleteLayoutUpdateEvent += () => {
                 _view.SetSelectionIndex(-1);
 
                 while (_view.ShapeCount > 0)
@@ -224,27 +224,27 @@ namespace Shapes
                 _view.SetSelectionIndex(_appModel.SelectedIndex);
 
                 _view.ViewHandlers.InvalidateLayout();
-            });
+            };
 
-            _appModel.ShapeInsertEvent += new AppModel.Facade.IndexDelegate((int index) => {
+            _appModel.ShapeInsertEvent += (int index) => {
                 _view.AddShape(index, _appModel.GetShape(index));
                 _view.ViewHandlers.InvalidateLayout();
-            });
+            };
 
-            _appModel.ShapeModifyEvent += new AppModel.Facade.IndexDelegate((int index) => {
+            _appModel.ShapeModifyEvent += (int index) => {
                 _view.GetShape(index).boundingRect = _appModel.GetShape(index).boundingRect;
                 _view.ViewHandlers.InvalidateLayout();
-            });
+            };
 
-            _appModel.ShapeRemoveEvent += new AppModel.Facade.IndexDelegate((int index) => {
+            _appModel.ShapeRemoveEvent += (int index) => {
                 _view.RemoveShape(index);
                 _view.ViewHandlers.InvalidateLayout();
-            });
+            };
 
-            _appModel.SelectionChangeEvent += new AppModel.Facade.IndexDelegate((int index) => {
+            _appModel.SelectionChangeEvent += (int index) => {
                 _view.SetSelectionIndex(index);
                 _view.ViewHandlers.InvalidateLayout();
-            });
+            };
         }
     }
 }

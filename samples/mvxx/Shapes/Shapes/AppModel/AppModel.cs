@@ -84,20 +84,18 @@ namespace Shapes.AppModel
         public AppModel(DomainModel.Facade domainModel)
         {
             _domainModel = domainModel;
-            _domainModel.CompleteLayoutUpdateEvent += new DomainModel.Facade.VoidDelegate(() => {
+            _domainModel.CompleteLayoutUpdateEvent += () => {
                 _selectedIndex = -1;
                 CompleteLayoutUpdateEvent();
-            });
-            _domainModel.ShapeModifyEvent += new DomainModel.Facade.IndexDelegate((int index) => {
-                ShapeModifyEvent(index);
-            });
-            _domainModel.ShapeRemoveEvent += new DomainModel.Facade.IndexDelegate((int index) => {
+            };
+            _domainModel.ShapeModifyEvent += ShapeModifyEvent;
+            _domainModel.ShapeRemoveEvent += (int index) => {
                 if (_selectedIndex >= _domainModel.ShapeCount)
                 {
                     _selectedIndex = -1;
                 }
                 ShapeRemoveEvent(index);
-            });
+            };
             _cursorHandler = new CursorHandler(new CursorHandlerModel(this));
         }
 
@@ -159,12 +157,10 @@ namespace Shapes.AppModel
             _cursorHandler.EndMove(pos);
         }
 
-        public delegate void VoidDelegate();
-        public event VoidDelegate CompleteLayoutUpdateEvent;
+        public event Common.DelegateTypes.Void CompleteLayoutUpdateEvent;
 
-        public delegate void IndexDelegate(int index);
-        public event IndexDelegate ShapeModifyEvent;
-        public event IndexDelegate ShapeRemoveEvent;
-        public event IndexDelegate SelectionChangeEvent;
+        public event Common.DelegateTypes.Int ShapeModifyEvent;
+        public event Common.DelegateTypes.Int ShapeRemoveEvent;
+        public event Common.DelegateTypes.Int SelectionChangeEvent;
     }
 }
