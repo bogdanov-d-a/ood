@@ -88,7 +88,7 @@ namespace Shapes.AppModel
                 _selectedIndex = -1;
                 CompleteLayoutUpdateEvent();
             };
-            _domainModel.ShapeModifyEvent += ShapeModifyEvent;
+            _domainModel.ShapeModifyEvent += (int index) => ShapeModifyEvent(index);
             _domainModel.ShapeRemoveEvent += (int index) => {
                 if (_selectedIndex >= _domainModel.ShapeCount)
                 {
