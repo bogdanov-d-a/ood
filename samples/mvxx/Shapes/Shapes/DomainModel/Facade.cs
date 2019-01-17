@@ -96,9 +96,9 @@ namespace Shapes.DomainModel
             _document = new Document(_canvas);
             _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this));
 
-            _document.ShapeInsertEvent += ShapeInsertEvent;
-            _document.ShapeModifyEvent += ShapeModifyEvent;
-            _document.ShapeRemoveEvent += ShapeRemoveEvent;
+            _document.ShapeInsertEvent += (int index) => ShapeInsertEvent(index);
+            _document.ShapeModifyEvent += (int index) => ShapeModifyEvent(index);
+            _document.ShapeRemoveEvent += (int index) => ShapeRemoveEvent(index);
         }
 
         public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)

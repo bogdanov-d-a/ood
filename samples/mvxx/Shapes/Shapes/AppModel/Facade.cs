@@ -18,12 +18,12 @@ namespace Shapes.AppModel
             _domainModel = new DomainModel.Facade();
             _appModel = new AppModel(_domainModel);
 
-            _domainModel.ShapeInsertEvent += ShapeInsertEvent;
+            _domainModel.ShapeInsertEvent += (int index) => ShapeInsertEvent(index);
 
-            _appModel.CompleteLayoutUpdateEvent += CompleteLayoutUpdateEvent;
-            _appModel.ShapeModifyEvent += ShapeModifyEvent;
-            _appModel.ShapeRemoveEvent += ShapeRemoveEvent;
-            _appModel.SelectionChangeEvent += SelectionChangeEvent;
+            _appModel.CompleteLayoutUpdateEvent += () => CompleteLayoutUpdateEvent();
+            _appModel.ShapeModifyEvent += (int index) => ShapeModifyEvent(index);
+            _appModel.ShapeRemoveEvent += (int index) => ShapeRemoveEvent(index);
+            _appModel.SelectionChangeEvent += (int index) => SelectionChangeEvent(index);
         }
 
         public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
