@@ -88,15 +88,37 @@ namespace Shapes.DomainModel
             }
         }
 
+        private class UndoRedoHandlers : Common.IUndoRedo
+        {
+            private readonly History _history;
+
+            public UndoRedoHandlers(History history)
+            {
+                _history = history;
+            }
+
+            public void Redo()
+            {
+                _history.Redo();
+            }
+
+            public void Undo()
+            {
+                _history.Undo();
+            }
+        }
+
         private readonly Canvas _canvas;
         private readonly History _history;
         private readonly CanvasCommandCreator _canvasCommandCreator;
+        private readonly UndoRedoHandlers _undoRedoHandlers;
 
         public Document(Canvas canvas)
         {
             _canvas = canvas;
             _history = new History();
             _canvasCommandCreator = new CanvasCommandCreator(_canvas, new CanvasCommandCreatorEvents(this));
+            _undoRedoHandlers = new UndoRedoHandlers(_history);
         }
 
         public void AddShape(Common.ShapeType type, Common.Rectangle rect)
@@ -114,14 +136,9 @@ namespace Shapes.DomainModel
             _canvasCommandCreator.RemoveShape(index);
         }
 
-        public void Undo()
+        public Common.IUndoRedo History
         {
-            _history.Undo();
-        }
-
-        public void Redo()
-        {
-            _history.Redo();
+            get => _undoRedoHandlers;
         }
 
         public void ClearHistory()

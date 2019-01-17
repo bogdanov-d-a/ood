@@ -8,15 +8,39 @@ namespace Shapes.AppModel
 {
     public class Facade
     {
+        private class UndoRedoHandlers : Common.IUndoRedo
+        {
+            private readonly Facade _facade;
+
+            public UndoRedoHandlers(Facade facade)
+            {
+                _facade = facade;
+            }
+
+            public void Redo()
+            {
+                _facade._appModel.ResetSelection();
+                _facade._domainModel.History.Redo();
+            }
+
+            public void Undo()
+            {
+                _facade._appModel.ResetSelection();
+                _facade._domainModel.History.Undo();
+            }
+        }
+
         private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
 
         private readonly DomainModel.Facade _domainModel;
         private readonly AppModel _appModel;
+        private readonly UndoRedoHandlers _undoRedoHandlers;
 
         public Facade()
         {
             _domainModel = new DomainModel.Facade();
             _appModel = new AppModel(_domainModel);
+            _undoRedoHandlers = new UndoRedoHandlers(this);
 
             _domainModel.ShapeInsertEvent += ShapeInsertEvent;
 
@@ -81,16 +105,9 @@ namespace Shapes.AppModel
             _appModel.EndMove(pos);
         }
 
-        public void Undo()
+        public Common.IUndoRedo History
         {
-            _appModel.ResetSelection();
-            _domainModel.Undo();
-        }
-
-        public void Redo()
-        {
-            _appModel.ResetSelection();
-            _domainModel.Redo();
+            get => _undoRedoHandlers;
         }
 
         public bool New()

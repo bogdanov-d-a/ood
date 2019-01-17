@@ -95,12 +95,6 @@ namespace Shapes.View
             void Remove();
         }
 
-        public interface IHistoryEvents
-        {
-            void Undo();
-            void Redo();
-        }
-
         public interface IMouseEvents
         {
             void Down(Common.Position pos);
@@ -112,7 +106,7 @@ namespace Shapes.View
         {
             IDocumentLifecycleEvents DocumentLifecycleEvents { get; }
             IShapeOperationEvents ShapeOperationEvents { get; }
-            IHistoryEvents HistoryEvents { get; }
+            Common.IUndoRedo HistoryEvents { get; }
             IMouseEvents MouseEvents { get; }
             bool FormClosing();
             Common.Size CanvasSize { get; }

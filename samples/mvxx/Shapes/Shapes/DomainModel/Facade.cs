@@ -131,14 +131,9 @@ namespace Shapes.DomainModel
             get => _canvas.ShapeCount;
         }
 
-        public void Undo()
+        public Common.IUndoRedo History
         {
-            _document.Undo();
-        }
-
-        public void Redo()
-        {
-            _document.Redo();
+            get => _document.History;
         }
 
         public bool New()

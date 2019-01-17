@@ -101,26 +101,6 @@ namespace Shapes
                 }
             }
 
-            private class HistoryEventsHandler : View.CanvasView.IHistoryEvents
-            {
-                private readonly AppModel.Facade _appModel;
-
-                public HistoryEventsHandler(AppModel.Facade appModel)
-                {
-                    _appModel = appModel;
-                }
-
-                public void Undo()
-                {
-                    _appModel.Undo();
-                }
-
-                public void Redo()
-                {
-                    _appModel.Redo();
-                }
-            }
-
             private class MouseEventsHandler : View.CanvasView.IMouseEvents
             {
                 private readonly AppModel.Facade _appModel;
@@ -149,7 +129,6 @@ namespace Shapes
             private readonly AppModel.Facade _appModel;
             private readonly DocumentLifecycleEventsHandler _documentLifecycleEvents;
             private readonly ShapeOperationEventsHandler _shapeOperationEvents;
-            private readonly HistoryEventsHandler _historyEvents;
             private readonly MouseEventsHandler _mouseEvents;
 
             public ViewEvents(AppModel.Facade appModel)
@@ -157,7 +136,6 @@ namespace Shapes
                 _appModel = appModel;
                 _documentLifecycleEvents = new DocumentLifecycleEventsHandler(_appModel);
                 _shapeOperationEvents = new ShapeOperationEventsHandler(_appModel);
-                _historyEvents = new HistoryEventsHandler(_appModel);
                 _mouseEvents = new MouseEventsHandler(_appModel);
             }
 
@@ -171,9 +149,9 @@ namespace Shapes
                 get => _shapeOperationEvents;
             }
 
-            public View.CanvasView.IHistoryEvents HistoryEvents
+            public Common.IUndoRedo HistoryEvents
             {
-                get => _historyEvents;
+                get => _appModel.History;
             }
 
             public View.CanvasView.IMouseEvents MouseEvents
