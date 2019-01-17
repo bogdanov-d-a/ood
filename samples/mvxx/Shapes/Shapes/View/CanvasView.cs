@@ -79,14 +79,6 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
-        public interface IDocumentLifecycleEvents
-        {
-            void New();
-            void Open();
-            void Save();
-            void SaveAs();
-        }
-
         public interface IShapeOperationEvents
         {
             void AddRectangle();
@@ -104,7 +96,7 @@ namespace Shapes.View
 
         public interface IViewEvents
         {
-            IDocumentLifecycleEvents DocumentLifecycleEvents { get; }
+            Common.IDocumentLifecycle DocumentLifecycleEvents { get; }
             IShapeOperationEvents ShapeOperationEvents { get; }
             Common.IUndoRedo HistoryEvents { get; }
             IMouseEvents MouseEvents { get; }

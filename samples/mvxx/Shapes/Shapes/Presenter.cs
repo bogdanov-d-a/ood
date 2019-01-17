@@ -41,36 +41,6 @@ namespace Shapes
 
         private class ViewEvents : View.CanvasView.IViewEvents
         {
-            private class DocumentLifecycleEventsHandler : View.CanvasView.IDocumentLifecycleEvents
-            {
-                private readonly AppModel.Facade _appModel;
-
-                public DocumentLifecycleEventsHandler(AppModel.Facade appModel)
-                {
-                    _appModel = appModel;
-                }
-
-                public void New()
-                {
-                    _appModel.New();
-                }
-
-                public void Open()
-                {
-                    _appModel.Open();
-                }
-
-                public void Save()
-                {
-                    _appModel.Save();
-                }
-
-                public void SaveAs()
-                {
-                    _appModel.SaveAs();
-                }
-            }
-
             private class ShapeOperationEventsHandler : View.CanvasView.IShapeOperationEvents
             {
                 private readonly AppModel.Facade _appModel;
@@ -127,21 +97,19 @@ namespace Shapes
             }
 
             private readonly AppModel.Facade _appModel;
-            private readonly DocumentLifecycleEventsHandler _documentLifecycleEvents;
             private readonly ShapeOperationEventsHandler _shapeOperationEvents;
             private readonly MouseEventsHandler _mouseEvents;
 
             public ViewEvents(AppModel.Facade appModel)
             {
                 _appModel = appModel;
-                _documentLifecycleEvents = new DocumentLifecycleEventsHandler(_appModel);
                 _shapeOperationEvents = new ShapeOperationEventsHandler(_appModel);
                 _mouseEvents = new MouseEventsHandler(_appModel);
             }
 
-            public View.CanvasView.IDocumentLifecycleEvents DocumentLifecycleEvents
+            public Common.IDocumentLifecycle DocumentLifecycleEvents
             {
-                get => _documentLifecycleEvents;
+                get => _appModel.DocumentLifecycle;
             }
 
             public View.CanvasView.IShapeOperationEvents ShapeOperationEvents
@@ -161,7 +129,7 @@ namespace Shapes
 
             public bool FormClosing()
             {
-                return _appModel.New();
+                return _appModel.DocumentLifecycle.New();
             }
 
             public Common.Size CanvasSize

@@ -84,9 +84,39 @@ namespace Shapes.DomainModel
             }
         }
 
+        private class DocumentLifecycleHandlers : Common.IDocumentLifecycle
+        {
+            private readonly DocumentLifecycleController _dlc;
+
+            public DocumentLifecycleHandlers(DocumentLifecycleController dlc)
+            {
+                _dlc = dlc;
+            }
+
+            public bool New()
+            {
+                return _dlc.New();
+            }
+
+            public bool Open()
+            {
+                return _dlc.Open();
+            }
+
+            public bool Save()
+            {
+                return _dlc.Save(false);
+            }
+
+            public bool SaveAs()
+            {
+                return _dlc.Save(true);
+            }
+        }
+
         private readonly Canvas _canvas;
         private readonly Document _document;
-        private readonly DocumentLifecycleController _dlc;
+        private readonly DocumentLifecycleHandlers _documentLifecycleHandlers;
         private Command.ICommand _savedCommand = null;
         private Common.ILifecycleDecisionEvents _lifecycleDecisionEvents = null;
 
@@ -94,7 +124,8 @@ namespace Shapes.DomainModel
         {
             _canvas = new Canvas(new Common.Size(640, 480));
             _document = new Document(_canvas);
-            _dlc = new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this));
+            _documentLifecycleHandlers = new DocumentLifecycleHandlers(
+                new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this)));
 
             _document.ShapeInsertEvent += ShapeInsertEvent;
             _document.ShapeModifyEvent += ShapeModifyEvent;
@@ -136,24 +167,9 @@ namespace Shapes.DomainModel
             get => _document.History;
         }
 
-        public bool New()
+        public Common.IDocumentLifecycle DocumentLifecycle
         {
-            return _dlc.New();
-        }
-
-        public void Open()
-        {
-            _dlc.Open();
-        }
-
-        public void Save()
-        {
-            _dlc.Save(false);
-        }
-
-        public void SaveAs()
-        {
-            _dlc.Save(true);
+            get => _documentLifecycleHandlers;
         }
 
         private void LoadCanvas(Utils.ICanvasLoader loader)

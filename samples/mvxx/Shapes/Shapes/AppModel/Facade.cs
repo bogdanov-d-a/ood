@@ -110,24 +110,9 @@ namespace Shapes.AppModel
             get => _undoRedoHandlers;
         }
 
-        public bool New()
+        public Common.IDocumentLifecycle DocumentLifecycle
         {
-            return _domainModel.New();
-        }
-
-        public void Open()
-        {
-            _domainModel.Open();
-        }
-
-        public void Save()
-        {
-            _domainModel.Save();
-        }
-
-        public void SaveAs()
-        {
-            _domainModel.SaveAs();
+            get => _domainModel.DocumentLifecycle;
         }
 
         public Common.Size CanvasSize
