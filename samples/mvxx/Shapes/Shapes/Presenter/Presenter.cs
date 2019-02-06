@@ -48,11 +48,6 @@ namespace Shapes.Presenter
                 _appModel = appModel;
             }
 
-            public Common.IDocumentLifecycle DocumentLifecycleEvents
-            {
-                get => _appModel.DocumentLifecycle;
-            }
-
             public bool FormClosing()
             {
                 return _appModel.DocumentLifecycle.New();

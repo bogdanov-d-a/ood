@@ -18,6 +18,7 @@ namespace Shapes
         private readonly View.ShapeActionsView _shapeActionsView;
         private readonly View.MouseEventsView _mouseEventsView;
         private readonly View.UndoRedoActionsView _undoRedoActionsView;
+        private readonly View.DocumentLifecycleActionsView _documentLifecycleActionsView;
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
@@ -135,7 +136,8 @@ namespace Shapes
         }
 
         public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView,
-            View.MouseEventsView mouseEventsView, View.UndoRedoActionsView undoRedoActionsView)
+            View.MouseEventsView mouseEventsView, View.UndoRedoActionsView undoRedoActionsView,
+            View.DocumentLifecycleActionsView documentLifecycleActionsView)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -146,6 +148,7 @@ namespace Shapes
             _shapeActionsView = shapeActionsView;
             _mouseEventsView = mouseEventsView;
             _undoRedoActionsView = undoRedoActionsView;
+            _documentLifecycleActionsView = documentLifecycleActionsView;
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
@@ -215,22 +218,22 @@ namespace Shapes
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.DocumentLifecycleEvents.New();
+            _documentLifecycleActionsView.OnNew();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.DocumentLifecycleEvents.Open();
+            _documentLifecycleActionsView.OnOpen();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.DocumentLifecycleEvents.Save();
+            _documentLifecycleActionsView.OnSave();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.DocumentLifecycleEvents.SaveAs();
+            _documentLifecycleActionsView.OnSaveAs();
         }
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)
