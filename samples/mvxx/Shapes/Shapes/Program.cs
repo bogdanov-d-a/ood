@@ -30,7 +30,11 @@ namespace Shapes
             new Presenter.UndoRedoActionsPresenter(model.History, undoRedoActionsView);
             new Presenter.DocumentLifecycleActionsPresenter(model.DocumentLifecycle, documentLifecycleActionsView);
 
-            Application.Run(new Shapes(view, shapeActionsView, mouseEventsView, undoRedoActionsView, documentLifecycleActionsView));
+            Shapes shapes = new Shapes(view, shapeActionsView, mouseEventsView, undoRedoActionsView, documentLifecycleActionsView);
+
+            model.SetLifecycleDecisionEvents(new Presenter.LifecycleDecisionPresenter(shapes.DialogsView).EventHandlers);
+
+            Application.Run(shapes);
         }
     }
 }

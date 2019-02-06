@@ -9,36 +9,6 @@ namespace Shapes.Presenter
 {
     public class Presenter
     {
-        private class LifecycleDecisionEvents : Common.ILifecycleDecisionEvents
-        {
-            private readonly View.CanvasView _view;
-
-            public LifecycleDecisionEvents(View.CanvasView view)
-            {
-                _view = view;
-            }
-
-            private View.CanvasView.IDialogHandlers GetDialogHandlers()
-            {
-                return _view.ViewHandlers.DialogHandlers;
-            }
-
-            public Option<string> RequestOpenPath()
-            {
-                return GetDialogHandlers().ShowOpenFileDialog();
-            }
-
-            public Option<string> RequestSavePath()
-            {
-                return GetDialogHandlers().ShowSaveFileDialog();
-            }
-
-            public Common.ClosingAction RequestUnsavedClosing()
-            {
-                return GetDialogHandlers().ShowUnsavedDocumentClosePrompt();
-            }
-        }
-
         private class ViewEvents : View.CanvasView.IViewEvents
         {
             private readonly AppModel.Facade _appModel;
@@ -67,7 +37,6 @@ namespace Shapes.Presenter
             _appModel = appModel;
             _view = view;
 
-            _appModel.SetLifecycleDecisionEvents(new LifecycleDecisionEvents(_view));
             _view.ViewEvents = new ViewEvents(_appModel);
 
             Initialize();

@@ -19,69 +19,63 @@ namespace Shapes
         private readonly View.MouseEventsView _mouseEventsView;
         private readonly View.UndoRedoActionsView _undoRedoActionsView;
         private readonly View.DocumentLifecycleActionsView _documentLifecycleActionsView;
+        private readonly DialogsViewHandler _dialogsViewHandler;
+
+        private class DialogsViewHandler : View.IDialogsView
+        {
+            private readonly Shapes _shapesForm;
+
+            public DialogsViewHandler(Shapes shapesForm)
+            {
+                _shapesForm = shapesForm;
+            }
+
+            public Option<string> ShowOpenFileDialog()
+            {
+                if (_shapesForm.openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(_shapesForm.openFileDialog.FileName);
+                }
+                return Option.None<string>();
+            }
+
+            public Option<string> ShowSaveFileDialog()
+            {
+                if (_shapesForm.saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return Option.Some(_shapesForm.saveFileDialog.FileName);
+                }
+                return Option.None<string>();
+            }
+
+            public Common.ClosingAction ShowUnsavedDocumentClosePrompt()
+            {
+                DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    return Common.ClosingAction.Save;
+                }
+                else if (result == DialogResult.No)
+                {
+                    return Common.ClosingAction.DontSave;
+                }
+                return Common.ClosingAction.DontClose;
+            }
+        }
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
-            private class DialogHandlersImpl : View.CanvasView.IDialogHandlers
-            {
-                private readonly Shapes _shapesForm;
-
-                public DialogHandlersImpl(Shapes shapesForm)
-                {
-                    _shapesForm = shapesForm;
-                }
-
-                public Option<string> ShowOpenFileDialog()
-                {
-                    if (_shapesForm.openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        return Option.Some(_shapesForm.openFileDialog.FileName);
-                    }
-                    return Option.None<string>();
-                }
-
-                public Option<string> ShowSaveFileDialog()
-                {
-                    if (_shapesForm.saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        return Option.Some(_shapesForm.saveFileDialog.FileName);
-                    }
-                    return Option.None<string>();
-                }
-
-                public Common.ClosingAction ShowUnsavedDocumentClosePrompt()
-                {
-                    DialogResult result = MessageBox.Show("Save document before closing?", "Warning",
-                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
-                    {
-                        return Common.ClosingAction.Save;
-                    }
-                    else if (result == DialogResult.No)
-                    {
-                        return Common.ClosingAction.DontSave;
-                    }
-                    return Common.ClosingAction.DontClose;
-                }
-            }
-
             private readonly Shapes _shapesForm;
-            private readonly DialogHandlersImpl _dialogHandlers;
 
             public ViewHandlers(Shapes shapesForm)
             {
                 _shapesForm = shapesForm;
-                _dialogHandlers = new DialogHandlersImpl(_shapesForm);
             }
 
             public void InvalidateLayout()
             {
                 _shapesForm.Invalidate();
-            }
-
-            public View.CanvasView.IDialogHandlers DialogHandlers
-            {
-                get => _dialogHandlers;
             }
         }
 
@@ -149,6 +143,13 @@ namespace Shapes
             _mouseEventsView = mouseEventsView;
             _undoRedoActionsView = undoRedoActionsView;
             _documentLifecycleActionsView = documentLifecycleActionsView;
+
+            _dialogsViewHandler = new DialogsViewHandler(this);
+        }
+
+        public View.IDialogsView DialogsView
+        {
+            get => _dialogsViewHandler;
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)

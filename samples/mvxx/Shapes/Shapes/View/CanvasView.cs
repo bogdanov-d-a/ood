@@ -87,17 +87,9 @@ namespace Shapes.View
 
         public IViewEvents ViewEvents = null;
 
-        public interface IDialogHandlers
-        {
-            Option<string> ShowOpenFileDialog();
-            Option<string> ShowSaveFileDialog();
-            Common.ClosingAction ShowUnsavedDocumentClosePrompt();
-        }
-
         public interface IViewHandlers
         {
             void InvalidateLayout();
-            IDialogHandlers DialogHandlers { get; }
         }
 
         public IViewHandlers ViewHandlers = null;
