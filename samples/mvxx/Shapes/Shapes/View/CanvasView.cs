@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Optional;
-using Optional.Unsafe;
 
 namespace Shapes.View
 {
@@ -79,18 +77,10 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
-        public interface IViewEvents
-        {
-            Common.Size CanvasSize { get; }
-        }
+        public delegate Common.Size SizeDelegate();
+        public SizeDelegate CanvasSizeProvider;
 
-        public IViewEvents ViewEvents = null;
-
-        public interface IViewHandlers
-        {
-            void InvalidateLayout();
-        }
-
-        public IViewHandlers ViewHandlers = null;
+        public delegate void VoidDelegate();
+        public VoidDelegate InvalidateLayout;
     }
 }

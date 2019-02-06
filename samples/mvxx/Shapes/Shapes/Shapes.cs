@@ -67,21 +67,6 @@ namespace Shapes
             }
         }
 
-        private class ViewHandlers : View.CanvasView.IViewHandlers
-        {
-            private readonly Shapes _shapesForm;
-
-            public ViewHandlers(Shapes shapesForm)
-            {
-                _shapesForm = shapesForm;
-            }
-
-            public void InvalidateLayout()
-            {
-                _shapesForm.Invalidate();
-            }
-        }
-
         private static Rectangle OffsetDrawRect(Common.Rectangle rect)
         {
             return new Rectangle(rect.Left + DrawOffset,
@@ -140,7 +125,7 @@ namespace Shapes
             DoubleBuffered = true;
 
             _canvasView = canvasView;
-            _canvasView.ViewHandlers = new ViewHandlers(this);
+            _canvasView.InvalidateLayout += () => Invalidate();
 
             _shapeActionsView = shapeActionsView;
             _mouseEventsView = mouseEventsView;
@@ -163,7 +148,7 @@ namespace Shapes
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Common.Size canvasSize = _canvasView.ViewEvents.CanvasSize;
+            Common.Size canvasSize = _canvasView.CanvasSizeProvider();
 
             g.FillRectangle(new SolidBrush(Color.White),
                 new Rectangle(DrawOffset,

@@ -82,7 +82,7 @@
     <Compile Include="DomainModel\Command\InsertShapeCommand.cs" />
     <Compile Include="DomainModel\Command\MoveShapeCommand.cs" />
     <Compile Include="DomainModel\Command\RemoveShapeCommand.cs" />
-    <Compile Include="Presenter\Presenter.cs" />
+    <Compile Include="Presenter\CanvasPresenter.cs" />
     <Compile Include="Utils\ShapeBoundsChecker.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>
