@@ -33,6 +33,7 @@ namespace Shapes
             Shapes shapes = new Shapes(view, shapeActionsView, mouseEventsView, undoRedoActionsView, documentLifecycleActionsView);
 
             model.SetLifecycleDecisionEvents(new Presenter.LifecycleDecisionPresenter(shapes.DialogsView).EventHandlers);
+            shapes.SetFormClosingHandler(() => model.DocumentLifecycle.New());
 
             Application.Run(shapes);
         }

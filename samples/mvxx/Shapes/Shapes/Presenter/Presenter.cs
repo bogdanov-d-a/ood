@@ -18,11 +18,6 @@ namespace Shapes.Presenter
                 _appModel = appModel;
             }
 
-            public bool FormClosing()
-            {
-                return _appModel.DocumentLifecycle.New();
-            }
-
             public Common.Size CanvasSize
             {
                 get => _appModel.CanvasSize;

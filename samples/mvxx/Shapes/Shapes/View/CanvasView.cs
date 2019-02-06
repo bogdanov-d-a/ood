@@ -81,7 +81,6 @@ namespace Shapes.View
 
         public interface IViewEvents
         {
-            bool FormClosing();
             Common.Size CanvasSize { get; }
         }
 

@@ -13,6 +13,8 @@ namespace Shapes
 {
     public partial class Shapes : Form
     {
+        public delegate bool BoolDelegate();
+
         private const int DrawOffset = 50;
         private readonly View.CanvasView _canvasView;
         private readonly View.ShapeActionsView _shapeActionsView;
@@ -20,6 +22,7 @@ namespace Shapes
         private readonly View.UndoRedoActionsView _undoRedoActionsView;
         private readonly View.DocumentLifecycleActionsView _documentLifecycleActionsView;
         private readonly DialogsViewHandler _dialogsViewHandler;
+        private BoolDelegate _formClosingHandler;
 
         private class DialogsViewHandler : View.IDialogsView
         {
@@ -152,6 +155,11 @@ namespace Shapes
             get => _dialogsViewHandler;
         }
 
+        public void SetFormClosingHandler(BoolDelegate handler)
+        {
+            _formClosingHandler = handler;
+        }
+
         private void Shapes_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -239,7 +247,7 @@ namespace Shapes
 
         private void Shapes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_canvasView.ViewEvents.FormClosing())
+            if (!_formClosingHandler())
             {
                 e.Cancel = true;
             }
