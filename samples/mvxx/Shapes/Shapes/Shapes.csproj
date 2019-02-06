@@ -60,6 +60,7 @@
     <Compile Include="DomainModel\IShape.cs" />
     <Compile Include="Presenter\MouseEventsPresenter.cs" />
     <Compile Include="Presenter\ShapeActionsPresenter.cs" />
+    <Compile Include="Presenter\UndoRedoActionsPresenter.cs" />
     <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
     <Compile Include="Utils\ICanvasLoader.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Common\ShapeType.cs" />
     <Compile Include="View\MouseEventsView.cs" />
     <Compile Include="View\ShapeActionsView.cs" />
+    <Compile Include="View\UndoRedoActionsView.cs" />
     <EmbeddedResource Include="Shapes.resx">
       <DependentUpon>Shapes.cs</DependentUpon>
     </EmbeddedResource>

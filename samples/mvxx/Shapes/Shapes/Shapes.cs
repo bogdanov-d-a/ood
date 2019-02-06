@@ -17,6 +17,7 @@ namespace Shapes
         private readonly View.CanvasView _canvasView;
         private readonly View.ShapeActionsView _shapeActionsView;
         private readonly View.MouseEventsView _mouseEventsView;
+        private readonly View.UndoRedoActionsView _undoRedoActionsView;
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
@@ -133,7 +134,8 @@ namespace Shapes
             }
         }
 
-        public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView, View.MouseEventsView mouseEventsView)
+        public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView,
+            View.MouseEventsView mouseEventsView, View.UndoRedoActionsView undoRedoActionsView)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -143,6 +145,7 @@ namespace Shapes
 
             _shapeActionsView = shapeActionsView;
             _mouseEventsView = mouseEventsView;
+            _undoRedoActionsView = undoRedoActionsView;
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
@@ -182,12 +185,12 @@ namespace Shapes
 
         private void undoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.HistoryEvents.Undo();
+            _undoRedoActionsView.OnUndo();
         }
 
         private void redoButton_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.HistoryEvents.Redo();
+            _undoRedoActionsView.OnRedo();
         }
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)

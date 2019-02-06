@@ -82,7 +82,6 @@ namespace Shapes.View
         public interface IViewEvents
         {
             Common.IDocumentLifecycle DocumentLifecycleEvents { get; }
-            Common.IUndoRedo HistoryEvents { get; }
             bool FormClosing();
             Common.Size CanvasSize { get; }
         }

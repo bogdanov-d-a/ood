@@ -53,11 +53,6 @@ namespace Shapes.Presenter
                 get => _appModel.DocumentLifecycle;
             }
 
-            public Common.IUndoRedo HistoryEvents
-            {
-                get => _appModel.History;
-            }
-
             public bool FormClosing()
             {
                 return _appModel.DocumentLifecycle.New();

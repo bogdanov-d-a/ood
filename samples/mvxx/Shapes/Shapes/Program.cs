@@ -21,12 +21,14 @@ namespace Shapes
             View.CanvasView view = new View.CanvasView();
             View.ShapeActionsView shapeActionsView = new View.ShapeActionsView();
             View.MouseEventsView mouseEventsView = new View.MouseEventsView();
+            View.UndoRedoActionsView undoRedoActionsView = new View.UndoRedoActionsView();
 
             new Presenter.Presenter(model, view);
             new Presenter.ShapeActionsPresenter(model, shapeActionsView);
             new Presenter.MouseEventsPresenter(model.Pointer, mouseEventsView);
+            new Presenter.UndoRedoActionsPresenter(model.History, undoRedoActionsView);
 
-            Application.Run(new Shapes(view, shapeActionsView, mouseEventsView));
+            Application.Run(new Shapes(view, shapeActionsView, mouseEventsView, undoRedoActionsView));
         }
     }
 }
