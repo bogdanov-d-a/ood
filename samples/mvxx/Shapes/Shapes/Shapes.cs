@@ -16,6 +16,7 @@ namespace Shapes
         private const int DrawOffset = 50;
         private readonly View.CanvasView _canvasView;
         private readonly View.ShapeActionsView _shapeActionsView;
+        private readonly View.MouseEventsView _mouseEventsView;
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
@@ -132,7 +133,7 @@ namespace Shapes
             }
         }
 
-        public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView)
+        public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView, View.MouseEventsView mouseEventsView)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -141,6 +142,7 @@ namespace Shapes
             _canvasView.ViewHandlers = new ViewHandlers(this);
 
             _shapeActionsView = shapeActionsView;
+            _mouseEventsView = mouseEventsView;
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
@@ -165,17 +167,17 @@ namespace Shapes
 
         private void Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.MouseEvents.Down(GetMousePosition());
+            _mouseEventsView.OnDown(GetMousePosition());
         }
 
         private void Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.MouseEvents.Up(GetMousePosition());
+            _mouseEventsView.OnUp(GetMousePosition());
         }
 
         private void Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            _canvasView.ViewEvents.MouseEvents.Move(GetMousePosition());
+            _mouseEventsView.OnMove(GetMousePosition());
         }
 
         private void undoButton_Click(object sender, EventArgs e)

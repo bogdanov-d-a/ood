@@ -41,38 +41,11 @@ namespace Shapes.Presenter
 
         private class ViewEvents : View.CanvasView.IViewEvents
         {
-            private class MouseEventsHandler : View.CanvasView.IMouseEvents
-            {
-                private readonly Common.IPointerDrag _pointerDrag;
-
-                public MouseEventsHandler(Common.IPointerDrag pointerDrag)
-                {
-                    _pointerDrag = pointerDrag;
-                }
-
-                public void Down(Common.Position pos)
-                {
-                    _pointerDrag.BeginMove(pos);
-                }
-
-                public void Move(Common.Position pos)
-                {
-                    _pointerDrag.Move(pos);
-                }
-
-                public void Up(Common.Position pos)
-                {
-                    _pointerDrag.EndMove(pos);
-                }
-            }
-
             private readonly AppModel.Facade _appModel;
-            private readonly MouseEventsHandler _mouseEvents;
 
             public ViewEvents(AppModel.Facade appModel)
             {
                 _appModel = appModel;
-                _mouseEvents = new MouseEventsHandler(_appModel.Pointer);
             }
 
             public Common.IDocumentLifecycle DocumentLifecycleEvents
@@ -83,11 +56,6 @@ namespace Shapes.Presenter
             public Common.IUndoRedo HistoryEvents
             {
                 get => _appModel.History;
-            }
-
-            public View.CanvasView.IMouseEvents MouseEvents
-            {
-                get => _mouseEvents;
             }
 
             public bool FormClosing()

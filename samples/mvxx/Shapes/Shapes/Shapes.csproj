@@ -58,6 +58,7 @@
     <Compile Include="DomainModel\Facade.cs" />
     <Compile Include="Common\ILifecycleDecisionEvents.cs" />
     <Compile Include="DomainModel\IShape.cs" />
+    <Compile Include="Presenter\MouseEventsPresenter.cs" />
     <Compile Include="Presenter\ShapeActionsPresenter.cs" />
     <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\ShapeType.cs" />
+    <Compile Include="View\MouseEventsView.cs" />
     <Compile Include="View\ShapeActionsView.cs" />
     <EmbeddedResource Include="Shapes.resx">
       <DependentUpon>Shapes.cs</DependentUpon>

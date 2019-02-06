@@ -20,11 +20,13 @@ namespace Shapes
 
             View.CanvasView view = new View.CanvasView();
             View.ShapeActionsView shapeActionsView = new View.ShapeActionsView();
+            View.MouseEventsView mouseEventsView = new View.MouseEventsView();
 
             new Presenter.Presenter(model, view);
             new Presenter.ShapeActionsPresenter(model, shapeActionsView);
+            new Presenter.MouseEventsPresenter(model.Pointer, mouseEventsView);
 
-            Application.Run(new Shapes(view, shapeActionsView));
+            Application.Run(new Shapes(view, shapeActionsView, mouseEventsView));
         }
     }
 }

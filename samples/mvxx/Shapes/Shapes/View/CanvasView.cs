@@ -79,18 +79,10 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
-        public interface IMouseEvents
-        {
-            void Down(Common.Position pos);
-            void Up(Common.Position pos);
-            void Move(Common.Position pos);
-        }
-
         public interface IViewEvents
         {
             Common.IDocumentLifecycle DocumentLifecycleEvents { get; }
             Common.IUndoRedo HistoryEvents { get; }
-            IMouseEvents MouseEvents { get; }
             bool FormClosing();
             Common.Size CanvasSize { get; }
         }
