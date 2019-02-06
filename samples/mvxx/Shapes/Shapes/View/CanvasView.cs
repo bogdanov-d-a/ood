@@ -79,14 +79,6 @@ namespace Shapes.View
             _selectionIndex = index;
         }
 
-        public interface IShapeOperationEvents
-        {
-            void AddRectangle();
-            void AddTriangle();
-            void AddCircle();
-            void Remove();
-        }
-
         public interface IMouseEvents
         {
             void Down(Common.Position pos);
@@ -97,7 +89,6 @@ namespace Shapes.View
         public interface IViewEvents
         {
             Common.IDocumentLifecycle DocumentLifecycleEvents { get; }
-            IShapeOperationEvents ShapeOperationEvents { get; }
             Common.IUndoRedo HistoryEvents { get; }
             IMouseEvents MouseEvents { get; }
             bool FormClosing();

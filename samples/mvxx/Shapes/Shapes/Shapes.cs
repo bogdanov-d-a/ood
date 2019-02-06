@@ -15,6 +15,7 @@ namespace Shapes
     {
         private const int DrawOffset = 50;
         private readonly View.CanvasView _canvasView;
+        private readonly View.ShapeActionsView _shapeActionsView;
 
         private class ViewHandlers : View.CanvasView.IViewHandlers
         {
@@ -131,13 +132,15 @@ namespace Shapes
             }
         }
 
-        public Shapes(View.CanvasView canvasView)
+        public Shapes(View.CanvasView canvasView, View.ShapeActionsView shapeActionsView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             _canvasView = canvasView;
             _canvasView.ViewHandlers = new ViewHandlers(this);
+
+            _shapeActionsView = shapeActionsView;
         }
 
         private void Shapes_Paint(object sender, PaintEventArgs e)
@@ -187,22 +190,22 @@ namespace Shapes
 
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.ShapeOperationEvents.AddRectangle();
+            _shapeActionsView.OnAddRectangle();
         }
 
         private void addTriangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.ShapeOperationEvents.AddTriangle();
+            _shapeActionsView.OnAddTriangle();
         }
 
         private void addCircleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.ShapeOperationEvents.AddCircle();
+            _shapeActionsView.OnAddCircle();
         }
 
         private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _canvasView.ViewEvents.ShapeOperationEvents.Remove();
+            _shapeActionsView.OnRemove();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)

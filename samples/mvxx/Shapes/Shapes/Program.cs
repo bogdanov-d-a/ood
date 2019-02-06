@@ -17,10 +17,14 @@ namespace Shapes
             Application.SetCompatibleTextRenderingDefault(false);
 
             AppModel.Facade model = new AppModel.Facade();
-            View.CanvasView view = new View.CanvasView();
-            Presenter presenter = new Presenter(model, view);
 
-            Application.Run(new Shapes(view));
+            View.CanvasView view = new View.CanvasView();
+            View.ShapeActionsView shapeActionsView = new View.ShapeActionsView();
+
+            Presenter presenter = new Presenter(model, view);
+            new ShapeActionsPresenter(model, shapeActionsView);
+
+            Application.Run(new Shapes(view, shapeActionsView));
         }
     }
 }

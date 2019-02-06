@@ -41,36 +41,6 @@ namespace Shapes
 
         private class ViewEvents : View.CanvasView.IViewEvents
         {
-            private class ShapeOperationEventsHandler : View.CanvasView.IShapeOperationEvents
-            {
-                private readonly AppModel.Facade _appModel;
-
-                public ShapeOperationEventsHandler(AppModel.Facade appModel)
-                {
-                    _appModel = appModel;
-                }
-
-                public void AddCircle()
-                {
-                    _appModel.AddCircle();
-                }
-
-                public void AddRectangle()
-                {
-                    _appModel.AddRectangle();
-                }
-
-                public void AddTriangle()
-                {
-                    _appModel.AddTriangle();
-                }
-
-                public void Remove()
-                {
-                    _appModel.RemoveSelectedShape();
-                }
-            }
-
             private class MouseEventsHandler : View.CanvasView.IMouseEvents
             {
                 private readonly Common.IPointerDrag _pointerDrag;
@@ -97,24 +67,17 @@ namespace Shapes
             }
 
             private readonly AppModel.Facade _appModel;
-            private readonly ShapeOperationEventsHandler _shapeOperationEvents;
             private readonly MouseEventsHandler _mouseEvents;
 
             public ViewEvents(AppModel.Facade appModel)
             {
                 _appModel = appModel;
-                _shapeOperationEvents = new ShapeOperationEventsHandler(_appModel);
                 _mouseEvents = new MouseEventsHandler(_appModel.Pointer);
             }
 
             public Common.IDocumentLifecycle DocumentLifecycleEvents
             {
                 get => _appModel.DocumentLifecycle;
-            }
-
-            public View.CanvasView.IShapeOperationEvents ShapeOperationEvents
-            {
-                get => _shapeOperationEvents;
             }
 
             public Common.IUndoRedo HistoryEvents
