@@ -58,7 +58,7 @@
     <Compile Include="DomainModel\Facade.cs" />
     <Compile Include="Common\ILifecycleDecisionEvents.cs" />
     <Compile Include="DomainModel\IShape.cs" />
-    <Compile Include="ShapeActionsPresenter.cs" />
+    <Compile Include="Presenter\ShapeActionsPresenter.cs" />
     <Compile Include="Utils\CanvasLoaderFromFile.cs" />
     <Compile Include="Common\Shape.cs" />
     <Compile Include="Utils\ICanvasLoader.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="DomainModel\Command\InsertShapeCommand.cs" />
     <Compile Include="DomainModel\Command\MoveShapeCommand.cs" />
     <Compile Include="DomainModel\Command\RemoveShapeCommand.cs" />
-    <Compile Include="Presenter.cs" />
+    <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Utils\ShapeBoundsChecker.cs" />
     <Compile Include="Shapes.cs">
       <SubType>Form</SubType>

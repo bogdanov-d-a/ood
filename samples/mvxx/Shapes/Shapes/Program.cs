@@ -21,8 +21,8 @@ namespace Shapes
             View.CanvasView view = new View.CanvasView();
             View.ShapeActionsView shapeActionsView = new View.ShapeActionsView();
 
-            Presenter presenter = new Presenter(model, view);
-            new ShapeActionsPresenter(model, shapeActionsView);
+            new Presenter.Presenter(model, view);
+            new Presenter.ShapeActionsPresenter(model, shapeActionsView);
 
             Application.Run(new Shapes(view, shapeActionsView));
         }

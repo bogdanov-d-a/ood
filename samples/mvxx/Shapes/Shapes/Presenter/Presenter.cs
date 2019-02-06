@@ -5,7 +5,7 @@ using System.Text;
 using Optional;
 using Optional.Unsafe;
 
-namespace Shapes
+namespace Shapes.Presenter
 {
     public class Presenter
     {
