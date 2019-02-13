@@ -46,6 +46,10 @@ namespace Shapes.Presenter
                 view.SetSelectionIndex(index);
                 view.InvalidateLayout();
             };
+
+            view.CanvasSizeProvider += () => {
+                return model.CanvasSize;
+            };
         }
     }
 }
