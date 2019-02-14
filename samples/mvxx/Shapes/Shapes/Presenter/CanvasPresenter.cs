@@ -7,9 +7,9 @@ namespace Shapes.Presenter
 {
     public class CanvasPresenter
     {
-        public CanvasPresenter(DomainModel.DocumentKeeper documentKeeper, AppModel.AppModel model, View.CanvasView view)
+        public CanvasPresenter(DomainModel.DocumentKeeper documentKeeper, AppModel.AppModel appModel, View.CanvasView view)
         {
-            model.CompleteLayoutUpdateEvent += () => {
+            appModel.CompleteLayoutUpdateEvent += () => {
                 view.SetSelectionIndex(-1);
 
                 while (view.ShapeCount > 0)
@@ -19,30 +19,30 @@ namespace Shapes.Presenter
 
                 for (int i = 0; i < documentKeeper.Canvas.ShapeCount; ++i)
                 {
-                    view.AddShape(i, model.GetShape(i));
+                    view.AddShape(i, appModel.GetShape(i));
                 }
 
-                view.SetSelectionIndex(model.SelectedIndex);
+                view.SetSelectionIndex(appModel.SelectedIndex);
 
                 view.InvalidateLayout();
             };
 
             documentKeeper.ShapeInsertEvent += (int index) => {
-                view.AddShape(index, model.GetShape(index));
+                view.AddShape(index, appModel.GetShape(index));
                 view.InvalidateLayout();
             };
 
-            model.ShapeModifyEvent += (int index) => {
-                view.GetShape(index).boundingRect = model.GetShape(index).boundingRect;
+            appModel.ShapeModifyEvent += (int index) => {
+                view.GetShape(index).boundingRect = appModel.GetShape(index).boundingRect;
                 view.InvalidateLayout();
             };
 
-            model.ShapeRemoveEvent += (int index) => {
+            appModel.ShapeRemoveEvent += (int index) => {
                 view.RemoveShape(index);
                 view.InvalidateLayout();
             };
 
-            model.SelectionChangeEvent += (int index) => {
+            appModel.SelectionChangeEvent += (int index) => {
                 view.SetSelectionIndex(index);
                 view.InvalidateLayout();
             };
