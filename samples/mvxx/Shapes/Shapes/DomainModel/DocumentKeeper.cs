@@ -156,9 +156,8 @@ namespace Shapes.DomainModel
 
         private void LoadCanvas(Utils.ICanvasLoader loader)
         {
-            loader.LoadShapes((Common.ShapeType type, Common.Rectangle boundingRect) => {
-                _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect));
-            });
+            loader.LoadShapes((Common.ShapeType type, Common.Rectangle boundingRect) =>
+                _canvas.InsertShape(_canvas.ShapeCount, new Common.Shape(type, boundingRect)));
             CompleteLayoutUpdateEvent();
         }
 

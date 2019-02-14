@@ -9,12 +9,8 @@ namespace Shapes.Presenter
     {
         public UndoRedoActionsPresenter(Common.IUndoRedo model, View.UndoRedoActionsView view)
         {
-            view.OnUndo += () => {
-                model.Undo();
-            };
-            view.OnRedo += () => {
-                model.Redo();
-            };
+            view.OnUndo += () => model.Undo();
+            view.OnRedo += () => model.Redo();
         }
     }
 }

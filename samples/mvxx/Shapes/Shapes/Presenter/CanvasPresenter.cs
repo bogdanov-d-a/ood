@@ -47,9 +47,7 @@ namespace Shapes.Presenter
                 view.InvalidateLayout();
             };
 
-            view.CanvasSizeProvider += () => {
-                return documentKeeper.Canvas.CanvasSize;
-            };
+            view.CanvasSizeProvider += () => documentKeeper.Canvas.CanvasSize;
         }
     }
 }

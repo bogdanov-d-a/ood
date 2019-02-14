@@ -11,18 +11,10 @@ namespace Shapes.Presenter
 
         public ShapeActionsPresenter(DomainModel.DocumentKeeper documentKeeper, AppModel.AppModel appModel, View.ShapeActionsView view)
         {
-            view.OnAddRectangle += () => {
-                documentKeeper.Document.AddShape(Common.ShapeType.Rectangle, defRect);
-            };
-            view.OnAddTriangle += () => {
-                documentKeeper.Document.AddShape(Common.ShapeType.Triangle, defRect);
-            };
-            view.OnAddCircle += () => {
-                documentKeeper.Document.AddShape(Common.ShapeType.Circle, defRect);
-            };
-            view.OnRemove += () => {
-                appModel.RemoveSelectedShape();
-            };
+            view.OnAddRectangle += () => documentKeeper.Document.AddShape(Common.ShapeType.Rectangle, defRect);
+            view.OnAddTriangle += () => documentKeeper.Document.AddShape(Common.ShapeType.Triangle, defRect);
+            view.OnAddCircle += () => documentKeeper.Document.AddShape(Common.ShapeType.Circle, defRect);
+            view.OnRemove += () => appModel.RemoveSelectedShape();
         }
     }
 }

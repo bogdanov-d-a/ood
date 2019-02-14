@@ -18,13 +18,12 @@ namespace Shapes.Utils
         {
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(_fileName))
             {
-                shapeEnumerator((Common.ShapeType type, Common.Rectangle boundingRect) => {
+                shapeEnumerator((Common.ShapeType type, Common.Rectangle boundingRect) =>
                     file.WriteLine(ShapeTypeUtils.TypeToString(type)
                         + " " + boundingRect.Left
                         + " " + boundingRect.Top
                         + " " + boundingRect.Width
-                        + " " + boundingRect.Height);
-                });
+                        + " " + boundingRect.Height));
             }
         }
     }

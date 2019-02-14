@@ -9,18 +9,10 @@ namespace Shapes.Presenter
     {
         public DocumentLifecycleActionsPresenter(Common.IDocumentLifecycle model, View.DocumentLifecycleActionsView view)
         {
-            view.OnNew += () => {
-                model.New();
-            };
-            view.OnOpen += () => {
-                model.Open();
-            };
-            view.OnSave += () => {
-                model.Save();
-            };
-            view.OnSaveAs += () => {
-                model.SaveAs();
-            };
+            view.OnNew += () => model.New();
+            view.OnOpen += () => model.Open();
+            view.OnSave += () => model.Save();
+            view.OnSaveAs += () => model.SaveAs();
         }
     }
 }
