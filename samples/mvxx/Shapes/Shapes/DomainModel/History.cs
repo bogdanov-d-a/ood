@@ -70,12 +70,6 @@ namespace Shapes.DomainModel
             return true;
         }
 
-        public void Clear()
-        {
-            _list.Clear();
-            _lastExecuted = null;
-        }
-
         public Command.ICommand GetLastExecuted()
         {
             return _lastExecuted == null

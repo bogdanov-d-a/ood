@@ -2,75 +2,73 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Optional;
 
 namespace Shapes.DomainModel
 {
-    public class Facade
+    public class DocumentKeeper
     {
         private class DocumentLifecycleControllerEvents : DocumentLifecycleController.IEvents
         {
             private class LifecycleActionEventsHandler : DocumentLifecycleController.ILifecycleActionEvents
             {
-                private readonly Facade _facade;
+                private readonly DocumentKeeper _documentKeeper;
 
-                public LifecycleActionEventsHandler(Facade facade)
+                public LifecycleActionEventsHandler(DocumentKeeper documentKeeper)
                 {
-                    _facade = facade;
+                    _documentKeeper = documentKeeper;
                 }
 
                 public void OnEraseDocument()
                 {
-                    _facade._canvas.RemoveAllShapes();
-                    _facade._document.ClearHistory();
-                    _facade.CompleteLayoutUpdateEvent();
+                    _documentKeeper.ResetData();
+                    _documentKeeper.CompleteLayoutUpdateEvent();
                 }
 
                 public void OnExportDocumentData(string path)
                 {
-                    _facade.SerializeShapes(new Utils.ShapeToFileSerializer(path));
+                    _documentKeeper.SerializeShapes(new Utils.ShapeToFileSerializer(path));
                 }
 
                 public void OnFillDocumentData(string path)
                 {
-                    _facade.LoadCanvas(new Utils.CanvasLoaderFromFile(path));
+                    _documentKeeper.LoadCanvas(new Utils.CanvasLoaderFromFile(path));
                 }
             }
 
             private class SynchronizationEventsHandler : DocumentLifecycleController.ISynchronizationEvents
             {
-                private readonly Facade _facade;
+                private readonly DocumentKeeper _documentKeeper;
 
-                public SynchronizationEventsHandler(Facade facade)
+                public SynchronizationEventsHandler(DocumentKeeper documentKeeper)
                 {
-                    _facade = facade;
+                    _documentKeeper = documentKeeper;
                 }
 
                 public bool IsDocumentSynced()
                 {
-                    return _facade._savedCommand == _facade._document.GetLastExecutedCommand();
+                    return _documentKeeper._savedCommand == _documentKeeper._document.GetLastExecutedCommand();
                 }
 
                 public void OnSyncDocument()
                 {
-                    _facade._savedCommand = _facade._document.GetLastExecutedCommand();
+                    _documentKeeper._savedCommand = _documentKeeper._document.GetLastExecutedCommand();
                 }
             }
 
-            private readonly Facade _facade;
+            private readonly DocumentKeeper _documentKeeper;
             private readonly LifecycleActionEventsHandler _lifecycleActionEvents;
             private readonly SynchronizationEventsHandler _synchronizationEvents;
 
-            public DocumentLifecycleControllerEvents(Facade facade)
+            public DocumentLifecycleControllerEvents(DocumentKeeper documentKeeper)
             {
-                _facade = facade;
-                _lifecycleActionEvents = new LifecycleActionEventsHandler(facade);
-                _synchronizationEvents = new SynchronizationEventsHandler(facade);
+                _documentKeeper = documentKeeper;
+                _lifecycleActionEvents = new LifecycleActionEventsHandler(documentKeeper);
+                _synchronizationEvents = new SynchronizationEventsHandler(documentKeeper);
             }
 
             public Common.ILifecycleDecisionEvents LifecycleDecisionEvents
             {
-                get => _facade._lifecycleDecisionEvents;
+                get => _documentKeeper._lifecycleDecisionEvents;
             }
 
             public DocumentLifecycleController.ILifecycleActionEvents LifecycleActionEvents
@@ -114,22 +112,16 @@ namespace Shapes.DomainModel
             }
         }
 
-        private readonly Canvas _canvas;
-        private readonly Document _document;
         private readonly DocumentLifecycleHandlers _documentLifecycleHandlers;
+        private Canvas _canvas;
+        private Document _document;
         private Command.ICommand _savedCommand = null;
         private Common.ILifecycleDecisionEvents _lifecycleDecisionEvents = null;
 
-        public Facade()
+        public DocumentKeeper()
         {
-            _canvas = new Canvas(new Common.Size(640, 480));
-            _document = new Document(_canvas);
             _documentLifecycleHandlers = new DocumentLifecycleHandlers(
                 new DocumentLifecycleController(new DocumentLifecycleControllerEvents(this)));
-
-            _document.ShapeInsertEvent += (int index) => ShapeInsertEvent(index);
-            _document.ShapeModifyEvent += (int index) => ShapeModifyEvent(index);
-            _document.ShapeRemoveEvent += (int index) => ShapeRemoveEvent(index);
         }
 
         public void SetLifecycleDecisionEvents(Common.ILifecycleDecisionEvents lifecycleDecisionEvents)
@@ -137,34 +129,24 @@ namespace Shapes.DomainModel
             _lifecycleDecisionEvents = lifecycleDecisionEvents;
         }
 
-        public void AddShape(Common.ShapeType type, Common.Rectangle rect)
+        public void ResetData()
         {
-            _document.AddShape(type, rect);
+            _canvas = new Canvas(new Common.Size(640, 480));
+            _document = new Document(_canvas);
+
+            _document.ShapeInsertEvent += (int index) => ShapeInsertEvent(index);
+            _document.ShapeModifyEvent += (int index) => ShapeModifyEvent(index);
+            _document.ShapeRemoveEvent += (int index) => ShapeRemoveEvent(index);
         }
 
-        public IShape GetShape(int index)
+        public Canvas Canvas
         {
-            return _document.GetShape(index);
+            get => _canvas;
         }
 
-        public void RemoveShape(int index)
+        public Document Document
         {
-            _document.RemoveShape(index);
-        }
-
-        public Common.Size CanvasSize
-        {
-            get => _canvas.CanvasSize;
-        }
-
-        public int ShapeCount
-        {
-            get => _canvas.ShapeCount;
-        }
-
-        public Common.IUndoRedo History
-        {
-            get => _document.History;
+            get => _document;
         }
 
         public Common.IDocumentLifecycle DocumentLifecycle
@@ -183,10 +165,10 @@ namespace Shapes.DomainModel
         private void SerializeShapes(Utils.IShapeSerializer serializer)
         {
             serializer.SerializeShapes((Utils.ShapeInfoDelegate shapeInfoDelegate) => {
-                for (int i = 0; i < ShapeCount; ++i)
+                for (int i = 0; i < _canvas.ShapeCount; ++i)
                 {
-                    var shape = GetShape(i);
-                    shapeInfoDelegate(shape.ShapeType, shape.BoundingRect);
+                    var shape = _canvas.GetShapeAt(i);
+                    shapeInfoDelegate(shape.type, shape.boundingRect);
                 }
             });
         }

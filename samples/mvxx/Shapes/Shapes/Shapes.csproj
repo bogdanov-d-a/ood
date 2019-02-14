@@ -48,15 +48,14 @@
   <ItemGroup>
     <Compile Include="AppModel\CursorHandler.cs" />
     <Compile Include="AppModel\CursorHandlerUtils.cs" />
-    <Compile Include="AppModel\Facade.cs" />
     <Compile Include="Common\ClosingAction.cs" />
     <Compile Include="Common\DelegateTypes.cs" />
     <Compile Include="Common\IDocumentLifecycle.cs" />
     <Compile Include="Common\IPointerDrag.cs" />
     <Compile Include="Common\IUndoRedo.cs" />
     <Compile Include="DomainModel\Command\IShapes.cs" />
-    <Compile Include="DomainModel\Facade.cs" />
     <Compile Include="Common\ILifecycleDecisionEvents.cs" />
+    <Compile Include="DomainModel\DocumentKeeper.cs" />
     <Compile Include="DomainModel\IShape.cs" />
     <Compile Include="Presenter\DocumentLifecycleActionsPresenter.cs" />
     <Compile Include="Presenter\LifecycleDecisionPresenter.cs" />

@@ -7,7 +7,7 @@ namespace Shapes.Presenter
 {
     public class CanvasPresenter
     {
-        public CanvasPresenter(AppModel.Facade model, View.CanvasView view)
+        public CanvasPresenter(DomainModel.DocumentKeeper documentKeeper, AppModel.AppModel model, View.CanvasView view)
         {
             model.CompleteLayoutUpdateEvent += () => {
                 view.SetSelectionIndex(-1);
@@ -17,7 +17,7 @@ namespace Shapes.Presenter
                     view.RemoveShape(0);
                 }
 
-                for (int i = 0; i < model.ShapeCount; ++i)
+                for (int i = 0; i < documentKeeper.Canvas.ShapeCount; ++i)
                 {
                     view.AddShape(i, model.GetShape(i));
                 }
@@ -27,7 +27,7 @@ namespace Shapes.Presenter
                 view.InvalidateLayout();
             };
 
-            model.ShapeInsertEvent += (int index) => {
+            documentKeeper.ShapeInsertEvent += (int index) => {
                 view.AddShape(index, model.GetShape(index));
                 view.InvalidateLayout();
             };
@@ -48,7 +48,7 @@ namespace Shapes.Presenter
             };
 
             view.CanvasSizeProvider += () => {
-                return model.CanvasSize;
+                return documentKeeper.Canvas.CanvasSize;
             };
         }
     }

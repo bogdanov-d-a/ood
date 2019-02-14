@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shapes.DomainModel
 {
-    class Canvas
+    public class Canvas
     {
         private readonly Common.Size _canvasSize;
         private readonly List<Common.Shape> _shapeList = new List<Common.Shape>();
@@ -40,11 +40,6 @@ namespace Shapes.DomainModel
         public void RemoveShapeAt(int index)
         {
             _shapeList.RemoveAt(index);
-        }
-
-        public void RemoveAllShapes()
-        {
-            _shapeList.Clear();
         }
 
         public Common.Size CanvasSize

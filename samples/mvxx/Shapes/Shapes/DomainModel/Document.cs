@@ -6,7 +6,7 @@ using Optional;
 
 namespace Shapes.DomainModel
 {
-    class Document
+    public class Document
     {
         private class Shape : IShape
         {
@@ -139,11 +139,6 @@ namespace Shapes.DomainModel
         public Common.IUndoRedo History
         {
             get => _undoRedoHandlers;
-        }
-
-        public void ClearHistory()
-        {
-            _history.Clear();
         }
 
         public Command.ICommand GetLastExecutedCommand()

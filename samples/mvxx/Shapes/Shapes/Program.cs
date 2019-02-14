@@ -16,7 +16,10 @@ namespace Shapes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            AppModel.Facade model = new AppModel.Facade();
+            DomainModel.DocumentKeeper keeper = new DomainModel.DocumentKeeper();
+            keeper.ResetData();
+
+            AppModel.AppModel appModel = new AppModel.AppModel(keeper);
 
             View.CanvasView canvasView = new View.CanvasView();
             View.ShapeActionsView shapeActionsView = new View.ShapeActionsView();
@@ -24,16 +27,16 @@ namespace Shapes
             View.UndoRedoActionsView undoRedoActionsView = new View.UndoRedoActionsView();
             View.DocumentLifecycleActionsView documentLifecycleActionsView = new View.DocumentLifecycleActionsView();
 
-            new Presenter.CanvasPresenter(model, canvasView);
-            new Presenter.ShapeActionsPresenter(model, shapeActionsView);
-            new Presenter.MouseEventsPresenter(model.Pointer, mouseEventsView);
-            new Presenter.UndoRedoActionsPresenter(model.History, undoRedoActionsView);
-            new Presenter.DocumentLifecycleActionsPresenter(model.DocumentLifecycle, documentLifecycleActionsView);
+            new Presenter.CanvasPresenter(keeper, appModel, canvasView);
+            new Presenter.ShapeActionsPresenter(keeper, appModel, shapeActionsView);
+            new Presenter.MouseEventsPresenter(appModel.Pointer, mouseEventsView);
+            new Presenter.UndoRedoActionsPresenter(appModel.History, undoRedoActionsView);
+            new Presenter.DocumentLifecycleActionsPresenter(keeper.DocumentLifecycle, documentLifecycleActionsView);
 
             Shapes shapes = new Shapes(canvasView, shapeActionsView, mouseEventsView, undoRedoActionsView, documentLifecycleActionsView);
 
-            model.SetLifecycleDecisionEvents(new Presenter.LifecycleDecisionPresenter(shapes.DialogsView).EventHandlers);
-            shapes.SetFormClosingHandler(() => model.DocumentLifecycle.New());
+            keeper.SetLifecycleDecisionEvents(new Presenter.LifecycleDecisionPresenter(shapes.DialogsView).EventHandlers);
+            shapes.SetFormClosingHandler(() => keeper.DocumentLifecycle.New());
 
             Application.Run(shapes);
         }

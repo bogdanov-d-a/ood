@@ -7,16 +7,18 @@ namespace Shapes.Presenter
 {
     public class ShapeActionsPresenter
     {
-        public ShapeActionsPresenter(AppModel.Facade appModel, View.ShapeActionsView view)
+        private static readonly Common.Rectangle defRect = new Common.Rectangle(new Common.Position(200, 100), new Common.Size(300, 200));
+
+        public ShapeActionsPresenter(DomainModel.DocumentKeeper documentKeeper, AppModel.AppModel appModel, View.ShapeActionsView view)
         {
             view.OnAddRectangle += () => {
-                appModel.AddRectangle();
+                documentKeeper.Document.AddShape(Common.ShapeType.Rectangle, defRect);
             };
             view.OnAddTriangle += () => {
-                appModel.AddTriangle();
+                documentKeeper.Document.AddShape(Common.ShapeType.Triangle, defRect);
             };
             view.OnAddCircle += () => {
-                appModel.AddCircle();
+                documentKeeper.Document.AddShape(Common.ShapeType.Circle, defRect);
             };
             view.OnRemove += () => {
                 appModel.RemoveSelectedShape();
