@@ -5,8 +5,6 @@
 #include <climits>
 #include "Observer.h"
 
-using namespace std;
-
 struct SWeatherInfo
 {
 	double temperature = 0;
