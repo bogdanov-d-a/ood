@@ -19,9 +19,9 @@ namespace ShapesLite
             CanvasView canvasView = new CanvasView();
             InfoView infoView = new InfoView();
             ControlView controlView = new ControlView();
-            new CanvasPresenter(domainModel, appModel, canvasView);
-            new InfoPresenter(domainModel, appModel, infoView);
-            new ControlPresenter(domainModel, appModel, controlView);
+            new Presenters.CanvasPresenter(domainModel, appModel, canvasView);
+            new Presenters.InfoPresenter(domainModel, appModel, infoView);
+            new Presenters.ControlPresenter(domainModel, appModel, controlView);
 
             domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
 
