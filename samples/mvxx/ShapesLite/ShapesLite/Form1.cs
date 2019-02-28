@@ -54,9 +54,9 @@ namespace ShapesLite
             Point rawPos = PointToClient(MousePosition);
             Common.Position<int> pos = new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            _view.Position.Value = Common.RectangleFactory.MakeRectangleInt(
-                new Common.Position<int>(pos.x - touchPos.x, pos.y - touchPos.y),
-                _view.Position.Value.Size);
+            Common.Size<int> size = _view.Position.Value.Size;
+            _view.Position.Value = new Common.RectangleInt(
+                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -64,9 +64,9 @@ namespace ShapesLite
             Point rawPos = PointToClient(MousePosition);
             Common.Position<int> pos = new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            _view.Position.Value = Common.RectangleFactory.MakeRectangleInt(
-                new Common.Position<int>(pos.x - touchPos.x, pos.y - touchPos.y),
-                _view.Position.Value.Size);
+            Common.Size<int> size = _view.Position.Value.Size;
+            _view.Position.Value = new Common.RectangleInt(
+                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
             _view.OnFinishMovingEvent(_view.Position.Value);
             _touchPos = Option.None<Common.Position<int>>();
         }

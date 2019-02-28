@@ -11,10 +11,8 @@ namespace ShapesLite
     {
         public const int DrawOffset = 50;
 
-        public readonly Common.SignallingValue<Common.RectangleT<int>> Position =
-            new Common.SignallingValue<Common.RectangleT<int>>(
-                Common.RectangleFactory.MakeRectangleInt(
-                    new Common.Position<int>(), new Common.Size<int>()));
+        public readonly Common.SignallingValue<Common.Rectangle<int>> Position =
+            new Common.SignallingValue<Common.Rectangle<int>>(new Common.RectangleInt(0, 0, 0, 0));
 
         public Common.Size<int> CanvasSize
         {
@@ -23,16 +21,16 @@ namespace ShapesLite
 
         public readonly Common.SignallingValue<bool> IsSelected = new Common.SignallingValue<bool>(false);
 
-        public delegate void OnFinishMovingDelegate(Common.RectangleT<int> pos);
+        public delegate void OnFinishMovingDelegate(Common.Rectangle<int> pos);
         public OnFinishMovingDelegate OnFinishMovingEvent = delegate {};
 
         public View()
         {
-            Position.Event += (Common.RectangleT<int> pos) => InvalidateEvent();
+            Position.Event += (Common.Rectangle<int> pos) => InvalidateEvent();
             IsSelected.Event += (bool selected) => InvalidateEvent();
         }
 
-        private static Rectangle OffsetDrawRect(Common.RectangleT<int> rect)
+        private static Rectangle OffsetDrawRect(Common.Rectangle<int> rect)
         {
             return new Rectangle(rect.Left + DrawOffset,
                 rect.Top + DrawOffset,
@@ -43,8 +41,7 @@ namespace ShapesLite
         public void Draw(Graphics g)
         {
             {
-                var rect2 = OffsetDrawRect(Common.RectangleFactory.MakeRectangleInt(
-                    new Common.Position<int>(), CanvasSize));
+                var rect2 = OffsetDrawRect(new Common.RectangleInt(0, 0, CanvasSize.width, CanvasSize.height));
                 g.FillRectangle(new SolidBrush(Color.White), rect2);
             }
 

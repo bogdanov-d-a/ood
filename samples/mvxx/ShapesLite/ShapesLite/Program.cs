@@ -19,9 +19,7 @@ namespace ShapesLite
             View view = new View();
             new Presenter(domainModel, appModel, view);
 
-            domainModel.Position.Value = Common.RectangleFactory.MakeRectangleDouble(
-                    new Common.Position<double>(0.25, 0.25),
-                    new Common.Size<double>(0.5, 0.5));
+            domainModel.Position.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
