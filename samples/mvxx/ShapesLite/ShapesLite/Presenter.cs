@@ -22,32 +22,32 @@ namespace ShapesLite
         {
             Common.Size<int> size = view.CanvasSize;
 
-            domainModel.Position.Event += (Common.Rectangle<double> pos) => {
-                appModel.Position.Value = pos;
+            domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
+                appModel.ShapeBoundingRect.Value = pos;
             };
 
-            appModel.Position.Event += (Common.Rectangle<double> pos) => {
-                view.Position.Value = new Common.RectangleInt(
+            appModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
+                view.ShapeBoundingRect.Value = new Common.RectangleInt(
                     DoubleToInt(pos.Left, size.width), DoubleToInt(pos.Top, size.height),
                     DoubleToInt(pos.Width, size.width), DoubleToInt(pos.Height, size.height));
             };
 
-            appModel.IsSelected.Event += (bool selected) => {
-                view.IsSelected.Value = selected;
+            appModel.IsShapeSelected.Event += (bool selected) => {
+                view.IsShapeSelected.Value = selected;
             };
 
-            view.Position.Event += (Common.Rectangle<int> pos) => {
-                appModel.Position.Value = new Common.RectangleDouble(
+            view.ShapeBoundingRect.Event += (Common.Rectangle<int> pos) => {
+                appModel.ShapeBoundingRect.Value = new Common.RectangleDouble(
                     IntToDouble(pos.Left, size.width), IntToDouble(pos.Top, size.height),
                     IntToDouble(pos.Width, size.width), IntToDouble(pos.Height, size.height));
             };
 
-            view.IsSelected.Event += (bool selected) => {
-                appModel.IsSelected.Value = selected;
+            view.IsShapeSelected.Event += (bool selected) => {
+                appModel.IsShapeSelected.Value = selected;
             };
 
             view.OnFinishMovingEvent += (Common.Rectangle<int> pos) => {
-                domainModel.Position.Value = new Common.RectangleDouble(
+                domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(
                     IntToDouble(pos.Left, size.width), IntToDouble(pos.Top, size.height),
                     IntToDouble(pos.Width, size.width), IntToDouble(pos.Height, size.height));
             };

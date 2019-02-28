@@ -8,9 +8,9 @@ namespace ShapesLite
 {
     public class AppModel
     {
-        public readonly Common.SignallingValue<Common.Rectangle<double>> Position =
+        public readonly Common.SignallingValue<Common.Rectangle<double>> ShapeBoundingRect =
             new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
 
-        public readonly Common.SignallingValue<bool> IsSelected = new Common.SignallingValue<bool>(false);
+        public readonly Common.SignallingValue<bool> IsShapeSelected = new Common.SignallingValue<bool>(false);
     }
 }

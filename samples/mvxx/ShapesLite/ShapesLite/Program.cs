@@ -19,7 +19,7 @@ namespace ShapesLite
             View view = new View();
             new Presenter(domainModel, appModel, view);
 
-            domainModel.Position.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
+            domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -33,7 +33,7 @@ namespace ShapesLite
 
         private bool IsInsideShape(Common.Position<int> position)
         {
-            return _view.Position.Value.Contains(position);
+            return _view.ShapeBoundingRect.Value.Contains(position);
         }
 
         private Common.Position<int> GetMousePos()
@@ -45,9 +45,9 @@ namespace ShapesLite
         private void ShapesLiteForm_MouseDown(object sender, MouseEventArgs e)
         {
             Common.Position<int> pos = GetMousePos();
-            _view.IsSelected.Value = IsInsideShape(pos);
-            _touchPos = _view.IsSelected.Value
-                ? Option.Some(new Common.Position<int>(pos.x - _view.Position.Value.Left, pos.y - _view.Position.Value.Top))
+            _view.IsShapeSelected.Value = IsInsideShape(pos);
+            _touchPos = _view.IsShapeSelected.Value
+                ? Option.Some(new Common.Position<int>(pos.x - _view.ShapeBoundingRect.Value.Left, pos.y - _view.ShapeBoundingRect.Value.Top))
                 : Option.None<Common.Position<int>>();
         }
 
@@ -55,8 +55,8 @@ namespace ShapesLite
         {
             Common.Position<int> pos = GetMousePos();
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            Common.Size<int> size = _view.Position.Value.Size;
-            _view.Position.Value = new Common.RectangleInt(
+            Common.Size<int> size = _view.ShapeBoundingRect.Value.Size;
+            _view.ShapeBoundingRect.Value = new Common.RectangleInt(
                 pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
         }
 
@@ -76,7 +76,7 @@ namespace ShapesLite
                 return;
             }
             UpdateViewShapePosition();
-            _view.OnFinishMovingEvent(_view.Position.Value);
+            _view.OnFinishMovingEvent(_view.ShapeBoundingRect.Value);
             _touchPos = Option.None<Common.Position<int>>();
         }
     }

@@ -11,7 +11,7 @@ namespace ShapesLite
     {
         public const int DrawOffset = 50;
 
-        public readonly Common.SignallingValue<Common.Rectangle<int>> Position =
+        public readonly Common.SignallingValue<Common.Rectangle<int>> ShapeBoundingRect =
             new Common.SignallingValue<Common.Rectangle<int>>(new Common.RectangleInt(0, 0, 0, 0));
 
         public Common.Size<int> CanvasSize
@@ -19,15 +19,15 @@ namespace ShapesLite
             get => new Common.Size<int>(700, 350);
         }
 
-        public readonly Common.SignallingValue<bool> IsSelected = new Common.SignallingValue<bool>(false);
+        public readonly Common.SignallingValue<bool> IsShapeSelected = new Common.SignallingValue<bool>(false);
 
         public delegate void OnFinishMovingDelegate(Common.Rectangle<int> pos);
         public OnFinishMovingDelegate OnFinishMovingEvent = delegate {};
 
         public View()
         {
-            Position.Event += (Common.Rectangle<int> pos) => InvalidateEvent();
-            IsSelected.Event += (bool selected) => InvalidateEvent();
+            ShapeBoundingRect.Event += (Common.Rectangle<int> pos) => InvalidateEvent();
+            IsShapeSelected.Event += (bool selected) => InvalidateEvent();
         }
 
         private static Rectangle OffsetDrawRect(Common.Rectangle<int> rect)
@@ -46,15 +46,15 @@ namespace ShapesLite
             }
 
             {
-                var rect2 = OffsetDrawRect(Position.Value);
+                var rect2 = OffsetDrawRect(ShapeBoundingRect.Value);
                 g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
             }
 
-            if (IsSelected.Value)
+            if (IsShapeSelected.Value)
             {
                 const int SelOffset = 5;
-                var rect2 = OffsetDrawRect(Position.Value);
+                var rect2 = OffsetDrawRect(ShapeBoundingRect.Value);
                 rect2.Inflate(new Size(SelOffset, SelOffset));
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Red)), rect2);
             }

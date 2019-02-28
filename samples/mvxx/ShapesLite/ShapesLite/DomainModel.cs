@@ -8,7 +8,7 @@ namespace ShapesLite
 {
     public class DomainModel
     {
-        public readonly Common.SignallingValue<Common.Rectangle<double>> Position =
+        public readonly Common.SignallingValue<Common.Rectangle<double>> ShapeBoundingRect =
             new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
     }
 }
