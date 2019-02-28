@@ -12,12 +12,12 @@ using Optional.Unsafe;
 
 namespace ShapesLite
 {
-    public partial class Form1 : Form
+    public partial class ShapesLiteForm : Form
     {
         private readonly View _view;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public Form1(View view)
+        public ShapesLiteForm(View view)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -26,7 +26,7 @@ namespace ShapesLite
             _view.InvalidateEvent += () => Invalidate();
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void ShapesLiteForm_Paint(object sender, PaintEventArgs e)
         {
             _view.Draw(e.Graphics);
         }
@@ -42,7 +42,7 @@ namespace ShapesLite
             return new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private void ShapesLiteForm_MouseDown(object sender, MouseEventArgs e)
         {
             Common.Position<int> pos = GetMousePos();
             _view.IsSelected.Value = IsInsideShape(pos);
@@ -60,7 +60,7 @@ namespace ShapesLite
                 pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        private void ShapesLiteForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_touchPos.HasValue)
             {
@@ -69,7 +69,7 @@ namespace ShapesLite
             UpdateViewShapePosition();
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        private void ShapesLiteForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (!_touchPos.HasValue)
             {
