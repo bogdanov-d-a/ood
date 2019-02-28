@@ -36,12 +36,28 @@ namespace ShapesLite
             return _view.Position.Value.Contains(position);
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private Common.Position<int> GetMousePos()
         {
             Point rawPos = PointToClient(MousePosition);
-            Common.Position<int> pos = new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
+            return new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            Common.Position<int> pos = GetMousePos();
             _view.IsSelected.Value = IsInsideShape(pos);
-            _touchPos = Option.Some(new Common.Position<int>(pos.x - _view.Position.Value.Left, pos.y - _view.Position.Value.Top));
+            _touchPos = _view.IsSelected.Value
+                ? Option.Some(new Common.Position<int>(pos.x - _view.Position.Value.Left, pos.y - _view.Position.Value.Top))
+                : Option.None<Common.Position<int>>();
+        }
+
+        private void UpdateViewShapePosition()
+        {
+            Common.Position<int> pos = GetMousePos();
+            Common.Position<int> touchPos = _touchPos.ValueOrFailure();
+            Common.Size<int> size = _view.Position.Value.Size;
+            _view.Position.Value = new Common.RectangleInt(
+                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -50,23 +66,16 @@ namespace ShapesLite
             {
                 return;
             }
-
-            Point rawPos = PointToClient(MousePosition);
-            Common.Position<int> pos = new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
-            Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            Common.Size<int> size = _view.Position.Value.Size;
-            _view.Position.Value = new Common.RectangleInt(
-                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
+            UpdateViewShapePosition();
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            Point rawPos = PointToClient(MousePosition);
-            Common.Position<int> pos = new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
-            Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            Common.Size<int> size = _view.Position.Value.Size;
-            _view.Position.Value = new Common.RectangleInt(
-                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
+            if (!_touchPos.HasValue)
+            {
+                return;
+            }
+            UpdateViewShapePosition();
             _view.OnFinishMovingEvent(_view.Position.Value);
             _touchPos = Option.None<Common.Position<int>>();
         }
