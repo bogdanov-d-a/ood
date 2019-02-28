@@ -52,10 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppModel.cs" />
-    <Compile Include="Common\ICopyable.cs" />
     <Compile Include="Common\Position.cs" />
-    <Compile Include="Common\RectangleFactory.cs" />
-    <Compile Include="Common\RectangleT.cs" />
+    <Compile Include="Common\Rectangle.cs" />
+    <Compile Include="Common\RectangleDouble.cs" />
+    <Compile Include="Common\RectangleInt.cs" />
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="DomainModel.cs" />

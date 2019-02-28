@@ -5,19 +5,18 @@ using System.Text;
 
 namespace ShapesLite.Common
 {
-    public abstract class RectangleT<T> : IEquatable<RectangleT<T>>, ICopyable<RectangleT<T>> where T : IEquatable<T>, IComparable<T>
+    public abstract class Rectangle<T> : IEquatable<Rectangle<T>> where T : IEquatable<T>, IComparable<T>
     {
         public abstract T Add(T a, T b);
         public abstract T Sub(T a, T b);
-        public abstract RectangleT<T> Copy();
 
         private Position<T> _leftTop;
         private Size<T> _size;
 
-        public RectangleT(Position<T> leftTop, Size<T> size)
+        public Rectangle(T left, T top, T width, T height)
         {
-            _leftTop = leftTop;
-            _size = size;
+            _leftTop = new Position<T>(left, top);
+            _size = new Size<T>(width, height);
         }
 
         public Position<T> LeftTop
@@ -96,7 +95,7 @@ namespace ShapesLite.Common
             Top = Add(Top, offset.height);
         }
 
-        public bool Equals(RectangleT<T> o)
+        public bool Equals(Rectangle<T> o)
         {
             return Equals(_leftTop, o._leftTop) && Equals(_size, o._size);
         }
