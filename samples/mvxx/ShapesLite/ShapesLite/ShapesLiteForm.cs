@@ -14,11 +14,11 @@ namespace ShapesLite
 {
     public partial class ShapesLiteForm : Form
     {
-        private readonly CanvasView _canvasView;
-        private readonly ControlView _controlView;
+        private readonly Views.CanvasView _canvasView;
+        private readonly Views.ControlView _controlView;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public ShapesLiteForm(CanvasView canvasView, InfoView infoView, ControlView controlView)
+        public ShapesLiteForm(Views.CanvasView canvasView, Views.InfoView infoView, Views.ControlView controlView)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -47,7 +47,7 @@ namespace ShapesLite
         private Common.Position<int> GetMousePos()
         {
             Point rawPos = PointToClient(MousePosition);
-            return new Common.Position<int>(rawPos.X - CanvasView.DrawOffset, rawPos.Y - CanvasView.DrawOffset);
+            return new Common.Position<int>(rawPos.X - Views.CanvasView.DrawOffset, rawPos.Y - Views.CanvasView.DrawOffset);
         }
 
         private void ShapesLiteForm_MouseDown(object sender, MouseEventArgs e)

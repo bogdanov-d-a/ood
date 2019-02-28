@@ -18,7 +18,7 @@ namespace ShapesLite.Presenters
             return 1.0 * value / factor;
         }
 
-        public CanvasPresenter(DomainModel domainModel, AppModel appModel, CanvasView view)
+        public CanvasPresenter(DomainModel domainModel, AppModel appModel, Views.CanvasView view)
         {
             Common.Size<int> size = view.CanvasSize;
 

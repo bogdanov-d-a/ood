@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShapesLite
+namespace ShapesLite.Views
 {
     public class ControlView
     {

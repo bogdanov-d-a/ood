@@ -16,9 +16,9 @@ namespace ShapesLite
         {
             DomainModel domainModel = new DomainModel();
             AppModel appModel = new AppModel();
-            CanvasView canvasView = new CanvasView();
-            InfoView infoView = new InfoView();
-            ControlView controlView = new ControlView();
+            Views.CanvasView canvasView = new Views.CanvasView();
+            Views.InfoView infoView = new Views.InfoView();
+            Views.ControlView controlView = new Views.ControlView();
             new Presenters.CanvasPresenter(domainModel, appModel, canvasView);
             new Presenters.InfoPresenter(domainModel, appModel, infoView);
             new Presenters.ControlPresenter(domainModel, appModel, controlView);
