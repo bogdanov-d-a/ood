@@ -12,8 +12,6 @@
 #include <boost/variant.hpp>
 #include "Observer.h"
 
-using namespace std;
-
 struct SWindData
 {
 	double speed = 0;
