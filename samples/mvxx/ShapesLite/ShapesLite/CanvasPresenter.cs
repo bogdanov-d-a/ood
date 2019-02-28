@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesLite
 {
-    public class Presenter
+    public class CanvasPresenter
     {
         private int DoubleToInt(double value, int factor)
         {
@@ -18,7 +18,7 @@ namespace ShapesLite
             return 1.0 * value / factor;
         }
 
-        public Presenter(DomainModel domainModel, AppModel appModel, View view)
+        public CanvasPresenter(DomainModel domainModel, AppModel appModel, CanvasView view)
         {
             Common.Size<int> size = view.CanvasSize;
 

@@ -14,16 +14,16 @@ namespace ShapesLite
 {
     public partial class ShapesLiteForm : Form
     {
-        private readonly View _view;
+        private readonly CanvasView _canvasView;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public ShapesLiteForm(View view, InfoView infoView)
+        public ShapesLiteForm(CanvasView canvasView, InfoView infoView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
-            _view = view;
-            _view.InvalidateEvent += () => Invalidate();
+            _canvasView = canvasView;
+            _canvasView.InvalidateEvent += () => Invalidate();
 
             infoTextBox.Text = infoView.GetText();
             infoView.TextChangedEvent += (string text) => {
@@ -33,26 +33,26 @@ namespace ShapesLite
 
         private void ShapesLiteForm_Paint(object sender, PaintEventArgs e)
         {
-            _view.Draw(e.Graphics);
+            _canvasView.Draw(e.Graphics);
         }
 
         private bool IsInsideShape(Common.Position<int> position)
         {
-            return _view.ShapeBoundingRect.Value.Contains(position);
+            return _canvasView.ShapeBoundingRect.Value.Contains(position);
         }
 
         private Common.Position<int> GetMousePos()
         {
             Point rawPos = PointToClient(MousePosition);
-            return new Common.Position<int>(rawPos.X - View.DrawOffset, rawPos.Y - View.DrawOffset);
+            return new Common.Position<int>(rawPos.X - CanvasView.DrawOffset, rawPos.Y - CanvasView.DrawOffset);
         }
 
         private void ShapesLiteForm_MouseDown(object sender, MouseEventArgs e)
         {
             Common.Position<int> pos = GetMousePos();
-            _view.IsShapeSelected.Value = IsInsideShape(pos);
-            _touchPos = _view.IsShapeSelected.Value
-                ? Option.Some(new Common.Position<int>(pos.x - _view.ShapeBoundingRect.Value.Left, pos.y - _view.ShapeBoundingRect.Value.Top))
+            _canvasView.IsShapeSelected.Value = IsInsideShape(pos);
+            _touchPos = _canvasView.IsShapeSelected.Value
+                ? Option.Some(new Common.Position<int>(pos.x - _canvasView.ShapeBoundingRect.Value.Left, pos.y - _canvasView.ShapeBoundingRect.Value.Top))
                 : Option.None<Common.Position<int>>();
         }
 
@@ -60,8 +60,8 @@ namespace ShapesLite
         {
             Common.Position<int> pos = GetMousePos();
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            Common.Size<int> size = _view.ShapeBoundingRect.Value.Size;
-            _view.ShapeBoundingRect.Value = new Common.RectangleInt(
+            Common.Size<int> size = _canvasView.ShapeBoundingRect.Value.Size;
+            _canvasView.ShapeBoundingRect.Value = new Common.RectangleInt(
                 pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
         }
 
@@ -81,7 +81,7 @@ namespace ShapesLite
                 return;
             }
             UpdateViewShapePosition();
-            _view.OnFinishMovingEvent(_view.ShapeBoundingRect.Value);
+            _canvasView.OnFinishMovingEvent(_canvasView.ShapeBoundingRect.Value);
             _touchPos = Option.None<Common.Position<int>>();
         }
     }

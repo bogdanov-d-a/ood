@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace ShapesLite
 {
-    public class View
+    public class CanvasView
     {
         public const int DrawOffset = 50;
 
@@ -24,7 +24,7 @@ namespace ShapesLite
         public delegate void OnFinishMovingDelegate(Common.Rectangle<int> pos);
         public OnFinishMovingDelegate OnFinishMovingEvent = delegate {};
 
-        public View()
+        public CanvasView()
         {
             ShapeBoundingRect.Event += (Common.Rectangle<int> pos) => InvalidateEvent();
             IsShapeSelected.Event += (bool selected) => InvalidateEvent();

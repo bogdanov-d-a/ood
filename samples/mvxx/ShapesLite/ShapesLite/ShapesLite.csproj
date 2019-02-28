@@ -67,10 +67,10 @@
     <Compile Include="ShapesLiteForm.Designer.cs">
       <DependentUpon>ShapesLiteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenter.cs" />
+    <Compile Include="CanvasPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View.cs" />
+    <Compile Include="CanvasView.cs" />
     <EmbeddedResource Include="ShapesLiteForm.resx">
       <DependentUpon>ShapesLiteForm.cs</DependentUpon>
     </EmbeddedResource>
