@@ -59,6 +59,8 @@
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="DomainModel.cs" />
+    <Compile Include="InfoPresenter.cs" />
+    <Compile Include="InfoView.cs" />
     <Compile Include="ShapesLiteForm.cs">
       <SubType>Form</SubType>
     </Compile>

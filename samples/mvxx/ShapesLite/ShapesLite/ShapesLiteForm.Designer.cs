@@ -28,13 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.infoTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
+            // 
+            // infoTextBox
+            // 
+            this.infoTextBox.Location = new System.Drawing.Point(12, 418);
+            this.infoTextBox.Name = "infoTextBox";
+            this.infoTextBox.Size = new System.Drawing.Size(776, 20);
+            this.infoTextBox.TabIndex = 0;
             // 
             // ShapesLiteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.infoTextBox);
             this.Name = "ShapesLiteForm";
             this.Text = "ShapesLiteForm";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShapesLiteForm_Paint);
@@ -42,10 +51,13 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ShapesLiteForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ShapesLiteForm_MouseUp);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.TextBox infoTextBox;
     }
 }
 

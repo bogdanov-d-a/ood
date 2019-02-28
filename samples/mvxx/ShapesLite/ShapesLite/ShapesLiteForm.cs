@@ -17,13 +17,18 @@ namespace ShapesLite
         private readonly View _view;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public ShapesLiteForm(View view)
+        public ShapesLiteForm(View view, InfoView infoView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             _view = view;
             _view.InvalidateEvent += () => Invalidate();
+
+            infoTextBox.Text = infoView.GetText();
+            infoView.ModelRect.Event += (Common.Rectangle<double> rect) => {
+                infoTextBox.Text = infoView.GetText();
+            };
         }
 
         private void ShapesLiteForm_Paint(object sender, PaintEventArgs e)
