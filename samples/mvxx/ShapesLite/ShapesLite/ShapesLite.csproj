@@ -59,10 +59,10 @@
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="Presenters\ControlPresenter.cs" />
-    <Compile Include="ControlView.cs" />
+    <Compile Include="Views\ControlView.cs" />
     <Compile Include="DomainModel.cs" />
     <Compile Include="Presenters\InfoPresenter.cs" />
-    <Compile Include="InfoView.cs" />
+    <Compile Include="Views\InfoView.cs" />
     <Compile Include="ShapesLiteForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,7 +72,7 @@
     <Compile Include="Presenters\CanvasPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CanvasView.cs" />
+    <Compile Include="Views\CanvasView.cs" />
     <EmbeddedResource Include="ShapesLiteForm.resx">
       <DependentUpon>ShapesLiteForm.cs</DependentUpon>
     </EmbeddedResource>
