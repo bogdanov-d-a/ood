@@ -81,7 +81,7 @@ namespace ShapesLite.Common
 
         private bool Contains(T min, T max, T val)
         {
-            return val.CompareTo(max) >= 0 && val.CompareTo(min) < 0;
+            return val.CompareTo(min) >= 0 && val.CompareTo(max) < 0;
         }
 
         public bool Contains(Position<T> pos)

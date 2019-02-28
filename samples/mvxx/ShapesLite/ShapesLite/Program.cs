@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace ShapesLite
 {
-    static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -14,9 +14,18 @@ namespace ShapesLite
         [STAThread]
         static void Main()
         {
+            DomainModel domainModel = new DomainModel();
+            AppModel appModel = new AppModel();
+            View view = new View();
+            new Presenter(domainModel, appModel, view);
+
+            domainModel.Position.Value = Common.RectangleFactory.MakeRectangleDouble(
+                    new Common.Position<double>(0.25, 0.25),
+                    new Common.Size<double>(0.5, 0.5));
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form1(view));
         }
     }
 }
