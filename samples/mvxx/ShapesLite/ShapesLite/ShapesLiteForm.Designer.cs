@@ -31,6 +31,7 @@
             this.infoTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flipSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,7 +45,8 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetPositionToolStripMenuItem});
+            this.resetPositionToolStripMenuItem,
+            this.flipSelectionToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
@@ -57,6 +59,13 @@
             this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.resetPositionToolStripMenuItem.Text = "Reset position";
             this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.resetPositionToolStripMenuItem_Click);
+            // 
+            // flipSelectionToolStripMenuItem
+            // 
+            this.flipSelectionToolStripMenuItem.Name = "flipSelectionToolStripMenuItem";
+            this.flipSelectionToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
+            this.flipSelectionToolStripMenuItem.Text = "Flip selection";
+            this.flipSelectionToolStripMenuItem.Click += new System.EventHandler(this.flipSelectionToolStripMenuItem_Click);
             // 
             // ShapesLiteForm
             // 
@@ -84,6 +93,7 @@
         private System.Windows.Forms.TextBox infoTextBox;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipSelectionToolStripMenuItem;
     }
 }
 

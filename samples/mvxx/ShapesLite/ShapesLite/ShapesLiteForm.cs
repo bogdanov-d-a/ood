@@ -92,5 +92,10 @@ namespace ShapesLite
         {
             _controlView.ResetPositionEvent();
         }
+
+        private void flipSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _controlView.FlipSelectionEvent();
+        }
     }
 }

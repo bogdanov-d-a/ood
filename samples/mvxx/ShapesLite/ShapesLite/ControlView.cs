@@ -10,5 +10,6 @@ namespace ShapesLite
     {
         public delegate void VoidDelegate();
         public VoidDelegate ResetPositionEvent;
+        public VoidDelegate FlipSelectionEvent;
     }
 }

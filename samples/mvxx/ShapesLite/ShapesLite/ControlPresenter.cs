@@ -13,6 +13,9 @@ namespace ShapesLite
             controlView.ResetPositionEvent += () => {
                 domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
             };
+            controlView.FlipSelectionEvent += () => {
+                appModel.IsShapeSelected.Value = !appModel.IsShapeSelected.Value;
+            };
         }
     }
 }
