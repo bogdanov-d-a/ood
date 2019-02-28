@@ -58,6 +58,8 @@
     <Compile Include="Common\RectangleInt.cs" />
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
+    <Compile Include="ControlPresenter.cs" />
+    <Compile Include="ControlView.cs" />
     <Compile Include="DomainModel.cs" />
     <Compile Include="InfoPresenter.cs" />
     <Compile Include="InfoView.cs" />

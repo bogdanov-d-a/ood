@@ -15,9 +15,10 @@ namespace ShapesLite
     public partial class ShapesLiteForm : Form
     {
         private readonly CanvasView _canvasView;
+        private readonly ControlView _controlView;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public ShapesLiteForm(CanvasView canvasView, InfoView infoView)
+        public ShapesLiteForm(CanvasView canvasView, InfoView infoView, ControlView controlView)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -29,6 +30,8 @@ namespace ShapesLite
             infoView.TextChangedEvent += (string text) => {
                 infoTextBox.Text = text;
             };
+
+            _controlView = controlView;
         }
 
         private void ShapesLiteForm_Paint(object sender, PaintEventArgs e)
@@ -83,6 +86,11 @@ namespace ShapesLite
             UpdateViewShapePosition();
             _canvasView.OnFinishMovingEvent(_canvasView.ShapeBoundingRect.Value);
             _touchPos = Option.None<Common.Position<int>>();
+        }
+
+        private void resetPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _controlView.ResetPositionEvent();
         }
     }
 }
