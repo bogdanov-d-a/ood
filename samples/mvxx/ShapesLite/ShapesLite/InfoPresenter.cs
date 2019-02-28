@@ -11,7 +11,11 @@ namespace ShapesLite
         public InfoPresenter(DomainModel domainModel, AppModel appModel, InfoView infoView)
         {
             domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
-                infoView.ModelRect.Value = rect;
+                infoView.DomainModelRect.Value = rect;
+            };
+
+            appModel.ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
+                infoView.AppModelRect.Value = rect;
             };
         }
     }

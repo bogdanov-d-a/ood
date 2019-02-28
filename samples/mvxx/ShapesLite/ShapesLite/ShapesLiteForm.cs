@@ -26,8 +26,8 @@ namespace ShapesLite
             _view.InvalidateEvent += () => Invalidate();
 
             infoTextBox.Text = infoView.GetText();
-            infoView.ModelRect.Event += (Common.Rectangle<double> rect) => {
-                infoTextBox.Text = infoView.GetText();
+            infoView.TextChangedEvent += (string text) => {
+                infoTextBox.Text = text;
             };
         }
 

@@ -8,8 +8,17 @@ namespace ShapesLite
 {
     public class InfoView
     {
-        public Common.SignallingValue<Common.Rectangle<double>> ModelRect =
+        public Common.SignallingValue<Common.Rectangle<double>> DomainModelRect =
             new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+
+        public Common.SignallingValue<Common.Rectangle<double>> AppModelRect =
+            new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+
+        public InfoView()
+        {
+            DomainModelRect.Event += (Common.Rectangle<double> rect) => FireTextChangedEvent();
+            AppModelRect.Event += (Common.Rectangle<double> rect) => FireTextChangedEvent();
+        }
 
         private static string RectToString(Common.Rectangle<double> rect)
         {
@@ -19,7 +28,15 @@ namespace ShapesLite
 
         public string GetText()
         {
-            return "ModelRect = " + RectToString(ModelRect.Value);
+            return "DMR = " + RectToString(DomainModelRect.Value) + " AMR = " + RectToString(AppModelRect.Value);
+        }
+
+        public delegate void TextDelegate(string text);
+        public event TextDelegate TextChangedEvent = delegate {};
+
+        private void FireTextChangedEvent()
+        {
+            TextChangedEvent(GetText());
         }
     }
 }
