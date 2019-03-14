@@ -19,6 +19,10 @@ namespace ShapesLite
         {
             _domainModel = domainModel;
 
+            _domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
+                ShapeBoundingRect.Value = pos;
+            };
+
             ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
                 rect.Left = Math.Max(rect.Left, 0);
                 rect.Top = Math.Max(rect.Top, 0);

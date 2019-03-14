@@ -18,13 +18,9 @@ namespace ShapesLite.Presenters
             return 1.0 * value / factor;
         }
 
-        public CanvasPresenter(DomainModel domainModel, AppModel appModel, Views.CanvasView view)
+        public CanvasPresenter(AppModel appModel, Views.CanvasView view)
         {
             Common.Size<int> size = view.CanvasSize;
-
-            domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
-                appModel.ShapeBoundingRect.Value = pos;
-            };
 
             appModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
                 view.ShapeBoundingRect.Value = new Common.RectangleInt(
@@ -47,7 +43,7 @@ namespace ShapesLite.Presenters
             };
 
             view.OnFinishMovingEvent += (Common.Rectangle<int> pos) => {
-                domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(
+                appModel.DomainShapeBoundingRect.Value = new Common.RectangleDouble(
                     IntToDouble(pos.Left, size.width), IntToDouble(pos.Top, size.height),
                     IntToDouble(pos.Width, size.width), IntToDouble(pos.Height, size.height));
             };
