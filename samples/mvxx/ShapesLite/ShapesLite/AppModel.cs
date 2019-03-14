@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Optional;
 
 namespace ShapesLite
 {
-    using RectangleSignallingValue = Common.SignallingValue<Common.Rectangle<double>>;
-    using BoolSignallingValue = Common.SignallingValue<bool>;
+    using RectangleD = Common.Rectangle<double>;
+    using SignallingInt = Common.SignallingValue<int>;
 
     public class AppModel
     {
-        public readonly RectangleSignallingValue ShapeBoundingRect =
-            new RectangleSignallingValue(new Common.RectangleDouble(0, 0, 0, 0));
-
-        public readonly BoolSignallingValue IsShapeSelected = new BoolSignallingValue(false);
+        public readonly SignallingInt SelectedShapeIndex = new SignallingInt(-1);
+        public Option<RectangleD> ActualSelectedShape = Option.None<RectangleD>();
 
         private readonly DomainModel _domainModel;
 
@@ -22,25 +21,51 @@ namespace ShapesLite
         {
             _domainModel = domainModel;
 
-            _domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
-                ShapeBoundingRect.Value = pos;
-            };
+            _domainModel.AfterShapeInsertEvent += (int index) => AfterShapeInsertEvent(index);
+            _domainModel.AfterShapeSetEvent += (int index) => AfterShapeSetEvent(index);
 
-            ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
-                rect.Left = Math.Max(rect.Left, 0);
-                rect.Top = Math.Max(rect.Top, 0);
-
-                double rightOutbound = Math.Max(rect.Right - 1, 0);
-                rect.Left -= rightOutbound;
-
-                double bottomOutbound = Math.Max(rect.Bottom - 1, 0);
-                rect.Top -= bottomOutbound;
+            _domainModel.BeforeShapeRemoveEvent += (int index) =>
+            {
+                if (SelectedShapeIndex.Value > index)
+                {
+                    SelectedShapeIndex.Value = SelectedShapeIndex.Value - 1;
+                }
+                else if (SelectedShapeIndex.Value == index)
+                {
+                    SelectedShapeIndex.Value = -1;
+                }
+                BeforeShapeRemoveEvent(index);
             };
         }
 
-        public RectangleSignallingValue DomainShapeBoundingRect
+        public void InsertShape(int index, RectangleD shape)
         {
-            get => _domainModel.ShapeBoundingRect;
+            _domainModel.InsertShape(index, shape);
         }
+
+        public RectangleD GetShapeAt(int index)
+        {
+            return _domainModel.GetShapeAt(index);
+        }
+
+        public void SetShapeAt(int index, RectangleD shape)
+        {
+            _domainModel.SetShapeAt(index, shape);
+        }
+
+        public void RemoveShapeAt(int index)
+        {
+            _domainModel.RemoveShapeAt(index);
+        }
+
+        public int ShapeCount
+        {
+            get => _domainModel.ShapeCount;
+        }
+
+        public delegate void IndexDelegate(int index);
+        public event IndexDelegate AfterShapeInsertEvent = delegate {};
+        public event IndexDelegate AfterShapeSetEvent = delegate {};
+        public event IndexDelegate BeforeShapeRemoveEvent = delegate {};
     }
 }

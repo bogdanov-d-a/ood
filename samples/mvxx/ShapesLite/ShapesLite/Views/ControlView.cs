@@ -9,7 +9,6 @@ namespace ShapesLite.Views
     public class ControlView
     {
         public delegate void VoidDelegate();
-        public VoidDelegate ResetPositionEvent;
-        public VoidDelegate FlipSelectionEvent;
+        public VoidDelegate AddShapeEvent = delegate {};
     }
 }

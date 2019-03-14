@@ -30,8 +30,7 @@
         {
             this.infoTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flipSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,27 +44,19 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetPositionToolStripMenuItem,
-            this.flipSelectionToolStripMenuItem});
+            this.addShapeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip";
             // 
-            // resetPositionToolStripMenuItem
+            // addShapeToolStripMenuItem
             // 
-            this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
-            this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
-            this.resetPositionToolStripMenuItem.Text = "Reset position";
-            this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.resetPositionToolStripMenuItem_Click);
-            // 
-            // flipSelectionToolStripMenuItem
-            // 
-            this.flipSelectionToolStripMenuItem.Name = "flipSelectionToolStripMenuItem";
-            this.flipSelectionToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.flipSelectionToolStripMenuItem.Text = "Flip selection";
-            this.flipSelectionToolStripMenuItem.Click += new System.EventHandler(this.flipSelectionToolStripMenuItem_Click);
+            this.addShapeToolStripMenuItem.Name = "addShapeToolStripMenuItem";
+            this.addShapeToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.addShapeToolStripMenuItem.Text = "Add shape";
+            this.addShapeToolStripMenuItem.Click += new System.EventHandler(this.addShapeToolStripMenuItem_Click);
             // 
             // ShapesLiteForm
             // 
@@ -92,8 +83,7 @@
 
         private System.Windows.Forms.TextBox infoTextBox;
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem flipSelectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addShapeToolStripMenuItem;
     }
 }
 

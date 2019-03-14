@@ -18,18 +18,13 @@ namespace ShapesLite
         private readonly Views.ControlView _controlView;
         private Option<Common.Position<int>> _touchPos = Option.None<Common.Position<int>>();
 
-        public ShapesLiteForm(Views.CanvasView canvasView, Views.InfoView infoView, Views.ControlView controlView)
+        public ShapesLiteForm(Views.CanvasView canvasView, Views.ControlView controlView)
         {
             InitializeComponent();
             DoubleBuffered = true;
 
             _canvasView = canvasView;
             _canvasView.InvalidateEvent += () => Invalidate();
-
-            infoTextBox.Text = infoView.GetText();
-            infoView.TextChangedEvent += (string text) => {
-                infoTextBox.Text = text;
-            };
 
             _controlView = controlView;
         }
@@ -39,9 +34,21 @@ namespace ShapesLite
             _canvasView.Draw(e.Graphics);
         }
 
-        private bool IsInsideShape(Common.Position<int> position)
+        private bool IsInsideShape(int index, Common.Position<int> position)
         {
-            return _canvasView.ShapeBoundingRect.Value.Contains(position);
+            return _canvasView.ShapeList[index].Contains(position);
+        }
+
+        private int FindShapeByPosition(Common.Position<int> position)
+        {
+            for (int i = 0; i < _canvasView.ShapeList.Count; ++i)
+            {
+                if (IsInsideShape(i, position))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private Common.Position<int> GetMousePos()
@@ -53,19 +60,28 @@ namespace ShapesLite
         private void ShapesLiteForm_MouseDown(object sender, MouseEventArgs e)
         {
             Common.Position<int> pos = GetMousePos();
-            _canvasView.IsShapeSelected.Value = IsInsideShape(pos);
-            _touchPos = _canvasView.IsShapeSelected.Value
-                ? Option.Some(new Common.Position<int>(pos.x - _canvasView.ShapeBoundingRect.Value.Left, pos.y - _canvasView.ShapeBoundingRect.Value.Top))
-                : Option.None<Common.Position<int>>();
+            _canvasView.SelectedShapeIndex.Value = FindShapeByPosition(pos);
+
+            if (_canvasView.SelectedShapeIndex.Value != -1)
+            {
+                var shape = _canvasView.ShapeList[_canvasView.SelectedShapeIndex.Value];
+                _touchPos = Option.Some(new Common.Position<int>(pos.x - shape.Left, pos.y - shape.Top));
+            }
+            else
+            {
+                _touchPos = Option.None<Common.Position<int>>();
+            }
         }
 
         private void UpdateViewShapePosition()
         {
             Common.Position<int> pos = GetMousePos();
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
-            Common.Size<int> size = _canvasView.ShapeBoundingRect.Value.Size;
-            _canvasView.ShapeBoundingRect.Value = new Common.RectangleInt(
+            int index = _canvasView.SelectedShapeIndex.Value;
+            Common.Size<int> size = _canvasView.ShapeList[index].Size;
+            _canvasView.ShapeList[index] = new Common.RectangleInt(
                 pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
+            _canvasView.OnMoveEvent(index, _canvasView.ShapeList[index]);
         }
 
         private void ShapesLiteForm_MouseMove(object sender, MouseEventArgs e)
@@ -84,18 +100,14 @@ namespace ShapesLite
                 return;
             }
             UpdateViewShapePosition();
-            _canvasView.OnFinishMovingEvent(_canvasView.ShapeBoundingRect.Value);
+            int index = _canvasView.SelectedShapeIndex.Value;
+            _canvasView.OnFinishMovingEvent(index, _canvasView.ShapeList[index]);
             _touchPos = Option.None<Common.Position<int>>();
         }
 
-        private void resetPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _controlView.ResetPositionEvent();
-        }
-
-        private void flipSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _controlView.FlipSelectionEvent();
+            _controlView.AddShapeEvent();
         }
     }
 }

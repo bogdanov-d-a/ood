@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Optional;
 
 namespace ShapesLite.Presenters
 {
+    using RectangleD = Common.Rectangle<double>;
+    using RectangleI = Common.Rectangle<int>;
+    using SizeI = Common.Size<int>;
+
     public class CanvasPresenter
     {
         private int DoubleToInt(double value, int factor)
@@ -18,34 +23,65 @@ namespace ShapesLite.Presenters
             return 1.0 * value / factor;
         }
 
+        private RectangleI RectangleDoubleToInt(RectangleD rect, SizeI factor)
+        {
+            return new Common.RectangleInt(
+                    DoubleToInt(rect.Left, factor.width), DoubleToInt(rect.Top, factor.height),
+                    DoubleToInt(rect.Width, factor.width), DoubleToInt(rect.Height, factor.height));
+        }
+
+        private RectangleD RectangleIntToDouble(RectangleI rect, SizeI factor)
+        {
+            return new Common.RectangleDouble(
+                    IntToDouble(rect.Left, factor.width), IntToDouble(rect.Top, factor.height),
+                    IntToDouble(rect.Width, factor.width), IntToDouble(rect.Height, factor.height));
+        }
+
         public CanvasPresenter(AppModel appModel, Views.CanvasView view)
         {
-            Common.Size<int> size = view.CanvasSize;
+            SizeI size = view.CanvasSize;
 
-            appModel.ShapeBoundingRect.Event += (Common.Rectangle<double> pos) => {
-                view.ShapeBoundingRect.Value = new Common.RectangleInt(
-                    DoubleToInt(pos.Left, size.width), DoubleToInt(pos.Top, size.height),
-                    DoubleToInt(pos.Width, size.width), DoubleToInt(pos.Height, size.height));
+            appModel.AfterShapeInsertEvent += (int index) => {
+                view.ShapeList.Insert(index, RectangleDoubleToInt(appModel.GetShapeAt(index), size));
+                view.InvalidateEvent();
             };
 
-            appModel.IsShapeSelected.Event += (bool selected) => {
-                view.IsShapeSelected.Value = selected;
+            appModel.AfterShapeSetEvent += (int index) => {
+                view.ShapeList[index] = RectangleDoubleToInt(appModel.GetShapeAt(index), size);
+                view.InvalidateEvent();
             };
 
-            view.ShapeBoundingRect.Event += (Common.Rectangle<int> pos) => {
-                appModel.ShapeBoundingRect.Value = new Common.RectangleDouble(
-                    IntToDouble(pos.Left, size.width), IntToDouble(pos.Top, size.height),
-                    IntToDouble(pos.Width, size.width), IntToDouble(pos.Height, size.height));
+            appModel.BeforeShapeRemoveEvent += (int index) => {
+                view.ShapeList.RemoveAt(index);
+                view.InvalidateEvent();
             };
 
-            view.IsShapeSelected.Event += (bool selected) => {
-                appModel.IsShapeSelected.Value = selected;
+            appModel.SelectedShapeIndex.Event += (int index) => {
+                view.SelectedShapeIndex.Value = index;
             };
 
-            view.OnFinishMovingEvent += (Common.Rectangle<int> pos) => {
-                appModel.DomainShapeBoundingRect.Value = new Common.RectangleDouble(
-                    IntToDouble(pos.Left, size.width), IntToDouble(pos.Top, size.height),
-                    IntToDouble(pos.Width, size.width), IntToDouble(pos.Height, size.height));
+            view.OnMoveEvent += (int index, RectangleI pos) => {
+                var rect = RectangleIntToDouble(pos, size);
+
+                rect.Left = Math.Max(rect.Left, 0);
+                rect.Top = Math.Max(rect.Top, 0);
+
+                double rightOutbound = Math.Max(rect.Right - 1, 0);
+                rect.Left -= rightOutbound;
+
+                double bottomOutbound = Math.Max(rect.Bottom - 1, 0);
+                rect.Top -= bottomOutbound;
+
+                appModel.ActualSelectedShape = Option.Some(rect);
+                view.ShapeList[view.SelectedShapeIndex.Value] = RectangleDoubleToInt(rect, size);
+            };
+
+            view.SelectedShapeIndex.Event += (int index) => {
+                appModel.SelectedShapeIndex.Value = index;
+            };
+
+            view.OnFinishMovingEvent += (int index, RectangleI pos) => {
+                appModel.SetShapeAt(index, RectangleIntToDouble(pos, size));
             };
         }
     }

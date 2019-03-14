@@ -61,8 +61,6 @@
     <Compile Include="Presenters\ControlPresenter.cs" />
     <Compile Include="Views\ControlView.cs" />
     <Compile Include="DomainModel.cs" />
-    <Compile Include="Presenters\InfoPresenter.cs" />
-    <Compile Include="Views\InfoView.cs" />
     <Compile Include="ShapesLiteForm.cs">
       <SubType>Form</SubType>
     </Compile>
