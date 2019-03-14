@@ -7,19 +7,22 @@ using System.Drawing;
 
 namespace ShapesLite.Views
 {
+    using RectangleSignallingValue = Common.SignallingValue<Common.Rectangle<int>>;
+    using BoolSignallingValue = Common.SignallingValue<bool>;
+
     public class CanvasView
     {
         public const int DrawOffset = 50;
 
-        public readonly Common.SignallingValue<Common.Rectangle<int>> ShapeBoundingRect =
-            new Common.SignallingValue<Common.Rectangle<int>>(new Common.RectangleInt(0, 0, 0, 0));
+        public readonly RectangleSignallingValue ShapeBoundingRect =
+            new RectangleSignallingValue(new Common.RectangleInt(0, 0, 0, 0));
 
         public Common.Size<int> CanvasSize
         {
             get => new Common.Size<int>(700, 350);
         }
 
-        public readonly Common.SignallingValue<bool> IsShapeSelected = new Common.SignallingValue<bool>(false);
+        public readonly BoolSignallingValue IsShapeSelected = new BoolSignallingValue(false);
 
         public delegate void OnFinishMovingDelegate(Common.Rectangle<int> pos);
         public OnFinishMovingDelegate OnFinishMovingEvent = delegate {};

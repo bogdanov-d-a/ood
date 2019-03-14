@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace ShapesLite.Views
 {
+    using RectangleSignallingValue = Common.SignallingValue<Common.Rectangle<double>>;
+
     public class InfoView
     {
-        public Common.SignallingValue<Common.Rectangle<double>> DomainModelRect =
-            new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+        public RectangleSignallingValue DomainModelRect =
+            new RectangleSignallingValue(new Common.RectangleDouble(0, 0, 0, 0));
 
-        public Common.SignallingValue<Common.Rectangle<double>> AppModelRect =
-            new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+        public RectangleSignallingValue AppModelRect =
+            new RectangleSignallingValue(new Common.RectangleDouble(0, 0, 0, 0));
 
         public InfoView()
         {

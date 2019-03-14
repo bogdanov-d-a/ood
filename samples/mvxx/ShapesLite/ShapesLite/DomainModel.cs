@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ShapesLite
 {
+    using RectangleSignallingValue = Common.SignallingValue<Common.Rectangle<double>>;
+
     public class DomainModel
     {
-        public readonly Common.SignallingValue<Common.Rectangle<double>> ShapeBoundingRect =
-            new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+        public readonly RectangleSignallingValue ShapeBoundingRect =
+            new RectangleSignallingValue(new Common.RectangleDouble(0, 0, 0, 0));
     }
 }

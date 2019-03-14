@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace ShapesLite
 {
+    using RectangleSignallingValue = Common.SignallingValue<Common.Rectangle<double>>;
+    using BoolSignallingValue = Common.SignallingValue<bool>;
+
     public class AppModel
     {
-        public readonly Common.SignallingValue<Common.Rectangle<double>> ShapeBoundingRect =
-            new Common.SignallingValue<Common.Rectangle<double>>(new Common.RectangleDouble(0, 0, 0, 0));
+        public readonly RectangleSignallingValue ShapeBoundingRect =
+            new RectangleSignallingValue(new Common.RectangleDouble(0, 0, 0, 0));
 
-        public readonly Common.SignallingValue<bool> IsShapeSelected = new Common.SignallingValue<bool>(false);
+        public readonly BoolSignallingValue IsShapeSelected = new BoolSignallingValue(false);
 
         private readonly DomainModel _domainModel;
 
@@ -35,7 +38,7 @@ namespace ShapesLite
             };
         }
 
-        public Common.SignallingValue<Common.Rectangle<double>> DomainShapeBoundingRect
+        public RectangleSignallingValue DomainShapeBoundingRect
         {
             get => _domainModel.ShapeBoundingRect;
         }
