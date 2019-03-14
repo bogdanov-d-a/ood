@@ -19,7 +19,7 @@ namespace ShapesLite
             Views.CanvasView canvasView = new Views.CanvasView();
             Views.ControlView controlView = new Views.ControlView();
             new Presenters.CanvasPresenter(appModel, canvasView);
-            new Presenters.ControlPresenter(appModel, controlView, canvasView);
+            new Presenters.ControlPresenter(appModel, controlView);
 
             domainModel.InsertShape(0, new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5));
             domainModel.InsertShape(1, new Common.RectangleDouble(0.75, 0.75, 0.25, 0.25));
