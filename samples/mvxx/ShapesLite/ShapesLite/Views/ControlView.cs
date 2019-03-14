@@ -10,5 +10,6 @@ namespace ShapesLite.Views
     {
         public delegate void VoidDelegate();
         public VoidDelegate AddShapeEvent = delegate {};
+        public VoidDelegate RemoveShapeEvent = delegate {};
     }
 }

@@ -31,6 +31,7 @@
             this.infoTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.addShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,7 +45,8 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addShapeToolStripMenuItem});
+            this.addShapeToolStripMenuItem,
+            this.removeShapeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(800, 24);
@@ -57,6 +59,13 @@
             this.addShapeToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.addShapeToolStripMenuItem.Text = "Add shape";
             this.addShapeToolStripMenuItem.Click += new System.EventHandler(this.addShapeToolStripMenuItem_Click);
+            // 
+            // removeShapeToolStripMenuItem
+            // 
+            this.removeShapeToolStripMenuItem.Name = "removeShapeToolStripMenuItem";
+            this.removeShapeToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
+            this.removeShapeToolStripMenuItem.Text = "Remove shape";
+            this.removeShapeToolStripMenuItem.Click += new System.EventHandler(this.removeShapeToolStripMenuItem_Click);
             // 
             // ShapesLiteForm
             // 
@@ -84,6 +93,7 @@
         private System.Windows.Forms.TextBox infoTextBox;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem addShapeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeShapeToolStripMenuItem;
     }
 }
 

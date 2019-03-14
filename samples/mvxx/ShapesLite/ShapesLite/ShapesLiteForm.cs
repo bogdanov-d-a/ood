@@ -109,5 +109,10 @@ namespace ShapesLite
         {
             _controlView.AddShapeEvent();
         }
+
+        private void removeShapeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _controlView.RemoveShapeEvent();
+        }
     }
 }
