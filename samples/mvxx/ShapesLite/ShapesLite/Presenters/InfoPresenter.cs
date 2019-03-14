@@ -8,9 +8,9 @@ namespace ShapesLite.Presenters
 {
     public class InfoPresenter
     {
-        public InfoPresenter(DomainModel domainModel, AppModel appModel, Views.InfoView infoView)
+        public InfoPresenter(AppModel appModel, Views.InfoView infoView)
         {
-            domainModel.ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
+            appModel.DomainShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
                 infoView.DomainModelRect.Value = rect;
             };
 

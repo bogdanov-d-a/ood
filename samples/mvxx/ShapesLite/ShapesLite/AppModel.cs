@@ -13,8 +13,12 @@ namespace ShapesLite
 
         public readonly Common.SignallingValue<bool> IsShapeSelected = new Common.SignallingValue<bool>(false);
 
-        public AppModel()
+        private readonly DomainModel _domainModel;
+
+        public AppModel(DomainModel domainModel)
         {
+            _domainModel = domainModel;
+
             ShapeBoundingRect.Event += (Common.Rectangle<double> rect) => {
                 rect.Left = Math.Max(rect.Left, 0);
                 rect.Top = Math.Max(rect.Top, 0);
@@ -25,6 +29,11 @@ namespace ShapesLite
                 double bottomOutbound = Math.Max(rect.Bottom - 1, 0);
                 rect.Top -= bottomOutbound;
             };
+        }
+
+        public Common.SignallingValue<Common.Rectangle<double>> DomainShapeBoundingRect
+        {
+            get => _domainModel.ShapeBoundingRect;
         }
     }
 }

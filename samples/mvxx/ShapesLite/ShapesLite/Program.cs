@@ -15,12 +15,12 @@ namespace ShapesLite
         static void Main()
         {
             DomainModel domainModel = new DomainModel();
-            AppModel appModel = new AppModel();
+            AppModel appModel = new AppModel(domainModel);
             Views.CanvasView canvasView = new Views.CanvasView();
             Views.InfoView infoView = new Views.InfoView();
             Views.ControlView controlView = new Views.ControlView();
             new Presenters.CanvasPresenter(domainModel, appModel, canvasView);
-            new Presenters.InfoPresenter(domainModel, appModel, infoView);
+            new Presenters.InfoPresenter(appModel, infoView);
             new Presenters.ControlPresenter(domainModel, appModel, controlView);
 
             domainModel.ShapeBoundingRect.Value = new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5);
