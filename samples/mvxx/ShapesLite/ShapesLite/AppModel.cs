@@ -21,9 +21,6 @@ namespace ShapesLite
         {
             _domainModel = domainModel;
 
-            _domainModel.ShapeList.AfterInsertEvent += (int index, RectangleD value) => AfterShapeInsertEvent(index);
-            _domainModel.ShapeList.AfterSetEvent += (int index, RectangleD value) => AfterShapeSetEvent(index);
-
             _domainModel.ShapeList.BeforeRemoveEvent += (int index, RectangleD value) =>
             {
                 if (SelectedShapeIndex.Value > index)
@@ -34,38 +31,12 @@ namespace ShapesLite
                 {
                     SelectedShapeIndex.Value = -1;
                 }
-                BeforeShapeRemoveEvent(index);
             };
         }
 
-        public void InsertShape(int index, RectangleD shape)
+        public Common.SignallingList<RectangleD> ShapeList
         {
-            _domainModel.ShapeList.Insert(index, shape);
+            get => _domainModel.ShapeList;
         }
-
-        public RectangleD GetShapeAt(int index)
-        {
-            return _domainModel.ShapeList.GetAt(index);
-        }
-
-        public void SetShapeAt(int index, RectangleD shape)
-        {
-            _domainModel.ShapeList.SetAt(index, shape);
-        }
-
-        public void RemoveShapeAt(int index)
-        {
-            _domainModel.ShapeList.RemoveAt(index);
-        }
-
-        public int ShapeCount
-        {
-            get => _domainModel.ShapeList.Count;
-        }
-
-        public delegate void IndexDelegate(int index);
-        public event IndexDelegate AfterShapeInsertEvent = delegate {};
-        public event IndexDelegate AfterShapeSetEvent = delegate {};
-        public event IndexDelegate BeforeShapeRemoveEvent = delegate {};
     }
 }

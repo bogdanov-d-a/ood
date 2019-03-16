@@ -41,15 +41,15 @@ namespace ShapesLite.Presenters
         {
             SizeI size = view.CanvasSize;
 
-            appModel.AfterShapeInsertEvent += (int index) => {
-                view.ShapeList.Insert(index, RectangleDoubleToInt(appModel.GetShapeAt(index), size));
+            appModel.ShapeList.AfterInsertEvent += (int index, RectangleD value) => {
+                view.ShapeList.Insert(index, RectangleDoubleToInt(value, size));
             };
 
-            appModel.AfterShapeSetEvent += (int index) => {
-                view.ShapeList.SetAt(index, RectangleDoubleToInt(appModel.GetShapeAt(index), size));
+            appModel.ShapeList.AfterSetEvent += (int index, RectangleD value) => {
+                view.ShapeList.SetAt(index, RectangleDoubleToInt(value, size));
             };
 
-            appModel.BeforeShapeRemoveEvent += (int index) => {
+            appModel.ShapeList.BeforeRemoveEvent += (int index, RectangleD value) => {
                 view.ShapeList.RemoveAt(index);
             };
 
@@ -78,7 +78,7 @@ namespace ShapesLite.Presenters
             };
 
             view.OnFinishMovingEvent += (int index, RectangleI pos) => {
-                appModel.SetShapeAt(index, RectangleIntToDouble(pos, size));
+                appModel.ShapeList.SetAt(index, RectangleIntToDouble(pos, size));
             };
         }
     }
