@@ -56,6 +56,7 @@
     <Compile Include="Common\Rectangle.cs" />
     <Compile Include="Common\RectangleDouble.cs" />
     <Compile Include="Common\RectangleInt.cs" />
+    <Compile Include="Common\SignallingList.cs" />
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="Presenters\ControlPresenter.cs" />
