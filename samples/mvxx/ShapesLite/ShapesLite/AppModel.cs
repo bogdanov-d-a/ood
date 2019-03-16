@@ -21,6 +21,19 @@ namespace ShapesLite
         {
             _domainModel = domainModel;
 
+            _domainModel.ShapeList.AfterInsertEvent += (int index, RectangleD value) =>
+            {
+                ActualSelectedShape = Option.None<RectangleD>();
+            };
+            _domainModel.ShapeList.AfterSetEvent += (int index, RectangleD value) =>
+            {
+                ActualSelectedShape = Option.None<RectangleD>();
+            };
+            _domainModel.ShapeList.BeforeRemoveEvent += (int index, RectangleD value) =>
+            {
+                ActualSelectedShape = Option.None<RectangleD>();
+            };
+
             _domainModel.ShapeList.BeforeRemoveEvent += (int index, RectangleD value) =>
             {
                 if (SelectedShapeIndex.Value > index)

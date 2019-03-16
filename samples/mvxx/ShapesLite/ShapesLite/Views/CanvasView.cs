@@ -28,6 +28,19 @@ namespace ShapesLite.Views
 
         public CanvasView()
         {
+            ShapeList.AfterSetEvent += (int index, RectangleI pos) => {
+                pos.Left = Math.Max(pos.Left, 0);
+                pos.Top = Math.Max(pos.Top, 0);
+
+                int rightOutbound = Math.Max(pos.Right - CanvasSize.width, 0);
+                pos.Left -= rightOutbound;
+
+                int bottomOutbound = Math.Max(pos.Bottom - CanvasSize.height, 0);
+                pos.Top -= bottomOutbound;
+
+                ShapeList.SetAt(index, pos);
+            };
+
             ShapeList.AfterInsertEvent += (int index, RectangleI pos) => InvalidateEvent();
             ShapeList.AfterSetEvent += (int index, RectangleI pos) => InvalidateEvent();
             ShapeList.BeforeRemoveEvent += (int index, RectangleI pos) => InvalidateEvent();

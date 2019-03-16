@@ -58,19 +58,7 @@ namespace ShapesLite.Presenters
             };
 
             view.ShapeList.AfterSetEvent += (int index, RectangleI pos) => {
-                var rect = RectangleIntToDouble(pos, size);
-
-                rect.Left = Math.Max(rect.Left, 0);
-                rect.Top = Math.Max(rect.Top, 0);
-
-                double rightOutbound = Math.Max(rect.Right - 1, 0);
-                rect.Left -= rightOutbound;
-
-                double bottomOutbound = Math.Max(rect.Bottom - 1, 0);
-                rect.Top -= bottomOutbound;
-
-                appModel.ActualSelectedShape = Option.Some(rect);
-                view.ShapeList.SetAt(view.SelectedShapeIndex.Value, RectangleDoubleToInt(rect, size));
+                appModel.ActualSelectedShape = Option.Some(RectangleIntToDouble(pos, size));
             };
 
             view.SelectedShapeIndex.Event += (int index) => {
