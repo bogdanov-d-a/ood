@@ -9,12 +9,13 @@ namespace ShapesLite.Views
 {
     using RectangleI = Common.Rectangle<int>;
     using SignallingInt = Common.SignallingValue<int>;
+    using ShapeListType = Common.SignallingList<Common.Rectangle<int>>;
 
     public class CanvasView
     {
         public const int DrawOffset = 50;
 
-        public readonly List<RectangleI> ShapeList = new List<RectangleI>();
+        public readonly ShapeListType ShapeList = new ShapeListType();
         public readonly SignallingInt SelectedShapeIndex = new SignallingInt(-1);
 
         public Common.Size<int> CanvasSize
@@ -23,12 +24,13 @@ namespace ShapesLite.Views
         }
 
         public delegate void MovingDelegate(int index, RectangleI pos);
-        public MovingDelegate OnMoveEvent = delegate {};
         public MovingDelegate OnFinishMovingEvent = delegate {};
 
         public CanvasView()
         {
-            OnMoveEvent += (int index, RectangleI pos) => InvalidateEvent();
+            ShapeList.AfterInsertEvent += (int index, RectangleI pos) => InvalidateEvent();
+            ShapeList.AfterSetEvent += (int index, RectangleI pos) => InvalidateEvent();
+            ShapeList.BeforeRemoveEvent += (int index, RectangleI pos) => InvalidateEvent();
             SelectedShapeIndex.Event += (int index) => InvalidateEvent();
         }
 
@@ -47,9 +49,9 @@ namespace ShapesLite.Views
                 g.FillRectangle(new SolidBrush(Color.White), rect2);
             }
 
-            foreach (RectangleI shape in ShapeList)
+            for (int i = 0; i < ShapeList.Count; ++i)
             {
-                var rect2 = OffsetDrawRect(shape);
+                var rect2 = OffsetDrawRect(ShapeList.GetAt(i));
                 g.FillRectangle(new SolidBrush(Color.Yellow), rect2);
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), rect2);
             }
@@ -57,13 +59,13 @@ namespace ShapesLite.Views
             if (SelectedShapeIndex.Value != -1)
             {
                 const int SelOffset = 5;
-                var rect2 = OffsetDrawRect(ShapeList[SelectedShapeIndex.Value]);
+                var rect2 = OffsetDrawRect(ShapeList.GetAt(SelectedShapeIndex.Value));
                 rect2.Inflate(new Size(SelOffset, SelOffset));
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Red)), rect2);
             }
         }
 
         public delegate void VoidDelegate();
-        public VoidDelegate InvalidateEvent = delegate {};
+        public event VoidDelegate InvalidateEvent = delegate {};
     }
 }

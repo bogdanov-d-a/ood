@@ -43,24 +43,21 @@ namespace ShapesLite.Presenters
 
             appModel.AfterShapeInsertEvent += (int index) => {
                 view.ShapeList.Insert(index, RectangleDoubleToInt(appModel.GetShapeAt(index), size));
-                view.InvalidateEvent();
             };
 
             appModel.AfterShapeSetEvent += (int index) => {
-                view.ShapeList[index] = RectangleDoubleToInt(appModel.GetShapeAt(index), size);
-                view.InvalidateEvent();
+                view.ShapeList.SetAt(index, RectangleDoubleToInt(appModel.GetShapeAt(index), size));
             };
 
             appModel.BeforeShapeRemoveEvent += (int index) => {
                 view.ShapeList.RemoveAt(index);
-                view.InvalidateEvent();
             };
 
             appModel.SelectedShapeIndex.Event += (int index) => {
                 view.SelectedShapeIndex.Value = index;
             };
 
-            view.OnMoveEvent += (int index, RectangleI pos) => {
+            view.ShapeList.AfterSetEvent += (int index, RectangleI pos) => {
                 var rect = RectangleIntToDouble(pos, size);
 
                 rect.Left = Math.Max(rect.Left, 0);
@@ -73,7 +70,7 @@ namespace ShapesLite.Presenters
                 rect.Top -= bottomOutbound;
 
                 appModel.ActualSelectedShape = Option.Some(rect);
-                view.ShapeList[view.SelectedShapeIndex.Value] = RectangleDoubleToInt(rect, size);
+                view.ShapeList.SetAt(view.SelectedShapeIndex.Value, RectangleDoubleToInt(rect, size));
             };
 
             view.SelectedShapeIndex.Event += (int index) => {

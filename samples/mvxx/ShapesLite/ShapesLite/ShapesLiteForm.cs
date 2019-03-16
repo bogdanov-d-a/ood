@@ -36,7 +36,7 @@ namespace ShapesLite
 
         private bool IsInsideShape(int index, Common.Position<int> position)
         {
-            return _canvasView.ShapeList[index].Contains(position);
+            return _canvasView.ShapeList.GetAt(index).Contains(position);
         }
 
         private int FindShapeByPosition(Common.Position<int> position)
@@ -64,7 +64,7 @@ namespace ShapesLite
 
             if (_canvasView.SelectedShapeIndex.Value != -1)
             {
-                var shape = _canvasView.ShapeList[_canvasView.SelectedShapeIndex.Value];
+                var shape = _canvasView.ShapeList.GetAt(_canvasView.SelectedShapeIndex.Value);
                 _touchPos = Option.Some(new Common.Position<int>(pos.x - shape.Left, pos.y - shape.Top));
             }
             else
@@ -78,10 +78,9 @@ namespace ShapesLite
             Common.Position<int> pos = GetMousePos();
             Common.Position<int> touchPos = _touchPos.ValueOrFailure();
             int index = _canvasView.SelectedShapeIndex.Value;
-            Common.Size<int> size = _canvasView.ShapeList[index].Size;
-            _canvasView.ShapeList[index] = new Common.RectangleInt(
-                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height);
-            _canvasView.OnMoveEvent(index, _canvasView.ShapeList[index]);
+            Common.Size<int> size = _canvasView.ShapeList.GetAt(index).Size;
+            _canvasView.ShapeList.SetAt(index, new Common.RectangleInt(
+                pos.x - touchPos.x, pos.y - touchPos.y, size.width, size.height));
         }
 
         private void ShapesLiteForm_MouseMove(object sender, MouseEventArgs e)
@@ -101,7 +100,7 @@ namespace ShapesLite
             }
             UpdateViewShapePosition();
             int index = _canvasView.SelectedShapeIndex.Value;
-            _canvasView.OnFinishMovingEvent(index, _canvasView.ShapeList[index]);
+            _canvasView.OnFinishMovingEvent(index, _canvasView.ShapeList.GetAt(index));
             _touchPos = Option.None<Common.Position<int>>();
         }
 
