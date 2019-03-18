@@ -33,11 +33,11 @@ public:
 };
 
 // Капуччино
-class CCapuccino : public CCoffee
+class CCappuccino : public CCoffee
 {
 public:
-	CCapuccino() 
-		:CCoffee("Capuccino") 
+	CCappuccino() 
+		:CCoffee("Cappuccino") 
 	{}
 
 	double GetCost() const override 
