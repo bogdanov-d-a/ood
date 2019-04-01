@@ -60,6 +60,7 @@
     <Compile Include="Common\SignallingValue.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="Presenters\ControlPresenter.cs" />
+    <Compile Include="ShapeGravityFall.cs" />
     <Compile Include="Views\ControlView.cs" />
     <Compile Include="DomainModel.cs" />
     <Compile Include="ShapesLiteForm.cs">

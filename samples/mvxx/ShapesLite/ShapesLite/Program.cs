@@ -24,6 +24,15 @@ namespace ShapesLite
             domainModel.ShapeList.Insert(0, new Common.RectangleDouble(0.25, 0.25, 0.5, 0.5));
             domainModel.ShapeList.Insert(1, new Common.RectangleDouble(0.75, 0.75, 0.25, 0.25));
 
+            ShapeGravityFall sgf = new ShapeGravityFall(appModel);
+
+            System.Timers.Timer timer = new System.Timers.Timer(10);
+            timer.Elapsed += (Object source, System.Timers.ElapsedEventArgs e) => {
+                sgf.Tick(0.01);
+            };
+            timer.AutoReset = true;
+            timer.Enabled = true;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ShapesLiteForm(canvasView, controlView));
