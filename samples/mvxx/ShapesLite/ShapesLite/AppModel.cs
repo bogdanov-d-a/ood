@@ -25,7 +25,7 @@ namespace ShapesLite
             {
                 ActualSelectedShape = Option.None<RectangleD>();
             };
-            _domainModel.ShapeList.AfterSetEvent += (int index, RectangleD value) =>
+            _domainModel.ShapeList.AfterSetEvent += (int index, RectangleD oldValue, RectangleD value) =>
             {
                 ActualSelectedShape = Option.None<RectangleD>();
             };

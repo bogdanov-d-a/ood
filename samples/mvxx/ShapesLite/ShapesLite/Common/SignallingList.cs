@@ -34,17 +34,19 @@ namespace ShapesLite.Common
 
         public void SetAt(int index, T value)
         {
-            if (GetAt(index).Equals(value))
+            T oldValue = GetAt(index);
+            if (oldValue.Equals(value))
             {
                 return;
             }
             _list[index] = value;
-            AfterSetEvent(index, value);
+            AfterSetEvent(index, oldValue, value);
         }
 
         public delegate void IndexValueDelegate(int index, T value);
+        public delegate void IndexTwoValuesDelegate(int index, T oldValue, T value);
         public event IndexValueDelegate AfterInsertEvent = delegate {};
         public event IndexValueDelegate BeforeRemoveEvent = delegate {};
-        public event IndexValueDelegate AfterSetEvent = delegate {};
+        public event IndexTwoValuesDelegate AfterSetEvent = delegate {};
     }
 }

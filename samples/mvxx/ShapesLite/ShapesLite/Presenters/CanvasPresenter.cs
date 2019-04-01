@@ -45,7 +45,7 @@ namespace ShapesLite.Presenters
                 view.ShapeList.Insert(index, RectangleDoubleToInt(value, size));
             };
 
-            appModel.ShapeList.AfterSetEvent += (int index, RectangleD value) => {
+            appModel.ShapeList.AfterSetEvent += (int index, RectangleD oldValue, RectangleD value) => {
                 view.ShapeList.SetAt(index, RectangleDoubleToInt(value, size));
             };
 
@@ -57,7 +57,7 @@ namespace ShapesLite.Presenters
                 view.SelectedShapeIndex.Value = index;
             };
 
-            view.ShapeList.AfterSetEvent += (int index, RectangleI pos) => {
+            view.ShapeList.AfterSetEvent += (int index, RectangleI oldPos, RectangleI pos) => {
                 appModel.ActualSelectedShape = Option.Some(RectangleIntToDouble(pos, size));
             };
 

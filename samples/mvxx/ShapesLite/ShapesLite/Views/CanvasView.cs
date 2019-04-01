@@ -30,21 +30,41 @@ namespace ShapesLite.Views
 
         public CanvasView()
         {
-            ShapeList.AfterSetEvent += (int index, RectangleI pos) => {
-                pos.Left = Math.Max(pos.Left, 0);
-                pos.Top = Math.Max(pos.Top, 0);
+            bool insideAfterSetEventHandler = false;
+            ShapeList.AfterSetEvent += (int index, RectangleI oldPos, RectangleI pos) => {
+                if (insideAfterSetEventHandler)
+                {
+                    return;
+                }
+                insideAfterSetEventHandler = true;
 
-                int rightOutbound = Math.Max(pos.Right - CanvasSize.width, 0);
-                pos.Left -= rightOutbound;
+                try
+                {
+                    RectangleI clipPos = new Common.RectangleInt(pos.Left, pos.Top, pos.Width, pos.Height);
 
-                int bottomOutbound = Math.Max(pos.Bottom - CanvasSize.height, 0);
-                pos.Top -= bottomOutbound;
+                    clipPos.Left = Math.Max(clipPos.Left, 0);
+                    clipPos.Top = Math.Max(clipPos.Top, 0);
 
-                ShapeList.SetAt(index, pos);
+                    int rightOutbound = Math.Max(clipPos.Right - CanvasSize.width, 0);
+                    clipPos.Left -= rightOutbound;
+
+                    int bottomOutbound = Math.Max(clipPos.Bottom - CanvasSize.height, 0);
+                    clipPos.Top -= bottomOutbound;
+
+                    ShapeList.SetAt(index, clipPos);
+
+                    if (!oldPos.Equals(clipPos))
+                    {
+                        InvalidateEvent();
+                    }
+                }
+                finally
+                {
+                    insideAfterSetEventHandler = false;
+                }
             };
 
             ShapeList.AfterInsertEvent += (int index, RectangleI pos) => InvalidateEvent();
-            ShapeList.AfterSetEvent += (int index, RectangleI pos) => InvalidateEvent();
             ShapeList.BeforeRemoveEvent += (int index, RectangleI pos) => InvalidateEvent();
             SelectedShapeIndex.Event += (int index) => InvalidateEvent();
         }
