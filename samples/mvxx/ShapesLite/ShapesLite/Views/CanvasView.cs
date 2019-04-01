@@ -18,6 +18,8 @@ namespace ShapesLite.Views
         public readonly ShapeListType ShapeList = new ShapeListType();
         public readonly SignallingInt SelectedShapeIndex = new SignallingInt(-1);
 
+        private int redrawCounter = 0;
+
         public Common.Size<int> CanvasSize
         {
             get => new Common.Size<int>(700, 350);
@@ -76,6 +78,9 @@ namespace ShapesLite.Views
                 rect2.Inflate(new Size(SelOffset, SelOffset));
                 g.DrawRectangle(new Pen(new SolidBrush(Color.Red)), rect2);
             }
+
+            g.DrawString(redrawCounter.ToString(), new Font("Arial", 10), new SolidBrush(Color.Black), 10 + DrawOffset, 10 + DrawOffset);
+            ++redrawCounter;
         }
 
         public delegate void VoidDelegate();
