@@ -12,7 +12,7 @@ namespace ShapesLite.Common
 
         private IndexValueDelegate<T> _afterInsertEvent = delegate { };
         private IndexValueDelegate<T> _beforeRemoveEvent = delegate { };
-        private IndexTwoValuesDelegate<T> _indexTwoValuesDelegate = delegate { };
+        private IndexTwoValuesDelegate<T> _afterSetEvent = delegate { };
 
         public int Count
         {
@@ -44,7 +44,7 @@ namespace ShapesLite.Common
                 return;
             }
             _list[index] = value;
-            _indexTwoValuesDelegate(index, oldValue, value);
+            _afterSetEvent(index, oldValue, value);
         }
 
         public event IndexValueDelegate<T> AfterInsertEvent
@@ -61,8 +61,8 @@ namespace ShapesLite.Common
 
         public event IndexTwoValuesDelegate<T> AfterSetEvent
         {
-            add => _indexTwoValuesDelegate += value;
-            remove => _indexTwoValuesDelegate -= value;
+            add => _afterSetEvent += value;
+            remove => _afterSetEvent -= value;
         }
     }
 }
