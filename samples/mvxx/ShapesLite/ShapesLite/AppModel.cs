@@ -47,7 +47,7 @@ namespace ShapesLite
             };
         }
 
-        public Common.SignallingList<RectangleD> ShapeList
+        public Common.ISignallingList<RectangleD> ShapeList
         {
             get => _domainModel.ShapeList;
         }

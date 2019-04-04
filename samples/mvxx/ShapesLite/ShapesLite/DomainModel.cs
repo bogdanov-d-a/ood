@@ -10,7 +10,7 @@ namespace ShapesLite
 
     public class DomainModel
     {
-        public readonly Common.SignallingList<RectangleD> ShapeList
+        public readonly Common.ISignallingList<RectangleD> ShapeList
             = new Common.SignallingList<RectangleD>();
     }
 }

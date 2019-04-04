@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppModel.cs" />
+    <Compile Include="Common\ISignallingList.cs" />
     <Compile Include="Common\Position.cs" />
     <Compile Include="Common\Rectangle.cs" />
     <Compile Include="Common\RectangleDouble.cs" />

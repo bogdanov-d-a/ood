@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace ShapesLite.Common
 {
-    public class SignallingList<T> where T : IEquatable<T>
+    public class SignallingList<T> : ISignallingList<T> where T : IEquatable<T>
     {
         private readonly List<T> _list = new List<T>();
+
+        private IndexValueDelegate<T> _afterInsertEvent = delegate { };
+        private IndexValueDelegate<T> _beforeRemoveEvent = delegate { };
+        private IndexTwoValuesDelegate<T> _indexTwoValuesDelegate = delegate { };
 
         public int Count
         {
@@ -18,12 +22,12 @@ namespace ShapesLite.Common
         public void Insert(int index, T item)
         {
             _list.Insert(index, item);
-            AfterInsertEvent(index, item);
+            _afterInsertEvent(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            BeforeRemoveEvent(index, _list[index]);
+            _beforeRemoveEvent(index, _list[index]);
             _list.RemoveAt(index);
         }
 
@@ -40,13 +44,25 @@ namespace ShapesLite.Common
                 return;
             }
             _list[index] = value;
-            AfterSetEvent(index, oldValue, value);
+            _indexTwoValuesDelegate(index, oldValue, value);
         }
 
-        public delegate void IndexValueDelegate(int index, T value);
-        public delegate void IndexTwoValuesDelegate(int index, T oldValue, T value);
-        public event IndexValueDelegate AfterInsertEvent = delegate {};
-        public event IndexValueDelegate BeforeRemoveEvent = delegate {};
-        public event IndexTwoValuesDelegate AfterSetEvent = delegate {};
+        public event IndexValueDelegate<T> AfterInsertEvent
+        {
+            add => _afterInsertEvent += value;
+            remove => _afterInsertEvent -= value;
+        }
+
+        public event IndexValueDelegate<T> BeforeRemoveEvent
+        {
+            add => _beforeRemoveEvent += value;
+            remove => _beforeRemoveEvent -= value;
+        }
+
+        public event IndexTwoValuesDelegate<T> AfterSetEvent
+        {
+            add => _indexTwoValuesDelegate += value;
+            remove => _indexTwoValuesDelegate -= value;
+        }
     }
 }

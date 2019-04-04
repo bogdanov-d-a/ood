@@ -9,13 +9,13 @@ namespace ShapesLite.Views
 {
     using RectangleI = Common.Rectangle<int>;
     using SignallingInt = Common.SignallingValue<int>;
-    using ShapeListType = Common.SignallingList<Common.Rectangle<int>>;
+    using ShapeListType = Common.ISignallingList<Common.Rectangle<int>>;
 
     public class CanvasView
     {
         public const int DrawOffset = 50;
 
-        public readonly ShapeListType ShapeList = new ShapeListType();
+        public readonly ShapeListType ShapeList = new Common.SignallingList<RectangleI>();
         public readonly SignallingInt SelectedShapeIndex = new SignallingInt(-1);
 
         private int redrawCounter = 0;
