@@ -33,28 +33,28 @@ public:
 	}
 };
 
-enum class CapuccinoSize
+enum class CappuccinoSize
 {
 	Regular,
 	Double,
 };
 
 // Капуччино
-class CCapuccino : public CCoffee
+class CCappuccino : public CCoffee
 {
 public:
-	CCapuccino(CapuccinoSize size = CapuccinoSize::Regular)
-		: CCoffee(std::string("Capuccino") + (size == CapuccinoSize::Double ? " (double)" : ""))
+	CCappuccino(CappuccinoSize size = CappuccinoSize::Regular)
+		: CCoffee(std::string("Cappuccino") + (size == CappuccinoSize::Double ? " (double)" : ""))
 		, m_size(size)
 	{}
 
 	double GetCost() const override 
 	{
-		return m_size == CapuccinoSize::Double ? 120 : 80;
+		return m_size == CappuccinoSize::Double ? 120 : 80;
 	}
 
 private:
-	CapuccinoSize m_size;
+	CappuccinoSize m_size;
 };
 
 enum class LatteSize

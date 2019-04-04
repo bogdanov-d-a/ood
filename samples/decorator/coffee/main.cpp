@@ -179,7 +179,7 @@ int main()
 	cout << endl;
 	{
 		// Наливаем чашечку двойного капуччино
-		auto сapuccino = make_unique<CCapuccino>(CapuccinoSize::Double);
+		auto сapuccino = make_unique<CCappuccino>(CappuccinoSize::Double);
 		// добавляем корицы
 		auto cinnamon = make_unique<CCinnamon>(move(сapuccino));
 		// добавляем пару долек лимона
@@ -199,7 +199,7 @@ int main()
 				make_unique<CIceCubes>(					// | под нею - кубики льда
 					make_unique<CLemon>(				// | | еще ниже лимон
 						make_unique<CCinnamon>(			// | | | слоем ниже - корица
-							make_unique<CCapuccino>()),	// | | |   в самом сердце - Капуччино
+							make_unique<CCappuccino>()),	// | | |   в самом сердце - Капуччино
 						2),								// | | 2 дольки лимона
 					2, IceCubeType::Dry),				// | 2 кубика сухого льда
 				2);										// 2 грамма шоколадной крошки
@@ -249,7 +249,7 @@ int main()
 	// обеспечиваемого операторами << и функцией MakeCondiment
 	{
 		auto beverage = 
-			make_unique<CCapuccino>()						// Наливаем чашечку капуччино,
+			make_unique<CCappuccino>()						// Наливаем чашечку капуччино,
 			<< MakeCondiment<CCinnamon>()					// оборачиваем корицей,
 			<< MakeCondiment<CLemon>(2)						// добавляем пару долек лимона
 			<< MakeCondiment<CIceCubes>(2, IceCubeType::Dry)// брасаем пару кубиков сухого льда
