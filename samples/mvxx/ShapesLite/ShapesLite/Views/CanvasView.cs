@@ -9,14 +9,101 @@ namespace ShapesLite.Views
 {
     using RectangleI = Common.Rectangle<int>;
     using SignallingInt = Common.SignallingValue<int>;
-    using ShapeListType = Common.ISignallingList<Common.Rectangle<int>>;
 
     public class CanvasView
     {
+        private class SignallingShapeListImpl : Common.ISignallingList<RectangleI>
+        {
+            private readonly CanvasView _view;
+
+            public SignallingShapeListImpl(CanvasView view)
+            {
+                _view = view;
+            }
+
+            public int Count => _view._shapeList.Count;
+
+            public event Common.IndexValueDelegate<RectangleI> AfterInsertEvent
+            {
+                add => _view._afterInsertEvent += value;
+                remove => _view._afterInsertEvent -= value;
+            }
+
+            public event Common.IndexValueDelegate<RectangleI> BeforeRemoveEvent
+            {
+                add => _view._beforeRemoveEvent += value;
+                remove => _view._beforeRemoveEvent -= value;
+            }
+
+            public event Common.IndexTwoValuesDelegate<RectangleI> AfterSetEvent
+            {
+                add => _view._afterSetEvent += value;
+                remove => _view._afterSetEvent -= value;
+            }
+
+            public RectangleI GetAt(int index)
+            {
+                return _view._shapeList[index];
+            }
+
+            public void Insert(int index, RectangleI item)
+            {
+                _view._shapeList.Insert(index, item);
+                _view.InvalidateEvent();
+                _view._afterInsertEvent(index, item);
+            }
+
+            public void RemoveAt(int index)
+            {
+                _view._beforeRemoveEvent(index, GetAt(index));
+                _view._shapeList.RemoveAt(index);
+                _view.InvalidateEvent();
+            }
+
+            public void SetAt(int index, RectangleI value)
+            {
+                RectangleI oldValue = GetAt(index);
+                if (oldValue.Equals(value))
+                {
+                    return;
+                }
+
+                RectangleI clipValue = new Common.RectangleInt(value.Left, value.Top, value.Width, value.Height);
+
+                clipValue.Left = Math.Max(clipValue.Left, 0);
+                clipValue.Top = Math.Max(clipValue.Top, 0);
+
+                int rightOutbound = Math.Max(clipValue.Right - _view.CanvasSize.width, 0);
+                clipValue.Left -= rightOutbound;
+
+                int bottomOutbound = Math.Max(clipValue.Bottom - _view.CanvasSize.height, 0);
+                clipValue.Top -= bottomOutbound;
+
+                if (oldValue.Equals(clipValue))
+                {
+                    return;
+                }
+
+                _view._shapeList[index] = clipValue;
+                _view.InvalidateEvent();
+                _view._afterSetEvent(index, oldValue, clipValue);
+            }
+        }
+
         public const int DrawOffset = 50;
 
-        public readonly ShapeListType ShapeList = new Common.SignallingList<RectangleI>();
         public readonly SignallingInt SelectedShapeIndex = new SignallingInt(-1);
+
+        private readonly List<RectangleI> _shapeList = new List<RectangleI>();
+        private readonly SignallingShapeListImpl _signallingShapeList;
+        private Common.IndexValueDelegate<RectangleI> _afterInsertEvent = delegate { };
+        private Common.IndexValueDelegate<RectangleI> _beforeRemoveEvent = delegate { };
+        private Common.IndexTwoValuesDelegate<RectangleI> _afterSetEvent = delegate { };
+
+        public Common.ISignallingList<RectangleI> ShapeList
+        {
+            get => _signallingShapeList;
+        }
 
         private int redrawCounter = 0;
 
@@ -30,42 +117,7 @@ namespace ShapesLite.Views
 
         public CanvasView()
         {
-            bool insideAfterSetEventHandler = false;
-            ShapeList.AfterSetEvent += (int index, RectangleI oldPos, RectangleI pos) => {
-                if (insideAfterSetEventHandler)
-                {
-                    return;
-                }
-                insideAfterSetEventHandler = true;
-
-                try
-                {
-                    RectangleI clipPos = new Common.RectangleInt(pos.Left, pos.Top, pos.Width, pos.Height);
-
-                    clipPos.Left = Math.Max(clipPos.Left, 0);
-                    clipPos.Top = Math.Max(clipPos.Top, 0);
-
-                    int rightOutbound = Math.Max(clipPos.Right - CanvasSize.width, 0);
-                    clipPos.Left -= rightOutbound;
-
-                    int bottomOutbound = Math.Max(clipPos.Bottom - CanvasSize.height, 0);
-                    clipPos.Top -= bottomOutbound;
-
-                    ShapeList.SetAt(index, clipPos);
-
-                    if (!oldPos.Equals(clipPos))
-                    {
-                        InvalidateEvent();
-                    }
-                }
-                finally
-                {
-                    insideAfterSetEventHandler = false;
-                }
-            };
-
-            ShapeList.AfterInsertEvent += (int index, RectangleI pos) => InvalidateEvent();
-            ShapeList.BeforeRemoveEvent += (int index, RectangleI pos) => InvalidateEvent();
+            _signallingShapeList = new SignallingShapeListImpl(this);
             SelectedShapeIndex.Event += (int index) => InvalidateEvent();
         }
 
